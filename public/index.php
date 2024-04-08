@@ -1,7 +1,9 @@
 <?php include './../src/Pages/includes/header.html'; ?>
 <main>
   <div class="container bg-light p-3 rounded mt-5">
-    <div class="text-center"><h2>Bienvenue</h2></div>
+    <div class="text-center">
+      <h2>Bienvenue</h2>
+    </div>
     <form>
       <div class="mb-3">
         <label for="mail" class="form-label">Email*</label>
