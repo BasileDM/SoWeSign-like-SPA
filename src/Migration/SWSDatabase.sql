@@ -26,6 +26,7 @@ CREATE TABLE SWS_CLASSES(
         ID           Int  Auto_increment  NOT NULL ,
         START_TIME   Date NOT NULL ,
         END_TIME     Date NOT NULL ,
+        CODE         Int NOT NULL ,
         ID_PROMOTION Int NOT NULL
 	,CONSTRAINT PK_SWS_CLASSES PRIMARY KEY (ID)
 
