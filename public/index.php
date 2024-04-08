@@ -7,13 +7,13 @@
     <form>
       <div class="mb-3">
         <label for="mail" class="form-label">Email*</label>
-        <input type="email" class="form-control" id="mail" aria-describedby="emailHelp">
+        <input id="mail" type="email" class="form-control" aria-describedby="emailHelp">
       </div>
       <div class="mb-3">
         <label for="password" class="form-label">Mot de passe*</label>
-        <input type="password" class="form-control" id="password">
+        <input id="password" type="password" class="form-control">
       </div>
-      <button type="submit" class="btn btn-primary">Connexion</button>
+      <button id="login" type="submit" class="btn btn-primary">Connexion</button>
     </form>
   </div>
 </main>
