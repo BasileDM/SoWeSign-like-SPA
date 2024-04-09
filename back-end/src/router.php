@@ -8,16 +8,13 @@ switch ($url) {
 
   case HOME_URL:
     var_dump($url);
-    echo 'Hello, World!';
+    echo 'Hello, World! Home.';
     break;
-    
-  case HOME_URL . '/a':
-    var_dump($url);
-    echo 'nope';
+
+  case HOME_URL . 'a':
+    echo 'A page here !';
     break;
 
   default:
-  var_dump($url);
-  die();
     http_response_code(404);
 }

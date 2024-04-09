@@ -1,4 +1,4 @@
-import { HOME_URL } from "./config.js";
+import { HOME_URL, API_URL } from "./config.js";
 
 const emailField = document.getElementById("mail");
 const passwordField = document.getElementById("password");
@@ -11,9 +11,10 @@ submitButton.addEventListener("click", () => {
 });
 
 function login($mail, $pass) {
-  fetch(HOME_URL + "login", {
+  fetch(API_URL + "a", {
     method: "POST",
     headers: {
+      "Origin": "http://brief6-sws-front",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
