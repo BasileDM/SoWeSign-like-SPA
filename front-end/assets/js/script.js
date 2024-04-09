@@ -11,7 +11,7 @@ submitButton.addEventListener("click", () => {
 });
 
 function login($mail, $pass) {
-  fetch(API_URL + "a", {
+  fetch(API_URL + "b", {
     method: "POST",
     headers: {
       "Origin": "http://brief6-sws-front",
@@ -22,12 +22,16 @@ function login($mail, $pass) {
       password: $pass,
     }),
   })
+    .then((response) => {
+      console.log('Raw response:', response);
+      return response;
+      })
     .then((response) => response.json())
     .then((data) => {
-      if (data.error) {
-        alert(data.error);
-      } else {
+        console.log(data);
         window.history.pushState("", "", HOME_URL + "dashboard");
-      }
-});
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    })
 }

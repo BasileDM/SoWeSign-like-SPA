@@ -12,7 +12,11 @@ switch ($url) {
     break;
 
   case HOME_URL . 'a':
-    echo 'A page here !';
+    echo json_encode('A response from back-end-url/a route !');
+    break;
+
+  case HOME_URL . 'b':
+    echo json_encode('A response from back-end-url/b route !');
     break;
 
   default:
