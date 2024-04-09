@@ -1,4 +1,4 @@
-<?php include './../src/Pages/includes/header.html'; ?>
+<?php include './includes/header.html'; ?>
 <main>
   <div class="container bg-light p-3 rounded mt-5">
     <div class="text-center">
@@ -17,4 +17,4 @@
     </form>
   </div>
 </main>
-<?php include './../src/Pages/includes/footer.html'; ?>
+<?php include './includes/footer.html'; ?>
