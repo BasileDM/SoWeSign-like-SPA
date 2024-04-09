@@ -5,6 +5,4 @@
     RewriteCond %{REQUEST_URI} !\.(.*)$ [NC]
     RewriteRule   (.*)  /index.php
 
-    # ErrorDocument 404 /page-introuvable
-
 </IfModule>

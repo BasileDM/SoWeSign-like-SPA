@@ -4,12 +4,6 @@ const emailField = document.getElementById("mail");
 const passwordField = document.getElementById("password");
 const submitButton = document.getElementById("login");
 
-submitButton.addEventListener("click", () => {
-  let mail = emailField.value;
-  let pass = passwordField.value;
-  login(mail, pass);
-});
-
 function login($mail, $pass) {
   fetch(API_URL + "b", {
     method: "POST",
@@ -34,3 +28,9 @@ function login($mail, $pass) {
       console.error("Error:", error);
     })
 }
+
+submitButton.addEventListener("click", () => {
+  let mail = emailField.value;
+  let pass = passwordField.value;
+  login(mail, pass);
+});

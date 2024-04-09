@@ -14,6 +14,4 @@
     RewriteCond %{REQUEST_URI} !^/index\.php
     RewriteRule ^ index.php [L]
 
-    # ErrorDocument 404 /page-introuvable
-
 </IfModule>
