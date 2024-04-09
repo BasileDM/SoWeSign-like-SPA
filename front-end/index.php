@@ -1,6 +1,9 @@
-<?php include './includes/header.html'; ?>
+<?php 
+include './includes/header.html'; 
+include './includes/toast.html';
+?>
 <main>
-  <div class="container bg-light p-3 rounded mt-5">
+  <div class="container bg-body-secondary p-3 rounded mt-5">
     <div class="text-center">
       <h2>Bienvenue</h2>
     </div>

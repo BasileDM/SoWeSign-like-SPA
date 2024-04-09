@@ -1,4 +1,5 @@
 import { HOME_URL, API_URL } from "./config.js";
+import { displayToast } from "./display.js";
 
 const emailField = document.getElementById("mail");
 const passwordField = document.getElementById("password");
@@ -16,17 +17,17 @@ function login($mail, $pass) {
     }),
   })
     .then((response) => {
-      console.log('Raw response:', response);
+      console.log("Raw response:", response);
       return response;
-      })
+    })
     .then((response) => response.json())
     .then((data) => {
-        console.log(data);
-        window.history.pushState("", "", HOME_URL + "dashboard");
+      console.log(data);
+      window.history.pushState("", "", HOME_URL + "dashboard");
     })
     .catch((error) => {
       console.error("Error:", error);
-    })
+    });
 }
 
 submitButton.addEventListener("click", () => {
@@ -34,3 +35,5 @@ submitButton.addEventListener("click", () => {
   let pass = passwordField.value;
   login(mail, pass);
 });
+
+displayToast("SIMPLON SWS", "Welcome to the website, the page has reloaded", "success");
