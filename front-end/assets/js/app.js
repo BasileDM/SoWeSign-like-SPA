@@ -5,7 +5,7 @@ const passwordField = document.getElementById("password");
 const submitButton = document.getElementById("login");
 
 function login($mail, $pass) {
-  fetch(API_URL + "b", {
+  fetch(API_URL + "a", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -1,3 +1,3 @@
 <?php
-  require_once __DIR__ . '/config.php';
-  require_once __DIR__ . '/src/router.php';
+session_start();
+require_once __DIR__ . '/src/init.php';
