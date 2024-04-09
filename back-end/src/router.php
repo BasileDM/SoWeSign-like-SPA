@@ -6,7 +6,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 $request = json_decode(file_get_contents('php://input'), true);
 
 switch ($url) {
-
+  
   case HOME_URL:
     var_dump($url);
     echo 'Hello, World! Home.';
