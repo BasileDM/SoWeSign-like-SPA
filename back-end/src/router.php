@@ -8,7 +8,7 @@ $request = json_decode(file_get_contents('php://input'), true);
 switch ($url) {
   
   case HOME_URL:
-    echo 'Current url: ' . $url . PHP_EOL . '<br>';
+    echo 'Current url: ' . $url . '<br>';
     echo 'Welcome to the API.';
     break;
 
