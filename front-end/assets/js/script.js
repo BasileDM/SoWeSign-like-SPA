@@ -11,7 +11,7 @@ submitButton.addEventListener("click", () => {
 });
 
 function login($mail, $pass) {
-  fetch(API_URL + "b", {
+  fetch(API_URL + "a", {
     method: "POST",
     headers: {
       "Origin": "http://brief6-sws-front",

@@ -13,7 +13,7 @@
         <label for="password" class="form-label">Mot de passe*</label>
         <input id="password" type="password" class="form-control">
       </div>
-      <button id="login" type="submit" class="btn btn-primary">Connexion</button>
+      <div id="login" class="btn btn-primary">Connexion</div>
     </form>
   </div>
 </main>
