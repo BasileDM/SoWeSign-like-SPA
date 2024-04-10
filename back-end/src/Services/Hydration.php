@@ -11,6 +11,12 @@ trait Hydration {
     $this->hydrate([$name => $value]);
   }
 
+  /**
+   * Hydrates an object with data.
+   *
+   * @param array $data The data to hydrate the object with.
+   * @return void
+   */
   private function hydrate(array $data): void {
     $setter = "set";
     foreach ($data as $key => $value) {

@@ -58,14 +58,13 @@ export class Router {
   }
 
   async loadDashboard() {
-    let html = "";
     console.log(`Fetching at address : ${API_URL + "dashboard"}`);
     const response = await fetch(API_URL + "dashboard");
     if (!response.ok) {
       throw new Error(`Cannot load dashboard: ${response.statusText}`);
     }
-    html = await response.json();
-    document.querySelector("#dashboard-section").innerHTML = html;
+    let data = await response.json();
+    document.querySelector("#dashboard-section").innerHTML = data.dashboard;
     this.render("dashboard-section");
   }
 
