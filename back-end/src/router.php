@@ -20,6 +20,10 @@ switch ($url) {
     echo json_encode('A response from back-end-url/b route !' . $request['mail'] . ' ' . $request['password']);
     break;
 
+    case HOME_URL . 'dashboard':
+      echo json_encode('This is the dashboard HTML !');
+      break;
+
   default:
     echo json_encode('404');
     break;
