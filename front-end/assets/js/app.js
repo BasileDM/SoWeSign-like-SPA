@@ -2,9 +2,7 @@ import { HOME_URL, API_URL } from "./config.js";
 import { displayToast } from "./display.js";
 import { Router } from "./classes/Router.js";
 
-window.addEventListener("DOMContentLoaded", () => {
-  const router = new Router();
-});
+const router = new Router();
 
 const emailField = document.getElementById("mail");
 const passwordField = document.getElementById("password");
@@ -29,8 +27,6 @@ function login($mail, $pass) {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      const router = new Router();
-      // window.history.pushState("", "", HOME_URL + "dashboard");
       router.navigateToRoute(HOME_URL + "dashboard");
     })
     .catch((error) => {
