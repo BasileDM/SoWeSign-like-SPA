@@ -25,16 +25,24 @@ switch ($url) {
       echo json_encode(['error' => 'Wrong mail or password.']);
       exit();
     }
+    header('Content-Type: application/json');
     echo json_encode(['success' => 'Login successful.', 'page' => 'dashboard']);
     break;
 
   case HOME_URL . 'dashboard':
+    if (!AuthController::isLoggedIn()) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Not authenticated.']);
+      exit();
+    }
     $dashboardHTML = file_get_contents(__DIR__ . '/Views/dashboard.html');
-    $dashboardHTML = json_encode(['dashboard' => $dashboardHTML]);
-    echo $dashboardHTML;
+    header('Content-Type: application/json');
+    $dashboardJSON = json_encode(['dashboard' => $dashboardHTML]);
+    echo $dashboardJSON;
     break;
 
   default:
+    header('Content-Type: application/json');
     echo json_encode('404');
     break;
 }

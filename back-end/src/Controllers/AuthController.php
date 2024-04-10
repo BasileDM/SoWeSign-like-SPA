@@ -28,7 +28,11 @@ class AuthController {
     return true;
   }
 
-  public static function cryptPassword($pass) {
-    return password_hash($pass, PASSWORD_DEFAULT);
+  public static function logout(): void {
+    session_destroy();
+  }
+
+  public static function isLoggedIn(): bool {
+    return isset($_SESSION['user_mail']);
   }
 }
