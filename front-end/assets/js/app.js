@@ -10,7 +10,7 @@ const submitButton = document.getElementById("login");
 const navLogin = document.getElementById("nav-login");
 
 function login($mail, $pass) {
-  fetch(API_URL + "b", {
+  fetch(API_URL + "login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

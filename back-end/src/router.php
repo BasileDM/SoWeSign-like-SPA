@@ -12,12 +12,8 @@ switch ($url) {
     echo 'Welcome to the API.';
     break;
 
-  case HOME_URL . 'a':
-    echo json_encode('A response from back-end-url/a route ! ' . $request['mail'] . ' ' . $request['password']);
-    break;
-
-  case HOME_URL . 'b':
-    echo json_encode('A response from back-end-url/b route !' . $request['mail'] . ' ' . $request['password']);
+  case HOME_URL . 'login':
+    
     break;
 
     case HOME_URL . 'dashboard':
