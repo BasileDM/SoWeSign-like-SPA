@@ -34,6 +34,7 @@ function login($mail, $pass) {
     });
 }
 
+// Event listeners
 submitButton.addEventListener("click", () => {
   let mail = emailField.value;
   let pass = passwordField.value;
@@ -45,4 +46,5 @@ navLogin.addEventListener("click", (event) => {
   window.history.pushState("", "", HOME_URL + "login");
 });
 
+// Procedural code
 displayToast("SIMPLON SWS", "Welcome to the website, the page has reloaded", "success");

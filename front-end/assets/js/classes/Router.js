@@ -9,7 +9,6 @@ export class Router {
       "/login": "login-section",
       "/confirm": "activate-section",
       "/dashboard": "dashboard-section",
-      "/test": "test-section",
     };
     this.init();
   }
@@ -24,6 +23,7 @@ export class Router {
     this.currentSection = this.routes[window.location.pathname];
     console.log(`current section : ${this.currentSection}`);
 
+    // Event listeners
     window.addEventListener("popstate", (event) => {
       const path = event.state && event.state.path;
       console.log(`popstate path : ${path || window.location.pathname}`);
@@ -38,13 +38,11 @@ export class Router {
         this.navigateToRoute(element.pathname);
       }
     });
-
     this.navigateToRoute(window.location.pathname);
   }
 
   navigateToRoute(path) {
     document.getElementById(this.currentSection).style.display = "none";
-
     console.log(`navigate to : ${path}`);
     const section = this.routes[path];
     console.log(`section ID : ${section}`);

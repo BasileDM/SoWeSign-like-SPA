@@ -21,11 +21,6 @@ include './includes/toast.html';
       </form>
     </div>
   </section>
-  <section id="test-section" style="display: none">
-    <p> HELOOOO </p>
-  </section>
-  <section id="dashboard-section" style="display: none">
-    <p> Dashboard YEP </p>
-  </section>
+  <section id="dashboard-section" style="display: none"></section>
 </main>
 <?php include './includes/footer.html'; ?>
