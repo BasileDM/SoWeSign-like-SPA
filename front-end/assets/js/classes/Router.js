@@ -17,20 +17,17 @@ export class Router {
   init() {
     console.log(`router initialized`);
     console.log(`window location pathname : ${window.location.pathname}`);
+    if (!(window.location.pathname in this.routes)) {
+      window.location.pathname = HOME_URL;
+      return;
+    }
     this.currentSection = this.routes[window.location.pathname];
     console.log(`current section : ${this.currentSection}`);
 
     window.addEventListener("popstate", (event) => {
-      let path = event.state && event.state.path;
-      if (path === null || path === undefined) {
-        if (window.location.pathname === HOME_URL) {
-          return;
-        } else {
-          this.navigateToRoute(HOME_URL);
-        }
-      } else {
-        this.navigateToRoute(path);
-      }
+      const path = event.state && event.state.path;
+      console.log(`popstate path : ${path || window.location.pathname}`);
+      this.navigateToRoute(path || window.location.pathname);
     });
 
     window.addEventListener("click", (event) => {
@@ -52,7 +49,7 @@ export class Router {
     const section = this.routes[path];
     console.log(`section ID : ${section}`);
     if (section && section === "dashboard-section") {
-      this.loadDashboard(section).catch((error) => console.error(error));
+      this.loadDashboard().catch((error) => console.error(error));
       window.history.pushState("", "", "dashboard");
     } else if (section) {
       this.render(section);
@@ -62,18 +59,16 @@ export class Router {
     console.log(`New current section : ${this.currentSection}`);
   }
 
-  async loadDashboard(section) {
+  async loadDashboard() {
     let html = "";
-    if (section === "dashboard-section") {
-      console.log(`Fetching at address : ${API_URL + "dashboard"}`);
-      const response = await fetch(API_URL + "dashboard");
-      if (!response.ok) {
-        throw new Error(`Cannot load ${section}: ${response.statusText}`);
-      }
-      html = await response.json();
-      document.querySelector("#dashboard-section").innerHTML = html;
-      this.render(section);
+    console.log(`Fetching at address : ${API_URL + "dashboard"}`);
+    const response = await fetch(API_URL + "dashboard");
+    if (!response.ok) {
+      throw new Error(`Cannot load dashboard: ${response.statusText}`);
     }
+    html = await response.json();
+    document.querySelector("#dashboard-section").innerHTML = html;
+    this.render("dashboard-section");
   }
 
   render(section) {
