@@ -8,7 +8,7 @@ $request = json_decode(file_get_contents('php://input'), true);
 switch ($url) {
   
   case HOME_URL:
-    echo 'Current url: ' . $url . PHP_EOL . '<br>';
+    echo 'Current url: ' . $url . '<br>';
     echo 'Welcome to the API.';
     break;
 
@@ -19,6 +19,10 @@ switch ($url) {
   case HOME_URL . 'b':
     echo json_encode('A response from back-end-url/b route !' . $request['mail'] . ' ' . $request['password']);
     break;
+
+    case HOME_URL . 'dashboard':
+      echo json_encode('This is the dashboard HTML !');
+      break;
 
   default:
     echo json_encode('404');
