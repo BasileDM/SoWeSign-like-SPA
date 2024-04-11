@@ -39,9 +39,8 @@ export function isTokenExpired() {
   const { payload } = decodeJwt(token);
   const timeLeft = 3600000 - (Date.now() - payload.iat * 1000);
   if (timeLeft <= 0) {
-    console.log(`token expired : ${timeLeft}ms`);
     return true;
   }
-  console.log(`token time left : ${timeLeft}ms`);
+  console.log(`token time left : ${(Math.floor(timeLeft / 60000))} minutes`);
   return false;
 }

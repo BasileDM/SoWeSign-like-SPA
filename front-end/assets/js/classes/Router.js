@@ -4,7 +4,6 @@ import { displayToast } from "../display.js";
 export class Router {
   constructor() {
     this.isDashboardLoaded = false;
-    this.dashboardHtml = "";
     this.currentSection = null;
     this.routes = {
       "/": "login-section",
