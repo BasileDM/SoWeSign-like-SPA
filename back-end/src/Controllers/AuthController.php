@@ -97,4 +97,11 @@ class AuthController {
     $exp = $payload['iat'] + 3600;
     return $exp > time();
   }
+
+  public static function getTokenTimeLeft($token): int {
+    $jwt = explode('.', $token);
+    $payload = json_decode(base64_decode($jwt[1]), true);
+    $exp = $payload['iat'] + 3600;
+    return $exp - time();
+  }
 }

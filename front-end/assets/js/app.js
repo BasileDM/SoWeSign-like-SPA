@@ -1,7 +1,7 @@
 import { HOME_URL, API_URL } from "./config.js";
 import { displayToast } from "./display.js";
 import { Router } from "./classes/Router.js";
-import { decodeJwt } from "./auth.js";
+import { decodeJwt, getToken, checkTokenTimeLeft } from "./auth.js";
 
 const router = new Router();
 
@@ -56,3 +56,9 @@ navLogin.addEventListener("click", (event) => {
 
 // Procedural code
 displayToast("SIMPLON SWS", "Welcome to the website, the page has reloaded", "success");
+if (getToken()) {
+  router.navigateToRoute(HOME_URL + "dashboard");
+  checkTokenTimeLeft();
+} else {
+  router.navigateToRoute(HOME_URL + "login");
+}

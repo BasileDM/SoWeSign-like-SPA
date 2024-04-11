@@ -84,6 +84,7 @@ final class Database {
     $configFile = fopen($this->config, "w");
     $content = "<?php
     define('DB_INITIALIZED', TRUE);
+    define('JWT_SECRET', '" . JWT_SECRET . "');
     define('DB_HOST', '" . DB_HOST . "');
     define('DB_NAME', '" . DB_NAME . "');
     define('DB_USER', '" . DB_USER . "');

@@ -3,6 +3,8 @@ import { displayToast } from "../display.js";
 
 export class Router {
   constructor() {
+    this.isDashboardLoaded = false;
+    this.dashboardHtml = "";
     this.currentSection = null;
     this.routes = {
       "/": "login-section",
@@ -12,6 +14,7 @@ export class Router {
       "/dashboard": "dashboard-section",
     };
     this.init();
+    console.log("Router initialized");
   }
 
   init() {
@@ -40,7 +43,7 @@ export class Router {
   navigateToRoute(path) {
     document.getElementById(this.currentSection).style.display = "none";
     const section = this.routes[path];
-    if (section && section === "dashboard-section") {
+    if (section && !this.isDashboardLoaded && section === "dashboard-section") {
       this.loadDashboard().catch((error) => console.error(error));
     } else if (section) {
       this.render(section);
@@ -71,6 +74,7 @@ export class Router {
           displayToast("SIMPLON SWS", data.error, "error");
 
         } else if (data.success) {
+          this.isDashboardLoaded = true;          
           window.history.pushState("", "", "dashboard");
           displayToast("SIMPLON SWS", data.success, "success");
           document.querySelector("#dashboard-section").innerHTML = data.dashboard;
