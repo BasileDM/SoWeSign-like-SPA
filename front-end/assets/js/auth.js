@@ -31,6 +31,7 @@ export function decodeJwt(token) {
 export function getToken() {
   return localStorage.getItem("token");
 }
+
 export function isTokenExpired() {
   const token = getToken();
   if (!token) {
@@ -39,8 +40,9 @@ export function isTokenExpired() {
   const { payload } = decodeJwt(token);
   const timeLeft = 3600000 - (Date.now() - payload.iat * 1000);
   if (timeLeft <= 0) {
+    localStorage.removeItem("token");
     return true;
   }
-  console.log(`token time left : ${(Math.floor(timeLeft / 60000))} minutes`);
+  // console.log(`token time left : ${(Math.floor(timeLeft / 60000))} minutes`);
   return false;
 }

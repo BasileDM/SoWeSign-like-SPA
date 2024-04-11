@@ -59,7 +59,6 @@ displayToast("SIMPLON SWS", "Welcome to the website, the page has reloaded", "su
 if (getToken() && !isTokenExpired()) {
   router.navigateToRoute(HOME_URL + "dashboard");
 } else {
-  localStorage.removeItem("token");
   router.navigateToRoute(HOME_URL + "login");
   displayToast("SIMPLON SWS", "Your session has expired, please log back in.", "error");
 }
