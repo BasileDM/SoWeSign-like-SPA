@@ -10,7 +10,7 @@ const submitButton = document.getElementById("login");
 const navLogin = document.getElementById("nav-login");
 
 function login($mail, $pass) {
-  fetch(API_URL + "b", {
+  fetch(API_URL + "login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -21,13 +21,19 @@ function login($mail, $pass) {
     }),
   })
     .then((response) => {
-      console.log("Raw response:", response);
-      return response;
-    })
-    .then((response) => response.json())
+      return response.json();
+    })    
     .then((data) => {
-      console.log(data);
-      router.navigateToRoute(HOME_URL + "dashboard");
+      if (data.error) {
+        displayToast("SIMPLON SWS", data.error, "error");
+
+      } else if (data.success) {
+        displayToast("SIMPLON SWS", data.success, "success");
+        router.navigateToRoute(HOME_URL + data.page);
+
+      } else {
+        displayToast("SIMPLON SWS", "Something went wrong.", "error");
+      }
     })
     .catch((error) => {
       console.error("Error:", error);
