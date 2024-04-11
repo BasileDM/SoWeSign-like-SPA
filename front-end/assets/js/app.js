@@ -56,9 +56,8 @@ navLogin.addEventListener("click", (event) => {
 
 // Procedural code
 displayToast("SIMPLON SWS", "Welcome to the website, the page has reloaded", "success");
-if (getToken()) {
+if (getToken() && !isTokenExpired()) {
   router.navigateToRoute(HOME_URL + "dashboard");
-  checkTokenTimeLeft();
 } else {
   router.navigateToRoute(HOME_URL + "login");
 }

@@ -31,15 +31,17 @@ export function decodeJwt(token) {
 export function getToken() {
   return localStorage.getItem("token");
 }
-export function checkTokenTimeLeft() {
+export function isTokenExpired() {
   const token = getToken();
   if (!token) {
-    return false;
+    return true;
   }
   const { payload } = decodeJwt(token);
-  const timeLeft = payload.iat * 1000 - Date.now();
+  const timeLeft = 3600000 - (Date.now() - payload.iat * 1000);
   if (timeLeft <= 0) {
-    console.log(payload);
+    console.log(`token expired : ${timeLeft}ms`);
+    return true;
   }
-  console.log(payload);
+  console.log(`token time left : ${timeLeft}ms`);
+  return false;
 }
