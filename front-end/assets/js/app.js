@@ -24,7 +24,6 @@ function login($mail, $pass) {
       return response.json();
     })    
     .then((data) => {
-
       if (data.error) {
         displayToast("SIMPLON SWS", data.error, "error");
 

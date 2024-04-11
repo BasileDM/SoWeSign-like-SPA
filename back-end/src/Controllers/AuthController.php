@@ -24,7 +24,6 @@ class AuthController {
     $_SESSION['user_mail'] = $user->getMail();
     $_SESSION['user_id'] = $user->getId();
     $_SESSION['user_role'] = $user->getIdRole();
-
     return true;
   }
 
@@ -33,6 +32,10 @@ class AuthController {
   }
 
   public static function isLoggedIn(): bool {
-    return isset($_SESSION['user_mail']);
+    if (isset($_SESSION['user_mail'])) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

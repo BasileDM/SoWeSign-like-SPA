@@ -21,7 +21,7 @@
         <?php if (isset($_SESSION['user_mail'])) { ?>
           <a id="nav-logout" class="nav-link active" aria-current="page" href="./login">Déconnexion</a>
         <?php } else { ?>
-          <a id="nav-login" class="nav-link active" aria-current="page" href="./login">Coooonnexion</a>
+          <a id="nav-login" class="nav-link active" aria-current="page" href="./login">Connexion</a>
         <?php } ?>
       </div>
     </nav>
