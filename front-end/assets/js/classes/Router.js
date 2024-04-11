@@ -3,6 +3,8 @@ import { displayToast } from "../display.js";
 
 export class Router {
   constructor() {
+    this.isDashboardLoaded = false;
+    this.dashboardHtml = "";
     this.currentSection = null;
     this.routes = {
       "/": "login-section",
@@ -12,6 +14,7 @@ export class Router {
       "/dashboard": "dashboard-section",
     };
     this.init();
+    console.log("Router initialized");
   }
 
   init() {
@@ -40,9 +43,8 @@ export class Router {
   navigateToRoute(path) {
     document.getElementById(this.currentSection).style.display = "none";
     const section = this.routes[path];
-    if (section && section === "dashboard-section") {
+    if (section && !this.isDashboardLoaded && section === "dashboard-section") {
       this.loadDashboard().catch((error) => console.error(error));
-
     } else if (section) {
       this.render(section);
       window.history.pushState("", "", path);
@@ -51,22 +53,37 @@ export class Router {
   }
 
   async loadDashboard() {
-    const response = await fetch(API_URL + "dashboard");
-    if (!response.ok) {
-      this.navigateToRoute(HOME_URL);
-      throw new Error(`Cannot load dashboard: ${response.statusText}`);
-    }
-    let data = await response.json();
-    if (data.error) {
-      this.navigateToRoute(HOME_URL);
-      displayToast("SIMPLON SWS", data.error, "error");
+    fetch(API_URL + "dashboard", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: localStorage.getItem("token"),
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Cannot load dashboard: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.error) {
+          this.navigateToRoute(HOME_URL);
+          displayToast("SIMPLON SWS", data.error, "error");
 
-    } else if (data.success) {
-      window.history.pushState("", "", "dashboard");
-      displayToast("SIMPLON SWS", data.success, "success");
-      document.querySelector("#dashboard-section").innerHTML = data.dashboard;
-      this.render("dashboard-section");
-    }
+        } else if (data.success) {
+          this.isDashboardLoaded = true;          
+          window.history.pushState("", "", "dashboard");
+          displayToast("SIMPLON SWS", data.success, "success");
+          document.querySelector("#dashboard-section").innerHTML = data.dashboard;
+          this.render("dashboard-section");
+
+        } else {
+          displayToast("SIMPLON SWS", "Something went wrong.", "error");
+        }
+      });
   }
 
   render(section) {
