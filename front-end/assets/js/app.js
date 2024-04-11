@@ -1,6 +1,7 @@
 import { HOME_URL, API_URL } from "./config.js";
 import { displayToast } from "./display.js";
 import { Router } from "./classes/Router.js";
+import { decodeJwt } from "./auth.js";
 
 const router = new Router();
 
@@ -29,6 +30,7 @@ function login($mail, $pass) {
 
       } else if (data.success) {
         displayToast("SIMPLON SWS", data.success, "success");
+        localStorage.setItem("token", data.token);
         router.navigateToRoute(HOME_URL + data.page);
 
       } else {

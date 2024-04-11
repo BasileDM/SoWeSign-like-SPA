@@ -15,30 +15,28 @@ switch ($url) {
     break;
 
   case HOME_URL . 'login':
-    if (!$method == 'POST' || !isset($request['mail']) || !isset($request['password'])) {
+    if ($method !== 'POST' || !isset($request['mail']) || !isset($request['password'])) {
       header('Content-Type: application/json');
       echo json_encode(['error' => 'Invalid request.']);
       exit();
     }
-    if (!AuthController::login($request['mail'], $request['password'])) {
-      header('Content-Type: application/json');
-      echo json_encode(['error' => 'Wrong mail or password.']);
-      exit();
-    }
-    header('Content-Type: application/json');
-    echo json_encode(['success' => 'Login successful.', 'page' => 'dashboard']);
+    AuthController::login($request['mail'], $request['password']);
     break;
 
   case HOME_URL . 'dashboard':
-    if (!AuthController::isLoggedIn()) {
+    if (!AuthController::checkTokenSignature($request['token'])) {
       header('Content-Type: application/json');
-      echo json_encode(['error' => 'Not authenticated.']);
+      echo json_encode(['error' => 'Error : Bad token.']);
+      exit();
+    }
+    if (!AuthController::checkTokenTime($request['token'])) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Error : Expired token, please log in again.']);
       exit();
     }
     $dashboardHTML = file_get_contents(__DIR__ . '/Views/dashboard.html');
     header('Content-Type: application/json');
-    $dashboardJSON = json_encode(['dashboard' => $dashboardHTML]);
-    echo $dashboardJSON;
+    echo json_encode(['success' => 'Dashboard loaded.', 'dashboard' => $dashboardHTML]);
     break;
 
   default:
