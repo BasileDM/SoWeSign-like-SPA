@@ -36,12 +36,12 @@ class AuthController {
    * @return string
    */
   public static function generateToken($userMail, $userId): string {
-    // Fonction pour encoder en base64url
+    // Function to encode to base64url
     function base64UrlEncode($data) {
       return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
     }
 
-    // En-tête
+    // Header
     $header = [
       'alg' => 'HS256',
       'typ' => 'JWT'
@@ -56,7 +56,7 @@ class AuthController {
     ];
     $encodedPayload = base64UrlEncode(json_encode($payload));
 
-    // Clé secrète
+    // Secret key
     $secret = JWT_SECRET;
 
     // Signature

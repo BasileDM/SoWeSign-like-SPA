@@ -1,18 +1,18 @@
 export function decodeJwt(token) {
-  // Séparer le token en ses différentes parties
+  // Split token in different parts
   const parts = token.split(".");
   if (parts.length !== 3) {
     throw new Error("JWT is invalid");
   }
-  // Fonction pour décoder les parties encodées en base64Url
+  // Decode function for base64Url encoded strings
   function base64UrlDecode(str) {
-    // Remplacer les caractères spécifiques à base64Url par ceux de base64 standard
+    // Replace special characters in base64Url to those of standard base64
     let base64 = str.replace(/-/g, "+").replace(/_/g, "/");
-    // Ajouter des signes égal (=) pour compléter la chaîne si nécessaire
+    // Add equal signs (=) to complete the string if necessary
     while (base64.length % 4) {
       base64 += "=";
     }
-    // Décoder la chaîne en base64 et convertir en chaîne UTF-8
+    // Decode base64 and convert to UTF-8
     return decodeURIComponent(
       atob(base64)
         .split("")
@@ -21,7 +21,7 @@ export function decodeJwt(token) {
     );
   }
 
-  // Décoder l'en-tête et le payload
+  // Decode header and payload
   const header = JSON.parse(base64UrlDecode(parts[0]));
   const payload = JSON.parse(base64UrlDecode(parts[1]));
 
