@@ -1,3 +1,5 @@
+import { displayToast } from "./display.js";
+
 export function decodeJwt(token) {
   // Split token in different parts
   const parts = token.split(".");
@@ -41,6 +43,7 @@ export function isTokenExpired() {
   const timeLeft = 3600000 - (Date.now() - payload.iat * 1000);
   if (timeLeft <= 0) {
     localStorage.removeItem("token");
+    displayToast("SIMPLON SWS", "Your session has expired.", "error");
     return true;
   }
   // console.log(`token time left : ${(Math.floor(timeLeft / 60000))} minutes`);

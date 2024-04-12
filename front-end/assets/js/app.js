@@ -55,10 +55,5 @@ navLogin.addEventListener("click", (event) => {
 });
 
 // Procedural code
-displayToast("SIMPLON SWS", "Welcome to the website, the page has reloaded", "success");
-if (getToken() && !isTokenExpired()) {
-  router.navigateToRoute(HOME_URL + "dashboard");
-} else {
-  router.navigateToRoute(HOME_URL + "login");
-  displayToast("SIMPLON SWS", "Your session has expired, please log back in.", "error");
-}
+// displayToast("SIMPLON SWS", "Welcome to the website, the page has reloaded", "success");
+
