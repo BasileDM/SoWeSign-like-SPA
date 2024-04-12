@@ -30,6 +30,37 @@ navLogout.addEventListener("click", (event) => {
   window.history.pushState("", "", HOME_URL + "login");
 });
 
+export function addDashboardListeners() {
+  const homeBtn = document.getElementById("home-btn");
+  const homeSection = document.getElementById("home-section");
+  const promotionsBtn = document.getElementById("promotions-btn");
+  const promoSection = document.getElementById("promotions-section");
+
+  promotionsBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    window.history.pushState("", "", HOME_URL + "dashboard/promotions");
+    promoSection.style.display = "block";
+    homeSection.style.display = "none";
+    setActiveNavbarItem(promotionsBtn);
+  });
+
+  homeBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    window.history.pushState("", "", HOME_URL + "dashboard");
+    homeSection.style.display = "block";
+    promoSection.style.display = "none";
+    setActiveNavbarItem(homeBtn);
+  });
+}
+
+function setActiveNavbarItem(item) {
+  const dshbNavbar = document.getElementById("dashboard-navbar");
+  dshbNavbar.querySelectorAll(".nav-link").forEach((element) => {
+    element.classList.remove("active");
+  });
+  item.classList.add("active");
+}
+
 // Procedural code
 displayToast("SIMPLON SWS", "Welcome to the website, the page has reloaded", "success");
 if (auth.getToken() && !auth.isTokenExpired()) {

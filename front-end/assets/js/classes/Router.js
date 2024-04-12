@@ -1,6 +1,7 @@
 import { HOME_URL, API_URL } from "../config.js";
 import { displayToast } from "../display.js";
 import { isTokenExpired, getToken } from "../auth.js";
+import { addDashboardListeners } from "../app.js";
 
 export class Router {
   constructor() {
@@ -13,6 +14,7 @@ export class Router {
       "/logout": "logout-section",
       "/confirm": "activate-section",
       "/dashboard": "dashboard-section",
+      "/dashboard/promotions": "dashboard-section",
     };
     this.init();
     console.log("Router initialized");
@@ -30,10 +32,10 @@ export class Router {
     this.navigateToRoute(window.location.pathname);
 
     // Add Window object event listeners
-    // window.addEventListener("popstate", (event) => {
-    //   const path = event.state && event.state.path;
-    //   this.navigateToRoute(path || window.location.pathname);
-    // });
+    window.addEventListener("popstate", (event) => {
+      const path = event.state && event.state.path;
+      this.navigateToRoute(path || window.location.pathname);
+    });
 
     window.addEventListener("click", (event) => {
       const element = event.target;
@@ -136,6 +138,7 @@ export class Router {
         if (data.error) {
           this.navigateToRoute(HOME_URL);
           displayToast("SIMPLON SWS", data.error, "error");
+
         } else if (data.success) {
           this.isDashboardLoaded = true;
           window.history.pushState("", "", "dashboard");
@@ -143,6 +146,8 @@ export class Router {
           document.querySelector("#dashboard-section").innerHTML = data.dashboard;
           console.log("%c Dashboard loaded from server, now making it visible", "color: red");
           this.render("dashboard-section");
+          addDashboardListeners();
+
         } else {
           displayToast("SIMPLON SWS", "Something went wrong.", "error");
         }
