@@ -7,7 +7,7 @@ use src\Models\Database;
 use src\Models\User;
 
 class UserRepository {
-  private $db;
+  private PDO $db;
 
   public function __construct() {
     $database = new Database();

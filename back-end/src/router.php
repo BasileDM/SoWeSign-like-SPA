@@ -39,6 +39,20 @@ switch ($url) {
     echo json_encode(['success' => 'Dashboard loaded.', 'dashboard' => $dashboardHTML]);
     break;
 
+  case HOME_URL . 'getclasses':
+    if (!AuthController::checkTokenSignature($request['token'])) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Error : Bad token.']);
+      exit();
+    }
+    if (!AuthController::checkTokenTime($request['token'])) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Error : Expired token, please log in again.']);
+      exit();
+    }
+    AuthController::loadClasses();
+    break;
+
   default:
     header('Content-Type: application/json');
     echo json_encode('404');

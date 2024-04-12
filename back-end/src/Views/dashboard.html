@@ -1,28 +1,123 @@
-<!-- <ul id="dashboard-navbar" class="nav nav-tabs">
-  <li class="nav-item">
-    <a id="home-btn" class="nav-link active" aria-current="page" href="#">Accueil</a>
-  </li>
-  <li class="nav-item">
-    <a id="promotions-btn" class="nav-link" href="#">Promotions</a>
-  </li>
-</ul> -->
 <nav class="m-2">
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Accueil</button>
-    <button class="nav-link" id="nav-promos-tab" data-bs-toggle="tab" data-bs-target="#nav-promos" type="button" role="tab" aria-controls="nav-promos" aria-selected="false">Promotions</button>
+    <button
+      class="nav-link active"
+      id="nav-home-tab"
+      data-bs-toggle="tab"
+      data-bs-target="#nav-home"
+      type="button"
+      role="tab"
+      aria-controls="nav-home"
+      aria-selected="true"
+    >
+      Accueil
+    </button>
+    <button
+      class="nav-link"
+      id="nav-promos-tab"
+      data-bs-toggle="tab"
+      data-bs-target="#nav-promos"
+      type="button"
+      role="tab"
+      aria-controls="nav-promos"
+      aria-selected="false"
+    >
+      Promotions
+    </button>
   </div>
 </nav>
-<div class="tab-content" id="nav-tabContent">
+<div class="tab-content m-3" id="nav-tabContent">
   <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
-    <h2>Accueil</h2>
+    <h3>Cours du jour</h3>
+    <div id="class-container" class="container-sm bg-body-secondary p-3 rounded mt-5">
+      <span class="spinner-border" role="status" id="class-spinner"></span>
+      <span class="small" id="class-spinner-text">Chargement des cours...</span>
+    </div>
   </div>
   <div class="tab-pane fade" id="nav-promos" role="tabpanel" aria-labelledby="nav-promos-tab" tabindex="0">
-    <h2>Promotions</h2>
+    <div id="promo-header-ctn" class="d-flex">
+      <div>
+        <h3>Toutes les promotions</h3>
+        <p>Tableau des promotions de Simplon</p>
+      </div>
+      <div class="ms-auto">
+        <a href="./promos" class="btn btn-success align-self-end">Ajouter promotion</a>
+      </div>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Promotion</th>
+          <th scope="col">Début</th>
+          <th scope="col">Fin</th>
+          <th scope="col">Places</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="visually-hidden">
+        <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+          <td>
+            <a href="./cours">Voir</a>
+            <a href="./cours">Modifier</a>
+            <a href="./cours">Supprimer</a>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+          <td>
+            <a href="./cours">Voir</a>
+            <a href="./cours">Modifier</a>
+            <a href="./cours">Supprimer</a>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td colspan="2">Larry the Bird</td>
+          <td>@twitter</td>
+          <td>
+            <a href="./cours">Voir</a>
+            <a href="./cours">Modifier</a>
+            <a href="./cours">Supprimer</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <span class="spinner-border" role="status"></span>
+    <span class="small">Chargement des promotions...</span>
   </div>
 </div>
-<!-- <section id="home-section">
-  <h2>Accueil</h2>
-</section>
-<section id="promotions-section" style="display: none">
-  <h2>Promotions</h2>
-</section> -->
+
+<script>
+  const homeTabCtn = document.getElementById("nav-home");
+  const homeTab = document.getElementById("nav-home-tab");
+  const classSpinner = document.getElementById("class-spinner");
+  const classSpinnerText = document.getElementById("class-spinner-text");
+  const classContainer = document.getElementById("class-container");
+
+  function loadClasses() {    
+    fetch (" " + API_URL + "getclasses")
+      .then((response) => response.json())
+      .then((data) => {
+
+        if (data.error) {
+          displayToast("SIMPLON SWS", data.error, "error");
+
+        } else if (data.success) {
+          classSpinner.classList.add("visually-hidden");
+          classSpinnerText.classList.add("visually-hidden");
+          data.classes.forEach((classe) => {
+            classContainer.innerHTML += classe;
+          });
+        }
+      })
+      .catch((error) => console.error(error));
+  }
+
+</script>
