@@ -5,13 +5,15 @@ namespace src\Controllers;
 use src\Repositories\UserRepository;
 
 class AuthController {
+  
   /**
    * login function to authenticate user with provided email and password.
    *
-   * @param string $mail email of the user trying to login
-   * @param string $pass password of the user trying to login
+   * @param string $mail : Email of the user trying to login
+   * @param string $pass : Password of the user trying to login
+   * @return void Sends a JSON response with a success message and a token.
    */
-  public static function login(string $mail, string $pass) {
+  public static function login(string $mail, string $pass): void {
     $userRepo = new UserRepository();
     $user = $userRepo->getByMail($mail);
     if (!$user) {
@@ -31,11 +33,13 @@ class AuthController {
   }
 
   /**
-   * Generates a JWT token.
+   * Generates a JWT token with the provided user ID and email.
    * 
+   * @param string $userMail : Email of the user
+   * @param string $userId : ID of the user
    * @return string
    */
-  public static function generateToken($userMail, $userId): string {
+  public static function generateToken(string $userMail, string $userId): string {
     // Function to encode to base64url
     function base64UrlEncode($data) {
       return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
@@ -72,10 +76,10 @@ class AuthController {
   /**
    * Check the signature of a JWT token.
    *
-   * @param string $token The JWT token to check.
+   * @param string $token : The JWT token to check.
    * @return bool Returns true if the signature is valid, false otherwise.
    */
-  public static function checkTokenSignature($token): bool {
+  public static function checkTokenSignature(string $token): bool {
     $jwt = explode('.', $token);
     if (count($jwt) !== 3) {
         return false; // Invalid JWT format
@@ -90,7 +94,13 @@ class AuthController {
     return hash_equals($signature, $newSignature);
   }
 
-  public static function checkTokenTime($token): bool {
+  /**
+   * A function to check if the token has expired after 1 hour.
+   *
+   * @param string $token : The token to be checked for expiration
+   * @return bool Returns true if the token has not expired, false otherwise
+   */
+  public static function checkTokenTime(string $token): bool {
     // the token should expire after 1 hour
     $jwt = explode('.', $token);
     $payload = json_decode(base64_decode($jwt[1]), true);
@@ -98,7 +108,13 @@ class AuthController {
     return $exp > time();
   }
 
-  public static function getTokenTimeLeft($token): int {
+  /**
+   * Get the time left for a token to expire.
+   *
+   * @param string $token : The JWT token to analyze.
+   * @return int The time left in seconds before the token expires.
+   */
+  public static function getTokenTimeLeft(string $token): int {
     $jwt = explode('.', $token);
     $payload = json_decode(base64_decode($jwt[1]), true);
     $exp = $payload['iat'] + 3600;

@@ -1,3 +1,5 @@
+import { displayToast } from "./display.js";
+
 export function decodeJwt(token) {
   // Split token in different parts
   const parts = token.split(".");
@@ -31,6 +33,7 @@ export function decodeJwt(token) {
 export function getToken() {
   return localStorage.getItem("token");
 }
+
 export function isTokenExpired() {
   const token = getToken();
   if (!token) {
@@ -39,9 +42,10 @@ export function isTokenExpired() {
   const { payload } = decodeJwt(token);
   const timeLeft = 3600000 - (Date.now() - payload.iat * 1000);
   if (timeLeft <= 0) {
-    console.log(`token expired : ${timeLeft}ms`);
+    localStorage.removeItem("token");
+    displayToast("SIMPLON SWS", "Your session has expired.", "error");
     return true;
   }
-  console.log(`token time left : ${timeLeft}ms`);
+  // console.log(`token time left : ${(Math.floor(timeLeft / 60000))} minutes`);
   return false;
 }
