@@ -10,6 +10,7 @@ export class Router {
       "/": "login-section",
       "/home": "login-section",
       "/login": "login-section",
+      "/logout": "logout-section",
       "/confirm": "activate-section",
       "/dashboard": "dashboard-section",
     };
@@ -60,7 +61,7 @@ export class Router {
       switch (section) {
         case "login-section":
           if (!isTokenExpired()) {
-            console.log(`Rerouting from login to dashboard`);
+            console.log(`%c Rerouting from login to dashboard`, "color: orange");
             this.navigateToRoute(HOME_URL + "dashboard");
             return;
           }
@@ -69,32 +70,49 @@ export class Router {
         case "activate-section":
           if (!isTokenExpired()) {
             this.navigateToRoute(HOME_URL + "dashboard");
-            console.log(`Rerouting from activate to dashboard`);
-            return;
-          };
-          break;
-
-        case "dashboard-section":
-          if (isTokenExpired()) {
-            this.navigateToRoute(HOME_URL);
-            console.log(`Rerouting from dashboard to login`);
+            console.log(`%c Rerouting from activate to dashboard`, "color: orange");
             return;
           }
           break;
+
         default:
-          console.log("Wrong section name, can't reroute");
+          console.log("Token present but no reroute necessary");
           break;
       }
     }
 
-    if (section === "dashboard-section" && !this.isDashboardLoaded) {
-      if (getToken() && !isTokenExpired()) this.loadDashboard().catch((error) => console.error(error));
-      return;
-    }
+    switch (section) {
+      case "dashboard-section":
+        if (!this.isDashboardLoaded) {
+          console.log(`Is dahboard loaded : ${this.isDashboardLoaded}`);
+          if (getToken() && !isTokenExpired()) {
+            this.loadDashboard().catch((error) => console.error(error));
+          } else {
+            console.log(`token not found or expired`);
+          }
+        } else {
+          this.render(section);
+          console.log(`${section} is now visible`);
+          window.history.pushState("", "", path);
+        }
+        if (isTokenExpired()) {
+          this.navigateToRoute(HOME_URL);
+          console.log(`%c Rerouting from dashboard to login`, "color: orange");
+          return;
+        }
+        break;
 
-    this.render(section);
-    console.log(`${section} is now visible`);
-    window.history.pushState("", "", path);
+      case "logout-section":
+        console.log(`%c Rerouting from logout to login`, "color: orange");
+        this.navigateToRoute(HOME_URL);
+        return;
+
+      default:
+        this.render(section);
+        console.log(`${section} is now visible`);
+        window.history.pushState("", "", path);
+        break;
+    }
   }
 
   async loadDashboard() {
@@ -108,6 +126,7 @@ export class Router {
       }),
     })
       .then((response) => {
+        console.log(`Fetching dashboard : ${response}`);
         if (!response.ok) {
           throw new Error(`Cannot load dashboard: ${response.statusText}`);
         }
@@ -122,7 +141,7 @@ export class Router {
           window.history.pushState("", "", "dashboard");
           displayToast("SIMPLON SWS", data.success, "success");
           document.querySelector("#dashboard-section").innerHTML = data.dashboard;
-          console.log("Dashboard loaded from server, now making it visible");
+          console.log("%c Dashboard loaded from server, now making it visible", "color: red");
           this.render("dashboard-section");
         } else {
           displayToast("SIMPLON SWS", "Something went wrong.", "error");

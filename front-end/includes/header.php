@@ -18,7 +18,7 @@
           <img src="./assets/imgs/logo32x32.png" alt="" />
           <a class="navbar-brand" href="./home">SIMPLON</a>
         </div>
-          <!-- <a id="nav-logout" class="nav-link active" aria-current="page" href="./login">Déconnexion</a> -->
+          <a id="nav-logout" class="nav-link active" aria-current="page" href="./logout">Déconnexion</a>
           <a id="nav-login" class="nav-link active" aria-current="page" href="./login">Connexion</a>
       </div>
     </nav>

@@ -22,5 +22,6 @@ include './includes/toast.html';
     </div>
   </section>
   <section id="dashboard-section" style="display: none"></section>
+  <section id="logout-section" style="display: none"><p>Logging out...</p></section>
 </main>
 <?php include './includes/footer.html'; ?>
