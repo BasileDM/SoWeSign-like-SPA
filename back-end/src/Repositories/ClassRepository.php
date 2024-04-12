@@ -13,8 +13,8 @@ final class ClassRepository {
     $this->db = $database->getDb();
   }
 
-  public function getClasses(): array {
-    $stmt = $this->db->query('SELECT * FROM classes');
+  public function getTodaysClasses(): array {
+    $stmt = $this->db->query('SELECT * FROM classes WHERE date = CURDATE()');
     $classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $classes;
   }
