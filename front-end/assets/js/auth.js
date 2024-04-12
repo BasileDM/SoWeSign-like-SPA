@@ -55,6 +55,7 @@ export function isTokenExpired() {
 
 export function logout() {
   localStorage.removeItem("token");
+  switchInterface(false);
 }
 
 export function login(mail, pass) {
