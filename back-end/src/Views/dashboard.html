@@ -1,14 +1,28 @@
-<ul id="dashboard-navbar" class="nav nav-tabs">
+<!-- <ul id="dashboard-navbar" class="nav nav-tabs">
   <li class="nav-item">
     <a id="home-btn" class="nav-link active" aria-current="page" href="#">Accueil</a>
   </li>
   <li class="nav-item">
     <a id="promotions-btn" class="nav-link" href="#">Promotions</a>
   </li>
-</ul>
-<section id="home-section">
+</ul> -->
+<nav class="m-2">
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Accueil</button>
+    <button class="nav-link" id="nav-promos-tab" data-bs-toggle="tab" data-bs-target="#nav-promos" type="button" role="tab" aria-controls="nav-promos" aria-selected="false">Promotions</button>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+    <h2>Accueil</h2>
+  </div>
+  <div class="tab-pane fade" id="nav-promos" role="tabpanel" aria-labelledby="nav-promos-tab" tabindex="0">
+    <h2>Promotions</h2>
+  </div>
+</div>
+<!-- <section id="home-section">
   <h2>Accueil</h2>
 </section>
 <section id="promotions-section" style="display: none">
   <h2>Promotions</h2>
-</section>
+</section> -->
