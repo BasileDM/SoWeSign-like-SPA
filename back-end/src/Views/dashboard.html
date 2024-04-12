@@ -93,31 +93,3 @@
     <span class="small">Chargement des promotions...</span>
   </div>
 </div>
-
-<script>
-  const homeTabCtn = document.getElementById("nav-home");
-  const homeTab = document.getElementById("nav-home-tab");
-  const classSpinner = document.getElementById("class-spinner");
-  const classSpinnerText = document.getElementById("class-spinner-text");
-  const classContainer = document.getElementById("class-container");
-
-  function loadClasses() {    
-    fetch (" " + API_URL + "getclasses")
-      .then((response) => response.json())
-      .then((data) => {
-
-        if (data.error) {
-          displayToast("SIMPLON SWS", data.error, "error");
-
-        } else if (data.success) {
-          classSpinner.classList.add("visually-hidden");
-          classSpinnerText.classList.add("visually-hidden");
-          data.classes.forEach((classe) => {
-            classContainer.innerHTML += classe;
-          });
-        }
-      })
-      .catch((error) => console.error(error));
-  }
-
-</script>

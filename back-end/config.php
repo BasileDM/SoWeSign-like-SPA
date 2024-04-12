@@ -5,5 +5,5 @@
     define('DB_NAME', 'sws');
     define('DB_USER', 'sws');
     define('DB_PASS', 'sws');
-    define('PREFIXE', 'sws_');
+    define('PREFIXE', 'SWS_');
     define('HOME_URL', '/');

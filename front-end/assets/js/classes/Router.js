@@ -1,6 +1,7 @@
 import { HOME_URL, API_URL } from "../config.js";
 import { displayToast } from "../display.js";
 import { isTokenExpired, getToken } from "../auth.js";
+import { loadClasses } from "../dashboard.js";
 
 export class Router {
   constructor() {
@@ -145,6 +146,7 @@ export class Router {
           document.querySelector("#dashboard-section").innerHTML = data.dashboard;
           console.log("%c Dashboard loaded from server, now making it visible", "color: red");
           this.render("dashboard-section");
+          loadClasses();
 
         } else {
           displayToast("SIMPLON SWS", "Something went wrong.", "error");

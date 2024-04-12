@@ -1,6 +1,7 @@
 <?php
 
 use src\Controllers\AuthController;
+use src\Controllers\DashboardController;
 
 $url = $_SERVER['REQUEST_URI'];
 $url = parse_url($url, PHP_URL_PATH);
@@ -50,7 +51,7 @@ switch ($url) {
       echo json_encode(['error' => 'Error : Expired token, please log in again.']);
       exit();
     }
-    AuthController::loadClasses();
+    DashboardController::getClasses();
     break;
 
   default:

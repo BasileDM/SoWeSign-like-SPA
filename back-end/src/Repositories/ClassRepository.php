@@ -1,8 +1,9 @@
 <?php
 
-namespace src\Controllers;
+namespace src\Repositories;
 
 use PDO;
+use src\Models\ClassModel;
 use src\Models\Database;
 
 final class ClassRepository {
@@ -14,8 +15,8 @@ final class ClassRepository {
   }
 
   public function getTodaysClasses(): array {
-    $stmt = $this->db->query('SELECT * FROM classes WHERE date = CURDATE()');
-    $classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $this->db->query('SELECT * FROM '.PREFIXE.'CLASSES WHERE DAY(START_TIME) = DAY(CURDATE())');
+    $classes = $stmt->fetchAll(PDO::FETCH_CLASS, ClassModel::class);
     return $classes;
   }
 }
