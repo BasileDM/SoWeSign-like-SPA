@@ -26,7 +26,7 @@ class AuthController {
       echo json_encode(['error' => 'Wrong mail or password.']);
       die();
     }
-    $token = self::generateToken($user->getMail(), $user->getId());
+    $token = self::generateToken($user->getMail(), $user->getId(), $user->getIdRole());
     header('Content-Type: application/json');
     echo json_encode(['success' => 'Login successful.', 'page' => 'dashboard', 'token' => $token]);
     die();
@@ -39,7 +39,7 @@ class AuthController {
    * @param string $userId : ID of the user
    * @return string
    */
-  public static function generateToken(string $userMail, string $userId): string {
+  public static function generateToken(string $userMail, string $userId, string $role): string {
     // Function to encode to base64url
     function base64UrlEncode($data) {
       return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
@@ -56,6 +56,7 @@ class AuthController {
     $payload = [
       'ID' => $userId,
       'mail' => $userMail,
+      'role' => $role,
       'iat' => time()
     ];
     $encodedPayload = base64UrlEncode(json_encode($payload));
