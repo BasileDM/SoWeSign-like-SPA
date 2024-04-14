@@ -14,8 +14,8 @@ final class ClassRepository {
     $this->db = $database->getDb();
   }
 
-  public function getTodaysClasses(): array {
-    $stmt = $this->db->query('SELECT * FROM '.PREFIXE.'CLASSES WHERE DAY(START_TIME) = DAY(CURDATE())');
+  public function getTodaysClasses(int $promotionId): array {
+    $stmt = $this->db->query('SELECT * FROM '.PREFIXE.'CLASSES WHERE DAY(START_TIME) = DAY(CURDATE()) AND ID_PROMOTION = '.$promotionId.';');
     $classes = $stmt->fetchAll(PDO::FETCH_CLASS, ClassModel::class);
     return $classes;
   }

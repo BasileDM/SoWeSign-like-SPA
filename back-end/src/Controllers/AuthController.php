@@ -121,4 +121,34 @@ class AuthController {
     $exp = $payload['iat'] + 3600;
     return $exp - time();
   }
+
+  /**
+   * Get the payload from a JWT token.
+   *
+   * @param string $token The JWT token from which to extract the payload.
+   * @return array The decoded payload data from the token.
+   */
+  public static function getTokenPayload(string $token): array {
+    $jwt = explode('.', $token);
+    $payload = json_decode(base64_decode($jwt[1]), true);
+    return $payload;
+  }
+
+  public static function securityCheck($token): void {
+    if (!isset($token)) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'No token provided.']);
+      exit();
+    }
+    if (!self::checkTokenSignature($token)) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Error : Bad token.']);
+      exit();
+    }
+    if (!self::checkTokenTime($token)) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Error : Expired token, please log in again.']);
+      exit();
+    }
+  }
 }

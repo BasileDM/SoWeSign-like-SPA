@@ -8,7 +8,7 @@ final class ClassModel {
   private int $Id;
   private string $StartTime;
   private string $EndTime;
-  private int $Code;
+  private int|null $Code;
   private int $IdPromotion;
 
   use Hydration;
@@ -67,7 +67,7 @@ final class ClassModel {
   /**
    * Get the value of Code
    */
-  public function getCode(): int {
+  public function getCode(): int|null {
     return $this->Code;
   }
 
@@ -77,7 +77,7 @@ final class ClassModel {
    * @param   int  $Code  
    * 
    */
-  public function setCode(int $Code) {
+  public function setCode(int|null $Code) {
     $this->Code = $Code;
   }
 

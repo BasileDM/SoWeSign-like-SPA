@@ -3,17 +3,7 @@ import { todaysClasses } from "../components/todaysClasses.js";
 export class ComponentCreator {
   constructor() {
     this.templates = {};
-
-    // Registering Default Components
-    // Today's Classes Component
     this.registerTemplate("classes", todaysClasses);
-
-    this.registerTemplate("customComponent", function (content) {
-      const div = document.createElement("div");
-      div.className = "custom-component";
-      div.textContent = content;
-      return div;
-    });
   }
 
   registerTemplate(name, templateFunction) {
