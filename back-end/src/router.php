@@ -50,6 +50,15 @@ switch ($url) {
     echo json_encode(['success' => 'Code generated.', 'code' => AuthController::generateClassCode($request['classId'])]);
     break;
 
+  case HOME_URL . 'sign':
+    if ($method !== 'POST' || $userRole !== '1' || !isset($request['classId']) || !isset($request['submittedCode'])) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Invalid request.']);
+      exit();
+    }
+    AuthController::recordSignature($request['submittedCode'], $request['classId'], $userId);
+    break;
+
   default:
     header('Content-Type: application/json');
     echo json_encode('404');

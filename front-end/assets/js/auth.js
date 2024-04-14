@@ -1,6 +1,7 @@
 import { HOME_URL, API_URL } from "./config.js";
 import { displayToast } from "./display.js";
 import { router } from "./app.js";
+import { dashboard } from "./app.js";
 
 export function decodeJwt(token) {
   // Split token in different parts
@@ -57,6 +58,8 @@ export function isTokenExpired() {
 
 export function logout() {
   localStorage.removeItem("token");
+  document.getElementById("dashboard-section").innerHTML = "";
+  dashboard.isLoaded = false;
   switchInterface(false);
 }
 

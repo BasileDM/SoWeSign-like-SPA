@@ -6,7 +6,7 @@ use src\Repositories\ClassRepository;
 use src\Repositories\UserRepository;
 
 class AuthController {
-  
+
   /**
    * login function to authenticate user with provided email and password.
    *
@@ -84,15 +84,15 @@ class AuthController {
   public static function checkTokenSignature(string $token): bool {
     $jwt = explode('.', $token);
     if (count($jwt) !== 3) {
-        return false; // Invalid JWT format
+      return false; // Invalid JWT format
     }
-    
+
     $header = base64_decode(str_replace(['-', '_'], ['+', '/'], $jwt[0]));
     $payload = base64_decode(str_replace(['-', '_'], ['+', '/'], $jwt[1]));
     $signature = base64_decode(str_replace(['-', '_'], ['+', '/'], $jwt[2]));
-    
+
     $newSignature = hash_hmac('sha256', $jwt[0] . '.' . $jwt[1], JWT_SECRET, true);
-    
+
     return hash_equals($signature, $newSignature);
   }
 
@@ -138,9 +138,8 @@ class AuthController {
   /**
    * A function to check token security and validation.
    *
-   * @param datatype $token The token to be checked for security.
-   * @throws void Sends a JSON response with an error message and exits the script.
-   * @return void 
+   * @param string $token The token to be checked for security.
+   * @return void Sends a JSON response with an error message and exits if the token doesn't pass security checks.
    */
   public static function securityCheck(string $token): void {
     if (!isset($token)) {
@@ -176,5 +175,25 @@ class AuthController {
     $classRepo = new ClassRepository();
     $classRepo->addCode($classId, $code);
     return (string) $code;
+  }
+
+  /**
+   * Record the signature for a user in a class.
+   *
+   * @param string $submittedCode The code submitted by the user.
+   * @param string $classId The ID of the class.
+   * @param string $userId The ID of the user.
+   * @return void Sends a JSON response with a success or error message and exits.
+   */
+  public static function recordSignature(string $submittedCode, string $classId, string $userId): void {
+    $classRepo = new ClassRepository();
+    $classCode = $classRepo->getClassCode($classId);
+    if ($submittedCode !== $classCode) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Invalid code.']);
+      exit();
+    }
+    $classRepo->addPresenceStatus($userId, $classId);
+    echo json_encode(['success' => 'Your presence has been recorded.']);
   }
 }

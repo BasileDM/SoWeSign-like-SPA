@@ -1,7 +1,7 @@
 import { HOME_URL } from "./config.js";
 import { displayToast } from "./display.js";
 import { Router } from "./classes/Router.js";
-import { Dashboard } from "./classes/Dashboard.js";
+import { Dashboard } from "./classes/dashboard.js";
 import { ComponentCreator } from "./classes/ComponentCreator.js";
 import * as auth from "./auth.js";
 

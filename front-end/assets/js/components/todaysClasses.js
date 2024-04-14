@@ -19,8 +19,9 @@ export function todaysClasses(content, role) {
   // Classes assignation
   component.className = "container-sm bg-body-secondary p-3 rounded mt-5";
   header.className = "d-flex justify-content-between";
-  body.className = "d-flex flex-column";
+  body.className = "d-flex flex-column gap-3";
   inputCode.className = "d-flex flex-column";
+  input.dataset.classId = content.Id;
 
   // Ordered architecture composition
   inputCode.appendChild(inputLabel);
@@ -59,30 +60,9 @@ export function todaysClasses(content, role) {
       break;
 
     case "1":
-      button.className = "btn btn-danger ms-auto align-self-end";
+      button.className = "btn btn-primary ms-auto align-self-end";
       button.textContent = "Signer";
-      button.addEventListener("click", () => {
-        fetch(API_URL + "sign", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            classId: content.Id, // ID of the class the code is sent for
-            token: localStorage.getItem("token"),
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.error) {
-              displayToast("SIMPLON SWS", data.error, "error");
-            } else if (data.success) {
-              displayToast("SIMPLON SWS", data.success, "success");
-            } else {
-              displayToast("SIMPLON SWS", "Something went wrong.", "error");
-            }
-          });
-      });
+      button.addEventListener("click", submitCode);
       break;
     default:
       break;
@@ -117,5 +97,29 @@ export function todaysClasses(content, role) {
         }
       });
   }
-}
 
+  function submitCode() {
+    fetch(API_URL + "sign", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        classId: content.Id, // ID of the class the code is sent for
+        submittedCode: input.value,
+        token: localStorage.getItem("token"),
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          displayToast("SIMPLON SWS", data.error, "error");
+        } else if (data.success) {
+          displayToast("SIMPLON SWS", data.success, "success");
+        } else {
+          displayToast("SIMPLON SWS", "Something went wrong.", "error");
+        }
+      });
+    console.log(input.value);
+  }
+}
