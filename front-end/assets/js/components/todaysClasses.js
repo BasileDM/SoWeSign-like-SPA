@@ -30,8 +30,8 @@ export function todaysClasses(content) {
   button.textContent = "Valider présence";
   date.textContent = content.StartTime.split(" ")[0];
   let time = content.StartTime.split(" ")[1];
-  date.innerHTML += " " + "<span style='color: #3b82f6'>" + time + "</span>";
   title.textContent = content.PromName;
+  title.innerHTML += " " + "<span style='color: #3b82f6'>" + time.split(":")[0] + "h" + time.split(":")[1] + "</span>";
   subtile.textContent = content.StudentsNumber + " participants";
 
   return component;
