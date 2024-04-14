@@ -161,8 +161,9 @@ class AuthController {
   }
 
   /**
-   * Generates a random code.
+   * Generate a class code
    *
+   * @param string $classId
    * @return string
    */
   public static function generateClassCode($classId): string {
