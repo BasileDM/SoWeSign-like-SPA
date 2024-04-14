@@ -19,4 +19,9 @@ final class ClassRepository {
     $classes = $stmt->fetchAll(PDO::FETCH_CLASS, ClassModel::class);
     return $classes;
   }
+
+  public function addCode(int $classId, string $code): void {
+    $stmt = $this->db->prepare('UPDATE '.PREFIXE.'CLASSES SET CODE = :code WHERE ID = :id;');
+    $stmt->execute(['code' => $code, 'id' => $classId]);
+  }
 }

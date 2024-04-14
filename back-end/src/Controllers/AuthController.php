@@ -2,6 +2,7 @@
 
 namespace src\Controllers;
 
+use src\Repositories\ClassRepository;
 use src\Repositories\UserRepository;
 
 class AuthController {
@@ -134,7 +135,14 @@ class AuthController {
     return $payload;
   }
 
-  public static function securityCheck($token): void {
+  /**
+   * A function to check token security and validation.
+   *
+   * @param datatype $token The token to be checked for security.
+   * @throws void Sends a JSON response with an error message and exits the script.
+   * @return void 
+   */
+  public static function securityCheck(string $token): void {
     if (!isset($token)) {
       header('Content-Type: application/json');
       echo json_encode(['error' => 'No token provided.']);
@@ -150,5 +158,22 @@ class AuthController {
       echo json_encode(['error' => 'Error : Expired token, please log in again.']);
       exit();
     }
+  }
+
+  /**
+   * Generates a random code.
+   *
+   * @return string
+   */
+  public static function generateClassCode($classId): string {
+    $chars = '0123456789';
+    $length = 6;
+    $code = '';
+    for ($i = 0; $i < $length; $i++) {
+      $code .= $chars[rand(0, strlen($chars) - 1)];
+    }
+    $classRepo = new ClassRepository();
+    $classRepo->addCode($classId, $code);
+    return (string) $code;
   }
 }

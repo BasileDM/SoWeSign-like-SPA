@@ -41,6 +41,15 @@ switch ($url) {
     DashboardController::getClasses($userId);
     break;
 
+  case HOME_URL . 'generatecode':
+    if ($method !== 'POST' || $userRole !== '2') {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Invalid request.']);
+      exit();
+    }
+    echo json_encode(['success' => 'Code generated.', 'code' => AuthController::generateClassCode($request['classId'])]);
+    break;
+
   default:
     header('Content-Type: application/json');
     echo json_encode('404');

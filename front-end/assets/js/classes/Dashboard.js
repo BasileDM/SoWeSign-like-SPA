@@ -1,6 +1,7 @@
 import { API_URL } from "../config.js";
 import { displayToast } from "../display.js";
 import { componentCreator } from "../app.js";
+import * as auth from "../auth.js";
 
 export class Dashboard {
   constructor() {
@@ -24,15 +25,11 @@ export class Dashboard {
           displayToast("SIMPLON SWS", data.error, "error");
         } else if (data.success) {
           console.log(data);
-          // const classSpinner = document.getElementById("class-spinner");
-          // const classSpinnerText = document.getElementById("class-spinner-text");
-          // const classContainer = document.getElementById("class-container");
-          // classSpinner.classList.add("visually-hidden");
-          // classSpinnerText.classList.add("visually-hidden");
           const homeTab = document.getElementById("nav-home");
+          const role = auth.decodeJwt(auth.getToken()).payload.role;
 
           data.todaysClasses.forEach((classe) => {
-            let classComponent = componentCreator.createComponent("classes", classe);
+            let classComponent = componentCreator.createComponent("classes", classe, role);
             homeTab.appendChild(classComponent);
           });
         }
