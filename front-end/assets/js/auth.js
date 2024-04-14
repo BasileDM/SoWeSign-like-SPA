@@ -46,7 +46,7 @@ export function isTokenExpired() {
   const timeLeft = 3600000 - (Date.now() - payload.iat * 1000);
   if (timeLeft <= 0) {
     localStorage.removeItem("token");
-    displayToast("SIMPLON SWS", "Your session has expired.", "error");
+    displayToast("SIMPLON SWS", "Your session has expired, please log back in.", "error");
     return true;
   }
   console.log(`%c Token validity time left : ${Math.floor(timeLeft / 60000)} minutes`, "color: green; font-weight: bold;");

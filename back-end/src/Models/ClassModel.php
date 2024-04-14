@@ -98,7 +98,12 @@ final class ClassModel {
     $this->IdPromotion = $IdPromotion;
   }
 
-  public function jsonSerialize(): mixed {
+  /**
+   * Serializes the object to a value that can be serialized natively by json_encode().
+   *
+   * @return array Returns an array representation of the object properties.
+   */
+  public function jsonSerialize(): array {
     return [
       'Id' => $this->Id,
       'StartTime' => $this->StartTime,

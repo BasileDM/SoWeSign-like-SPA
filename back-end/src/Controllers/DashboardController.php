@@ -9,7 +9,13 @@ final class DashboardController {
   public static function getClasses(): void {
     $classesRepo = new ClassRepository();
     $todaysClasses = $classesRepo->getTodaysClasses();
+
+    $serializedClasses = array_map(function($class) {
+      return $class->jsonSerialize();
+    }, $todaysClasses);
+
     header('Content-Type: application/json');
-    echo json_encode(['success' => 'Classes returned', 'todaysClasses1' => $todaysClasses[0], 'todaysClasses2' => $todaysClasses[1]]);
+    echo json_encode(['success' => 'Classes returned', 'todaysClasses' => $serializedClasses]);
   }
 }
+
