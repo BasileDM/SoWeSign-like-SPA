@@ -42,10 +42,16 @@ class UserRepository {
     return $stmt->fetch();
   }
 
-  public function getUserPromotion(string $userId): int {
+  /**
+   * Retrieves the promotion ID of a user based on the user ID.
+   *
+   * @param string $userId The ID of the user to retrieve the promotion for.
+   * @return int The ID of the promotion associated with the user.
+   */
+  public function getUserPromotionId(string $userId): int {
     $sql = "SELECT ID_PROMOTION FROM " . PREFIXE . "RELATION_USER_PROMOTION WHERE ID_USER = :id";
     $stmt = $this->db->prepare($sql);
     $stmt->execute(['id' => $userId]);
-    return (int) $stmt->fetchColumn();
+    return $stmt->fetchColumn();
   }
 }

@@ -19,7 +19,8 @@ export function todaysClasses(content) {
 
   // Architecture composition
   body.appendChild(button);
-  titleSubtile.appendChild(title, subtile);
+  titleSubtile.appendChild(title);
+  titleSubtile.appendChild(subtile);
   header.appendChild(titleSubtile);
   header.appendChild(date);
   component.appendChild(header);
@@ -30,7 +31,8 @@ export function todaysClasses(content) {
   date.textContent = content.StartTime.split(" ")[0];
   let time = content.StartTime.split(" ")[1];
   date.innerHTML += " " + "<span style='color: #3b82f6'>" + time + "</span>";
-  title.textContent = content.IdPromotion;
+  title.textContent = content.PromName;
+  subtile.textContent = content.StudentsNumber + " participants";
 
   return component;
 }
