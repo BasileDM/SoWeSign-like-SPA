@@ -1,17 +1,19 @@
 import { HOME_URL, API_URL } from "../config.js";
 import { displayToast } from "../display.js";
 import { isTokenExpired, getToken } from "../auth.js";
+import { dashboard } from "../app.js";
 
 export class Router {
   constructor() {
-    this.isDashboardLoaded = false;
     this.currentSection = null;
     this.routes = {
       "/": "login-section",
       "/home": "login-section",
       "/login": "login-section",
+      "/logout": "logout-section",
       "/confirm": "activate-section",
       "/dashboard": "dashboard-section",
+      "/dashboard/promotions": "dashboard-section",
     };
     this.init();
     console.log("Router initialized");
@@ -29,10 +31,10 @@ export class Router {
     this.navigateToRoute(window.location.pathname);
 
     // Add Window object event listeners
-    // window.addEventListener("popstate", (event) => {
-    //   const path = event.state && event.state.path;
-    //   this.navigateToRoute(path || window.location.pathname);
-    // });
+    window.addEventListener("popstate", (event) => {
+      const path = event.state && event.state.path;
+      this.navigateToRoute(path || window.location.pathname);
+    });
 
     window.addEventListener("click", (event) => {
       const element = event.target;
@@ -60,7 +62,7 @@ export class Router {
       switch (section) {
         case "login-section":
           if (!isTokenExpired()) {
-            console.log(`Rerouting from login to dashboard`);
+            console.log(`%c Rerouting from login to dashboard`, "color: orange");
             this.navigateToRoute(HOME_URL + "dashboard");
             return;
           }
@@ -69,67 +71,51 @@ export class Router {
         case "activate-section":
           if (!isTokenExpired()) {
             this.navigateToRoute(HOME_URL + "dashboard");
-            console.log(`Rerouting from activate to dashboard`);
-            return;
-          };
-          break;
-
-        case "dashboard-section":
-          if (isTokenExpired()) {
-            this.navigateToRoute(HOME_URL);
-            console.log(`Rerouting from dashboard to login`);
+            console.log(`%c Rerouting from activate to dashboard`, "color: orange");
             return;
           }
           break;
+
         default:
-          console.log("Wrong section name, can't reroute");
+          console.log("Token present but no reroute necessary");
           break;
       }
     }
 
-    if (section === "dashboard-section" && !this.isDashboardLoaded) {
-      if (getToken() && !isTokenExpired()) this.loadDashboard().catch((error) => console.error(error));
-      return;
-    }
-
-    this.render(section);
-    console.log(`${section} is now visible`);
-    window.history.pushState("", "", path);
-  }
-
-  async loadDashboard() {
-    fetch(API_URL + "dashboard", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        token: localStorage.getItem("token"),
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Cannot load dashboard: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.error) {
-          this.navigateToRoute(HOME_URL);
-          displayToast("SIMPLON SWS", data.error, "error");
-        } else if (data.success) {
-          this.isDashboardLoaded = true;
-          window.history.pushState("", "", "dashboard");
-          displayToast("SIMPLON SWS", data.success, "success");
-          document.querySelector("#dashboard-section").innerHTML = data.dashboard;
-          console.log("Dashboard loaded from server, now making it visible");
-          this.render("dashboard-section");
+    switch (section) {
+      case "dashboard-section":
+        if (!dashboard.isLoaded) {
+          console.log(`Is dashboard loaded : ${dashboard.isLoaded}`);
+          if (getToken() && !isTokenExpired()) {
+            dashboard.loadDashboard().catch((error) => console.error(error));
+          } else {
+            console.log(`token not found or expired`);
+          }
         } else {
-          displayToast("SIMPLON SWS", "Something went wrong.", "error");
+          this.render(section);
+          console.log(`${section} is now visible`);
+          window.history.pushState("", "", path);
         }
-      });
-  }
+        if (isTokenExpired()) {
+          this.navigateToRoute(HOME_URL);
+          console.log(`%c Rerouting from dashboard to login`, "color: orange");
+          return;
+        }
+        break;
 
+      case "logout-section":
+        console.log(`%c Rerouting from logout to login`, "color: orange");
+        this.navigateToRoute(HOME_URL);
+        return;
+
+      default:
+        this.render(section);
+        console.log(`${section} is now visible`);
+        window.history.pushState("", "", path);
+        break;
+    }
+  }
+  
   render(section) {
     document.querySelector(`#${section}`).style.display = "block";
   }
