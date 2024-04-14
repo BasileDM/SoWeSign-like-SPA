@@ -15,12 +15,6 @@ const submitButton = document.getElementById("login");
 const navLogin = document.getElementById("nav-login");
 const navLogout = document.getElementById("nav-logout");
 
-// Component creator usage example
-const commentComponent = componentCreator.createComponent("classes", "This is a comment.");
-const customComponent = componentCreator.createComponent("customComponent", "This is a custom component.");
-document.body.appendChild(commentComponent);
-document.body.appendChild(customComponent);
-
 // Event listeners
 submitButton.addEventListener("click", () => {
   let mail = emailField.value;

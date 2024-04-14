@@ -24,14 +24,16 @@ export class Dashboard {
           displayToast("SIMPLON SWS", data.error, "error");
         } else if (data.success) {
           console.log(data);
-          const classSpinner = document.getElementById("class-spinner");
-          const classSpinnerText = document.getElementById("class-spinner-text");
-          const classContainer = document.getElementById("class-container");
-          classSpinner.classList.add("visually-hidden");
-          classSpinnerText.classList.add("visually-hidden");
+          // const classSpinner = document.getElementById("class-spinner");
+          // const classSpinnerText = document.getElementById("class-spinner-text");
+          // const classContainer = document.getElementById("class-container");
+          // classSpinner.classList.add("visually-hidden");
+          // classSpinnerText.classList.add("visually-hidden");
+          const homeTab = document.getElementById("nav-home");
 
           data.todaysClasses.forEach((classe) => {
-            classContainer.innerHTML += classe.Id;
+            let classComponent = componentCreator.createComponent("classes", classe);
+            homeTab.appendChild(classComponent);
           });
         }
       })
