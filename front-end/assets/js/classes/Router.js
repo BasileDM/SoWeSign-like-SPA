@@ -1,11 +1,10 @@
 import { HOME_URL, API_URL } from "../config.js";
 import { displayToast } from "../display.js";
 import { isTokenExpired, getToken } from "../auth.js";
-import { Dashboard } from "./dashboard.js";
+import { dashboard } from "../app.js";
 
 export class Router {
   constructor() {
-    this.dashboard = new Dashboard();
     this.currentSection = null;
     this.routes = {
       "/": "login-section",
@@ -85,10 +84,10 @@ export class Router {
 
     switch (section) {
       case "dashboard-section":
-        if (!this.dashboard.isLoaded) {
-          console.log(`Is dashboard loaded : ${this.dashboard.isLoaded}`);
+        if (!dashboard.isLoaded) {
+          console.log(`Is dashboard loaded : ${dashboard.isLoaded}`);
           if (getToken() && !isTokenExpired()) {
-            this.dashboard.loadDashboard().catch((error) => console.error(error));
+            dashboard.loadDashboard().catch((error) => console.error(error));
           } else {
             console.log(`token not found or expired`);
           }
@@ -115,5 +114,9 @@ export class Router {
         window.history.pushState("", "", path);
         break;
     }
+  }
+  
+  render(section) {
+    document.querySelector(`#${section}`).style.display = "block";
   }
 }

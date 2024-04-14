@@ -1,8 +1,12 @@
 import { HOME_URL } from "./config.js";
 import { displayToast } from "./display.js";
 import { Router } from "./classes/Router.js";
+import { Dashboard } from "./classes/Dashboard.js";
+import { ComponentCreator } from "./classes/ComponentCreator.js";
 import * as auth from "./auth.js";
 
+export const componentCreator = new ComponentCreator();
+export const dashboard = new Dashboard();
 export const router = new Router();
 
 const emailField = document.getElementById("mail");
@@ -10,6 +14,12 @@ const passwordField = document.getElementById("password");
 const submitButton = document.getElementById("login");
 const navLogin = document.getElementById("nav-login");
 const navLogout = document.getElementById("nav-logout");
+
+// Component creator usage example
+const commentComponent = componentCreator.createComponent("classes", "This is a comment.");
+const customComponent = componentCreator.createComponent("customComponent", "This is a custom component.");
+document.body.appendChild(commentComponent);
+document.body.appendChild(customComponent);
 
 // Event listeners
 submitButton.addEventListener("click", () => {

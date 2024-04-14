@@ -2,7 +2,6 @@ import { HOME_URL, API_URL } from "./config.js";
 import { displayToast } from "./display.js";
 import { router } from "./app.js";
 
-
 export function decodeJwt(token) {
   // Split token in different parts
   const parts = token.split(".");
@@ -49,7 +48,10 @@ export function isTokenExpired() {
     displayToast("SIMPLON SWS", "Your session has expired, please log back in.", "error");
     return true;
   }
-  console.log(`%c Token validity time left : ${Math.floor(timeLeft / 60000)} minutes`, "color: green; font-weight: bold;");
+  console.log(
+    `%c Token validity time left : ${Math.floor(timeLeft / 60000)} minutes`,
+    "color: green; font-weight: bold;"
+  );
   return false;
 }
 
