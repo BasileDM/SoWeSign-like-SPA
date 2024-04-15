@@ -35,10 +35,13 @@ final class DashboardController {
       $class['userStatus'] = $userRepo->getStatus($userId, $class['Id']);
     });
 
-    // if $userRole is "1" remove Code property from the array
+    // Remove code if generated and user is role 1
+    // a null code means the class hasn't been started by the teacher yet
     if ($userRole === "1") {
       array_walk($serializedClasses, function(&$class) {
-        unset($class['Code']);
+        if ($class['Code'] !== null) {
+          unset($class['Code']);
+        }        
       });
     }
 
