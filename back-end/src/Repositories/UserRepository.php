@@ -54,4 +54,21 @@ class UserRepository {
     $stmt->execute(['id' => $userId]);
     return $stmt->fetchColumn();
   }
+  
+  /**
+   * Retrieves the status (abscence, presence, late) of a user in a specific class.
+   *
+   * @param string $userId The ID of the user.
+   * @param string $classId The ID of the class.
+   * @return int|null The status of the user in the class if found, otherwise null.
+   */
+  public function getStatus(string $userId, string $classId): int|null {
+    $sql = "SELECT STATUS FROM " . PREFIXE . "RELATION_USER_CLASS WHERE ID_USER = :id AND ID_CLASS = :classId";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(['id' => $userId, 'classId' => $classId]);
+    if ($stmt->rowCount() > 0) { 
+      return $stmt->fetchColumn();
+    }
+    return null;
+  }
 }

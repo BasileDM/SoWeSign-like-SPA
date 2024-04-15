@@ -7,14 +7,14 @@ use src\Repositories\PromRepository;
 use src\Repositories\UserRepository;
 
 final class DashboardController {
-
   /**
    * Retrieves the classes for a given user ID, serializes them, and returns them as JSON response.
    *
    * @param string $userId The ID of the user to fetch classes for
+   * @param string $userRole The role of the user
    * @return void
    */
-  public static function getClasses(string $userId): void {
+  public static function getClasses(string $userId, string $userRole): void {
     $classesRepo = new ClassRepository();
     $userRepo = new UserRepository();
     $userPromId = $userRepo->getUserPromotionId($userId);
@@ -27,11 +27,23 @@ final class DashboardController {
     $promRepo = new PromRepository();
     $promName = $promRepo->getPromName($userPromId);
     $studentsNumber = $promRepo->getStudentsNumber($userPromId);
-    // Add a property to the serialized classes called promName with the value of the variable $promName
-    array_walk($serializedClasses, function(&$class) use ($promName, $studentsNumber) {
+
+    // Add additional properties to each class
+    array_walk($serializedClasses, function(&$class) use ($promName, $studentsNumber, $userRepo, $userId) {
       $class['PromName'] = $promName;
       $class['StudentsNumber'] = $studentsNumber;
+      $class['userStatus'] = $userRepo->getStatus($userId, $class['Id']);
     });
+
+    // Remove code if generated and user is role 1
+    // a null code means the class hasn't been started by the teacher yet
+    if ($userRole === "1") {
+      array_walk($serializedClasses, function(&$class) {
+        if ($class['Code'] !== null) {
+          unset($class['Code']);
+        }        
+      });
+    }
 
     header('Content-Type: application/json');
     echo json_encode(['success' => 'Classes returned', 'todaysClasses' => $serializedClasses]);

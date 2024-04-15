@@ -63,6 +63,16 @@ export function todaysClasses(content, role) {
       button.className = "btn btn-primary ms-auto align-self-end";
       button.textContent = "Signer";
       button.addEventListener("click", submitCode);
+      if (content.Code === null) {
+        inputCode.remove();
+        button.remove();
+      }
+      if (content.userStatus != null) {
+        button.textContent = "Présence enregistrée !";
+        button.className = "btn btn-success ms-auto align-self-end disabled";
+        inputCode.innerHTML = "";
+        button.removeEventListener("click", submitCode);
+      }
       break;
     default:
       break;
@@ -116,6 +126,10 @@ export function todaysClasses(content, role) {
           displayToast("SIMPLON SWS", data.error, "error");
         } else if (data.success) {
           displayToast("SIMPLON SWS", data.success, "success");
+          button.textContent = "Présence enregistrée !";
+          button.className = "btn btn-success ms-auto align-self-end disabled";
+          inputCode.innerHTML = "";
+          button.removeEventListener("click", submitCode);
         } else {
           displayToast("SIMPLON SWS", "Something went wrong.", "error");
         }
