@@ -8,7 +8,7 @@ $url = parse_url($url, PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 $request = json_decode(file_get_contents('php://input'), true);
 
-if ($url !== HOME_URL . 'login') {
+if ($url !== HOME_URL . 'login' && $url !== HOME_URL) {
   AuthController::securityCheck($request['token']);
   $tokenPayload = AuthController::getTokenPayload($request['token']);
   $userId = $tokenPayload['ID'];
@@ -20,6 +20,7 @@ switch ($url) {
   case HOME_URL:
     echo 'Current url: ' . $url . '<br>';
     echo 'Welcome to the API.';
+    exit();
     break;
 
   case HOME_URL . 'login':
