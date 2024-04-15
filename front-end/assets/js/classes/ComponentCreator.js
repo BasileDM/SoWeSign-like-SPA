@@ -1,9 +1,11 @@
 import { todaysClasses } from "../components/todaysClasses.js";
+import { promTableRow } from "../components/promTableRow.js";
 
 export class ComponentCreator {
   constructor() {
     this.templates = {};
     this.registerTemplate("classes", todaysClasses);
+    this.registerTemplate("promTableRow", promTableRow);
   }
 
   registerTemplate(name, templateFunction) {
