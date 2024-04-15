@@ -49,5 +49,20 @@ final class DashboardController {
     echo json_encode(['success' => 'Classes returned', 'todaysClasses' => $serializedClasses]);
     exit();
   }
+
+  /**
+   * Retrieves the promotions for a given user ID, serializes them, and returns them as JSON response.
+   *
+   * @param string $userId The ID of the user to fetch promotions for
+   * @param string $userRole The role of the user
+   * @return void
+   */
+  public static function getPromotions(string $userRole): void {
+    $promRepo = new PromRepository();
+    $promotions = $promRepo->getAll($userRole);
+    header('Content-Type: application/json');
+    echo json_encode(['success' => 'Promotions returned', 'promotions' => $promotions]);
+    exit();
+  }
 }
 

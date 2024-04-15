@@ -25,10 +25,21 @@ class PromRepository {
     return $name;
   }
 
+  /**
+   * Gets the number of students with a unique ID in a promotion.
+   *
+   * @param int $promotionId
+   * @return int
+   */
   public function getStudentsNumber(int $promotionId): int {
-    // The sql request should COUNT in the prefixed table RELATION_USER_PROMOTION the number of students with a unique ID where the promotion is the promotionId
     $stmt = $this->db->query('SELECT COUNT(DISTINCT ID_USER) FROM '.PREFIXE.'RELATION_USER_PROMOTION WHERE ID_PROMOTION = '.$promotionId.';');
     $nbStudents = $stmt->fetchColumn();
     return $nbStudents;
+  }
+
+  public function getAll(): array {
+    $stmt = $this->db->query('SELECT * FROM '.PREFIXE.'PROMOTIONS;');
+    $promos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $promos;
   }
 }
