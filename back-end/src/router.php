@@ -39,7 +39,7 @@ switch ($url) {
     break;
 
   case HOME_URL . 'getclasses':
-    DashboardController::getClasses($userId);
+    DashboardController::getClasses($userId, $userRole);
     break;
 
   case HOME_URL . 'generatecode':

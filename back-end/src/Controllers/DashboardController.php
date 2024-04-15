@@ -12,9 +12,10 @@ final class DashboardController {
    * Retrieves the classes for a given user ID, serializes them, and returns them as JSON response.
    *
    * @param string $userId The ID of the user to fetch classes for
+   * @param string $userRole The role of the user
    * @return void
    */
-  public static function getClasses(string $userId): void {
+  public static function getClasses(string $userId, string $userRole): void {
     $classesRepo = new ClassRepository();
     $userRepo = new UserRepository();
     $userPromId = $userRepo->getUserPromotionId($userId);
@@ -32,6 +33,12 @@ final class DashboardController {
       $class['PromName'] = $promName;
       $class['StudentsNumber'] = $studentsNumber;
     });
+    // if $userRole is "1" remove Code property from the array
+    if ($userRole === "1") {
+      array_walk($serializedClasses, function(&$class) {
+        unset($class['Code']);
+      });
+    }
 
     header('Content-Type: application/json');
     echo json_encode(['success' => 'Classes returned', 'todaysClasses' => $serializedClasses]);
