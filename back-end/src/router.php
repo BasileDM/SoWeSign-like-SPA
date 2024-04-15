@@ -42,6 +42,10 @@ switch ($url) {
     DashboardController::getClasses($userId, $userRole);
     break;
 
+  case HOME_URL . 'getproms':
+    DashboardController::getPromotions($userRole);
+    break;
+
   case HOME_URL . 'generatecode':
     if ($method !== 'POST' || $userRole !== '2') {
       header('Content-Type: application/json');

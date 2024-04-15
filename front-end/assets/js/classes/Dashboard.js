@@ -37,6 +37,35 @@ export class Dashboard {
       .catch((error) => console.error(error));
   }
 
+  loadProms() {
+    console.log("Fetching proms ......................");
+    fetch(API_URL + "getproms", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: localStorage.getItem("token"),
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          displayToast("SIMPLON SWS", data.error, "error");
+        } else if (data.success) {
+          console.log(data);
+          const promTable = document.getElementById("prom-table-body");
+          const role = auth.decodeJwt(auth.getToken()).payload.role;
+
+          data.promotions.forEach((prom) => {
+            let promComponent = componentCreator.createComponent("promTableRow", prom, role);
+            promTable.appendChild(promComponent);
+          });
+        }
+      })
+      .catch((error) => console.error(error));
+  }
+
   async loadDashboard() {
     fetch(API_URL + "dashboard", {
       method: "POST",
@@ -66,6 +95,7 @@ export class Dashboard {
           console.log("%c Dashboard loaded from server, now making it visible", "color: red");
           this.render("dashboard-section");
           this.loadClasses();
+          this.loadProms();
         } else {
           displayToast("SIMPLON SWS", "Something went wrong.", "error");
         }
