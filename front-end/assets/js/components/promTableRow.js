@@ -19,7 +19,7 @@ export function promTableRow(content, role) {
   a1.textContent = "Voir";
   a2.textContent = "Modifier";
   a3.textContent = "Supprimer";
-  a1.setAttribute("href", "./promdetails");
+  a1.setAttribute("href", "./promotions");
   a2.setAttribute("href", "./promedit");
   a3.setAttribute("href", "./promdelete");
   a1.className = "link-info link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover";

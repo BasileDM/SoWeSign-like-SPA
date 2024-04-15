@@ -6,6 +6,7 @@ import { dashboard } from "../app.js";
 export class Router {
   constructor() {
     this.currentSection = null;
+    this.routeComponents = null;
     this.routes = {
       "/": "login-section",
       "/home": "login-section",
@@ -13,19 +14,21 @@ export class Router {
       "/logout": "logout-section",
       "/confirm": "activate-section",
       "/dashboard": "dashboard-section",
-      "/dashboard/promotions": "dashboard-section",
     };
     this.init();
     console.log("Router initialized");
   }
 
   init() {
-    if (!(window.location.pathname in this.routes)) {
+    this.routeComponents = window.location.pathname.split("/");
+    this.routeComponents.shift();
+    console.log(this.routeComponents);
+    if (!("/" + this.routeComponents[0] in this.routes)) {
       window.location.pathname = HOME_URL;
       console.log(`Init : Pathname not found : ${window.location.pathname}`);
       return;
     }
-    this.currentSection = this.routes[window.location.pathname];
+    this.currentSection = this.routes["/" + window.location.pathname.split("/")[1]];
     console.log(`Init : Current section set to Window pathname : ${this.currentSection}`);
 
     this.navigateToRoute(window.location.pathname);
@@ -46,14 +49,15 @@ export class Router {
   }
 
   navigateToRoute(path) {
-    const section = this.routes[path];
+    let splitPath = path.split("/");
+    const section = this.routes["/" + splitPath[1]];
     if (!section) {
       displayToast("SIMPLON SWS", "The page you are trying to access does not exist", "error");
       return;
     }
     console.log(`Valid section, nav section is now : ${section}`);
     document.getElementById(this.currentSection).style.display = "none";
-    console.log(`Navigating to : ${path}, Hiding current section : ${this.currentSection}`);
+    console.log(`Navigating to : ${path}, split: /${splitPath[1]}, Hiding current section : ${this.currentSection}`);
     this.currentSection = section;
     console.log(`New current section set to : ${this.currentSection}`);
 
@@ -94,7 +98,7 @@ export class Router {
         } else {
           render(section);
           console.log(`${section} is now visible`);
-          window.history.pushState("", "", path);
+          window.history.pushState("", "", "/" + splitPath[1]);
         }
         if (isTokenExpired()) {
           this.navigateToRoute(HOME_URL);
@@ -111,7 +115,7 @@ export class Router {
       default:
         render(section);
         console.log(`${section} is now visible`);
-        window.history.pushState("", "", path);
+        window.history.pushState("", "", "/" + splitPath[1]);
         break;
     }
   }
