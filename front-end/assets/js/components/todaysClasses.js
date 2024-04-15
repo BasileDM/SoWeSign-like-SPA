@@ -38,10 +38,32 @@ export function todaysClasses(content, role) {
   // Content population
   date.textContent = content.StartTime.split(" ")[0];
   let time = content.StartTime.split(" ")[1];
+  let endTime = content.EndTime.split(" ")[1];
   title.textContent = content.PromName;
-  title.innerHTML += " " + "<span style='color: #3b82f6'>" + time.split(":")[0] + "h" + time.split(":")[1] + "</span>";
+  title.innerHTML +=
+    " " +
+    "<span style='color: #3b82f6; font-size: 0.8em'>" +
+    time.split(":")[0] +
+    "h" +
+    time.split(":")[1] +
+    " - " +
+    endTime.split(":")[0] +
+    "h" +
+    endTime.split(":")[1] +
+    "</span>";
   subtile.textContent = content.StudentsNumber + " participants";
   inputLabel.textContent = "Code*";
+
+  const currentHour = new Date().getHours();
+  const currentMinutes = new Date().getMinutes();
+  const [classHour, classMinute] = time.split(":");
+  const [classEndHour, classEndMinute] = endTime.split(":");
+  const hasClassStarted =
+    currentHour > parseInt(classHour) ||
+    (currentHour === parseInt(classHour) && currentMinutes >= parseInt(classMinute));
+  const hasClassEnded =
+    currentHour > parseInt(classEndHour) ||
+    (currentHour === parseInt(classEndHour) && currentMinutes >= parseInt(classEndMinute));
 
   // Role dependent generation
   switch (role) {
@@ -50,12 +72,13 @@ export function todaysClasses(content, role) {
         button.className = "btn btn-primary ms-auto align-self-end";
         button.textContent = "Valider présence";
         button.addEventListener("click", generateCode);
+        hasClassStarted ? button.classList.remove("disabled") : button.classList.add("disabled");
       } else {
         body.insertBefore(classCode, button);
         classCode.textContent = content.Code;
         classCode.className = "border border-2 border-primary rounded p-1 w-100 text-center";
-        button.className = "btn btn-warning ms-auto align-self-end";
-        button.innerHTML = "<strong>Signatures en cours</strong>";
+        hasClassEnded ? button.className = "btn btn-success ms-auto align-self-end" : button.className = "btn btn-warning ms-auto align-self-end";
+        hasClassEnded ? button.innerHTML = "<strong>Signatures recueillies</strong>" : button.innerHTML = "<strong>Signatures en cours</strong>";
       }
       break;
 
@@ -70,6 +93,11 @@ export function todaysClasses(content, role) {
       if (content.userStatus != null) {
         button.textContent = "Présence enregistrée !";
         button.className = "btn btn-success ms-auto align-self-end disabled";
+        inputCode.innerHTML = "";
+        button.removeEventListener("click", submitCode);
+      } else if (hasClassEnded) {
+        button.textContent = "Cours terminé";
+        button.className = "btn btn-danger ms-auto align-self-end disabled";
         inputCode.innerHTML = "";
         button.removeEventListener("click", submitCode);
       }
