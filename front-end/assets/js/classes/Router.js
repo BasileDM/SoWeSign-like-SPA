@@ -1,8 +1,7 @@
 import { HOME_URL } from "../config.js";
-import { displayToast } from "../display.js";
+import { displayToast, render } from "../display.js";
 import { isTokenExpired, getToken } from "../auth.js";
 import { dashboard } from "../app.js";
-import { render } from "../display.js";
 
 export class Router {
   constructor() {

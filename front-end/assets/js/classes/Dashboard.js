@@ -1,7 +1,6 @@
 import { API_URL } from "../config.js";
-import { displayToast } from "../display.js";
+import { displayToast, render } from "../display.js";
 import { componentCreator } from "../app.js";
-import { render } from "../display.js";
 import * as auth from "../auth.js";
 
 export class Dashboard {
