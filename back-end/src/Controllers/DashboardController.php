@@ -7,7 +7,6 @@ use src\Repositories\PromRepository;
 use src\Repositories\UserRepository;
 
 final class DashboardController {
-
   /**
    * Retrieves the classes for a given user ID, serializes them, and returns them as JSON response.
    *
@@ -28,11 +27,14 @@ final class DashboardController {
     $promRepo = new PromRepository();
     $promName = $promRepo->getPromName($userPromId);
     $studentsNumber = $promRepo->getStudentsNumber($userPromId);
-    // Add a property to the serialized classes called promName with the value of the variable $promName
-    array_walk($serializedClasses, function(&$class) use ($promName, $studentsNumber) {
+
+    // Add additional properties to each class
+    array_walk($serializedClasses, function(&$class) use ($promName, $studentsNumber, $userRepo, $userId) {
       $class['PromName'] = $promName;
       $class['StudentsNumber'] = $studentsNumber;
+      $class['userStatus'] = $userRepo->getStatus($userId, $class['Id']);
     });
+
     // if $userRole is "1" remove Code property from the array
     if ($userRole === "1") {
       array_walk($serializedClasses, function(&$class) {
