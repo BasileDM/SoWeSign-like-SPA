@@ -75,7 +75,7 @@ export function todaysClasses(content, role) {
         hasClassStarted ? button.classList.remove("disabled") : button.classList.add("disabled");
       } else {
         body.insertBefore(classCode, button);
-        classCode.textContent = content.Code;
+        hasClassEnded ? classCode.remove() : classCode.textContent = content.Code;
         classCode.className = "border border-2 border-primary rounded p-1 w-100 text-center";
         hasClassEnded ? button.className = "btn btn-success ms-auto align-self-end" : button.className = "btn btn-warning ms-auto align-self-end";
         hasClassEnded ? button.innerHTML = "<strong>Signatures recueillies</strong>" : button.innerHTML = "<strong>Signatures en cours</strong>";
