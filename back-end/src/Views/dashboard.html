@@ -26,10 +26,12 @@
     </button>
   </div>
 </nav>
+
 <div class="tab-content m-3" id="nav-tabContent">
   <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
     <h3>Cours du jour</h3>
   </div>
+
   <div class="tab-pane fade" id="nav-promos" role="tabpanel" aria-labelledby="nav-promos-tab" tabindex="0">
     <div id="promo-header-ctn" class="d-flex">
       <div>
@@ -50,8 +52,52 @@
           <th scope="col">Actions</th>
         </tr>
       </thead>
-      <tbody id="prom-table-body">
-      </tbody>
+      <tbody id="prom-table-body"></tbody>
     </table>
   </div>
+
+  <section id="promodetails" style="display: none;">
+    <div id="student-list-toolbar"></div>
+    <nav class="m-2">
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button
+          class="nav-link active"
+          id="nav-home-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#nav-home"
+          type="button"
+          role="tab"
+          aria-controls="nav-home"
+          aria-selected="true"
+        >
+          Tableau des apprenants
+        </button>
+        <button
+          class="nav-link"
+          id="nav-promos-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#nav-promos"
+          type="button"
+          role="tab"
+          aria-controls="nav-promos"
+          aria-selected="false"
+        >
+          Retards
+        </button>
+      </div>
+    </nav>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Nom de famille</th>
+          <th scope="col">Prénom</th>
+          <th scope="col">Mail</th>
+          <th scope="col">Compte activé</th>
+          <th scope="col">Rôle</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="prom-table-body"></tbody>
+    </table>
+  </section>
 </div>
