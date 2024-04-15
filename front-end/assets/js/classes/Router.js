@@ -1,7 +1,8 @@
-import { HOME_URL, API_URL } from "../config.js";
+import { HOME_URL } from "../config.js";
 import { displayToast } from "../display.js";
 import { isTokenExpired, getToken } from "../auth.js";
 import { dashboard } from "../app.js";
+import { render } from "../display.js";
 
 export class Router {
   constructor() {
@@ -92,7 +93,7 @@ export class Router {
             console.log(`token not found or expired`);
           }
         } else {
-          this.render(section);
+          render(section);
           console.log(`${section} is now visible`);
           window.history.pushState("", "", path);
         }
@@ -109,14 +110,10 @@ export class Router {
         return;
 
       default:
-        this.render(section);
+        render(section);
         console.log(`${section} is now visible`);
         window.history.pushState("", "", path);
         break;
     }
-  }
-  
-  render(section) {
-    document.querySelector(`#${section}`).style.display = "block";
   }
 }

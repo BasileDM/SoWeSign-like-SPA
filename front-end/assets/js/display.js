@@ -20,4 +20,6 @@ export function displayToast(title, message, type) {
   toast.show();
 }
 
-
+export function render(section) {
+  document.querySelector(`#${section}`).style.display = "block";
+}

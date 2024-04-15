@@ -93,16 +93,12 @@ export class Dashboard {
           displayToast("SIMPLON SWS", data.success, "success");
           document.querySelector("#dashboard-section").innerHTML = data.dashboard;
           console.log("%c Dashboard loaded from server, now making it visible", "color: red");
-          this.render("dashboard-section");
+          render("dashboard-section");
           this.loadClasses();
           this.loadProms();
         } else {
           displayToast("SIMPLON SWS", "Something went wrong.", "error");
         }
       });
-  }
-
-  render(section) {
-    document.querySelector(`#${section}`).style.display = "block";
   }
 }
