@@ -51,6 +51,14 @@ final class ClassRepository {
     $stmt->execute(['classId' => $classId, 'userId' => $userId, 'presenceStatus' => $presenceStatus]);
   }
 
+  public function getLatePresences(): array {
+    $stmt = $this->db->query('SELECT *  FROM ' . PREFIXE . 'RELATION_USER_CLASS 
+    JOIN ' . PREFIXE . 'RELATION_USER_PROMOTION ON ' . PREFIXE . 'RELATION_USER_CLASS.ID_USER = ' . PREFIXE . 'RELATION_USER_PROMOTION.ID_USER
+    WHERE STATUS = 2;');
+    $presences = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $presences;
+  }
+
   /**
    * Retrieves the code for a specific class.
    *

@@ -33,7 +33,7 @@ export class Dashboard {
             homeTab.appendChild(classComponent);
           });
           
-          this.loadProms(); // loadProms then loads students
+          this.loadProms(); // loadProms then loads presences
         }
       })
       .catch((error) => console.error(error));
@@ -58,15 +58,48 @@ export class Dashboard {
           console.log(data);
           const promTable = document.getElementById("prom-table-body");
           const role = auth.decodeJwt(auth.getToken()).payload.role;
+          let latePresenceTable = document.getElementById("late-list-table");
           const studentListTable = document.getElementById("student-list-table");
 
           data.promotions.forEach((prom) => {
             // These table bodies will be populated in the loadStudents method
             studentListTable.innerHTML += `<tbody id="students-table-body-prom${prom.ID}" class="d-none"></tbody>`;
+            latePresenceTable.innerHTML += `<tbody id="late-table-body-prom${prom.ID}" class="d-none"></tbody>`;
             let promComponent = componentCreator.createComponent("promTableRow", prom, role);
             promTable.appendChild(promComponent);
           });
 
+          this.loadLatePresences(); // loadLatePresences then loads students 
+        }
+      })
+      .catch((error) => console.error(error));
+  }
+
+  loadLatePresences() {
+    console.log("Fetching late presence .............");
+    fetch(API_URL + "getlatepresences", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: localStorage.getItem("token"),
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          displayToast("SIMPLON SWS", data.error, "error");
+        } else if (data.success) {
+          console.log(data);
+          const role = auth.decodeJwt(auth.getToken()).payload.role;
+
+          data.latePresences.forEach((latePresence) => {
+            let latePresenceTable = document.getElementById("late-table-body-prom" + latePresence.ID_PROMOTION);
+            let latePresenceComponent = componentCreator.createComponent("studentsTableRow", latePresence, role);
+            latePresenceTable.appendChild(latePresenceComponent);
+          });
+        
           this.loadStudents();
         }
       })
@@ -102,6 +135,12 @@ export class Dashboard {
       })
       .catch((error) => console.error(error));
   }
+
+  
+
+  
+
+  
 
   async loadDashboard() {
     fetch(API_URL + "dashboard", {

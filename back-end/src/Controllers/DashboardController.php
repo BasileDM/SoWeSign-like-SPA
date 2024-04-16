@@ -70,7 +70,6 @@ final class DashboardController {
    */
   public static function getStudents(): void {
     $userRepo = new UserRepository();
-    $promRepo = new PromRepository();
     $students = $userRepo->getAll();
 
     $serializedStudents = array_map(function ($student) {
@@ -83,6 +82,14 @@ final class DashboardController {
 
     header('Content-Type: application/json');
     echo json_encode(['success' => 'Students returned', 'students' => $serializedStudents]);
+    exit();
+  }
+
+  public static function getLatePresences(): void {
+    $classRepo = new ClassRepository();
+    $latePresences = $classRepo->getLatePresences();
+    header('Content-Type: application/json');
+    echo json_encode(['success' => 'Late presence returned', 'latePresences' => $latePresences]);
     exit();
   }
 }

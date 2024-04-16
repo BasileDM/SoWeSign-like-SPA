@@ -36,6 +36,7 @@
 
   <!-- Promotions tab -->
   <div class="tab-pane fade" id="nav-promos" role="tabpanel" aria-labelledby="nav-promos-tab" tabindex="0">
+    <!-- List of all proms -->
     <section id="promolist">
       <!-- Promotions list header -->
       <div id="promo-header-ctn" class="d-flex">
@@ -110,8 +111,25 @@
 
       <!-- Student / Late nav content -->
       <div class="tab-content m-3" id="nav-promdetails-tabContent">
+        <!-- Students tab -->
         <div class="tab-pane fade show active" id="nav-students" role="tabpanel" aria-labelledby="nav-students-tab" tabindex="0">
           <table class="table table-striped" id="student-list-table">
+            <thead>
+              <tr>
+                <th scope="col">Nom de famille</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Mail</th>
+                <th scope="col">Compte activé</th>
+                <th scope="col">Rôle</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        
+        <!-- Late tab -->
+        <div class="tab-pane fade" id="nav-late" role="tabpanel" aria-labelledby="nav-late-tab" tabindex="0">
+          <table class="table table-striped" id="late-list-table">
             <thead>
               <tr>
                 <th scope="col">Nom de famille</th>

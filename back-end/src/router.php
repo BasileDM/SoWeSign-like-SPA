@@ -50,6 +50,10 @@ switch ($url) {
     DashboardController::getStudents();
     break;
 
+  case HOME_URL . 'getlatepresences':
+    DashboardController::getLatePresences();
+    break;
+
   case HOME_URL . 'generatecode':
     if ($method !== 'POST' || $userRole !== '2') {
       header('Content-Type: application/json');
