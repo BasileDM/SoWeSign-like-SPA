@@ -32,6 +32,8 @@ export class Dashboard {
             let classComponent = componentCreator.createComponent("classes", classe, role);
             homeTab.appendChild(classComponent);
           });
+          
+          this.loadProms(); // loadProms then loads students
         }
       })
       .catch((error) => console.error(error));
@@ -56,11 +58,16 @@ export class Dashboard {
           console.log(data);
           const promTable = document.getElementById("prom-table-body");
           const role = auth.decodeJwt(auth.getToken()).payload.role;
+          const studentListTable = document.getElementById("student-list-table");
 
           data.promotions.forEach((prom) => {
+            // These table bodies will be populated in the loadStudents method
+            studentListTable.innerHTML += `<tbody id="students-table-body-prom${prom.ID}" class="d-none"></tbody>`;
             let promComponent = componentCreator.createComponent("promTableRow", prom, role);
             promTable.appendChild(promComponent);
           });
+
+          this.loadStudents();
         }
       })
       .catch((error) => console.error(error));
@@ -83,10 +90,11 @@ export class Dashboard {
           displayToast("SIMPLON SWS", data.error, "error");
         } else if (data.success) {
           console.log(data);
-          const studentTable = document.getElementById("students-table-body");
           const role = auth.decodeJwt(auth.getToken()).payload.role;
 
           data.students.forEach((student) => {
+            // Each table body for each prom are created in the loadProms method
+            let studentTable = document.getElementById("students-table-body-prom" + student.IdPromotion);
             let studentComponent = componentCreator.createComponent("studentsTableRow", student, role);
             studentTable.appendChild(studentComponent);
           });
@@ -123,9 +131,9 @@ export class Dashboard {
           document.querySelector("#dashboard-section").innerHTML = data.dashboard;
           console.log("%c Dashboard loaded from server, now making it visible", "color: red");
           render("dashboard-section");
-          this.loadClasses();
-          this.loadProms();
-          this.loadStudents();
+
+          this.loadClasses(); // This methos then loads proms
+
         } else {
           displayToast("SIMPLON SWS", "Something went wrong.", "error");
         }

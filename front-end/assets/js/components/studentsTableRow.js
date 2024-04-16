@@ -10,7 +10,6 @@ export function studentsTableRow(content, role) {
   const actionDiv = document.createElement("div");
   const a1 = document.createElement("span");
   const a2 = document.createElement("span");
-  const a3 = document.createElement("span");
 
   th.setAttribute("scope", "row");
   th.textContent = content.LastName;

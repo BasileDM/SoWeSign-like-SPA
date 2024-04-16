@@ -42,6 +42,8 @@ export function promTableRow(content, role) {
   return component;
 
   function displayPromo() {
+    const promTableBody = document.getElementById(`students-table-body-prom${content.ID}`);
+    promTableBody.classList.remove("d-none");
     const promList = document.getElementById("promolist");
     promList.style.display = "none";
     const promdetails = document.getElementById("promodetails");
@@ -57,6 +59,7 @@ export function promTableRow(content, role) {
     goBackButton.addEventListener("click", () => {
       promList.style.display = "block";
       promdetails.style.display = "none";
+      promTableBody.classList.add("d-none");
     });
   }
 
