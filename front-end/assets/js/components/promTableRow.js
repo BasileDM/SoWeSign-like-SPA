@@ -54,8 +54,8 @@ export function promTableRow(content, role) {
 
     const title = document.getElementById("students-toolbar-title");
     const subtitle = document.getElementById("students-toolbar-subtitle");
-    title.textContent = "Promotion";
-    subtitle.textContent = "Promotion " + content.NAME;
+    title.textContent = "Promotion " + content.NAME;
+    subtitle.textContent = "Informations générales";
 
     const goBackButton = document.getElementById("students-toolbar-goback-btn");
 

@@ -1,4 +1,4 @@
-export function studentsTableRow(content, role) {
+export function studentsTableRow(content, role, type) {
   console.log(content);
   const component = document.createElement("tr");
   const th = document.createElement("th");
@@ -14,7 +14,7 @@ export function studentsTableRow(content, role) {
   th.setAttribute("scope", "row");
   th.textContent = content.LastName;
   tdFirstName.textContent = content.FirstName;
-  tdMail.textContent = content.Mail;
+  tdMail.textContent = type === "late" ? content.lateDate : content.Mail;
   tdActivated.textContent = content.Activated;
   tdRole.textContent = content.IdRole;
   actionDiv.className = "d-flex gap-2 justify-content-end flex-wrap";

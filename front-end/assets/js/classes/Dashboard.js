@@ -92,7 +92,6 @@ export class Dashboard {
           displayToast("SIMPLON SWS", data.error, "error");
         } else if (data.success) {
           console.log(data);
-          const role = auth.decodeJwt(auth.getToken()).payload.role;
           let latePresences = data.latePresences;
           this.loadStudents(latePresences);
         }
@@ -129,8 +128,8 @@ export class Dashboard {
               let latePresenceTable = document.getElementById("late-table-body-prom" + latePresence.ID_PROMOTION);
               if (latePresence.ID_USER === student.Id) {
                 console.log(`%cLate presence detected for ${student.FirstName} in prom ${latePresence.ID_PROMOTION}`, "color: magenta; font-weight: bold;");
-                console.log(student);
-                let lateStudentComponent = componentCreator.createComponent("studentsTableRow", student, role);
+                student.lateDate = latePresence.START_TIME;
+                let lateStudentComponent = componentCreator.createComponent("studentsTableRow", student, null, "late");
                 console.log(lateStudentComponent);
                 console.log(latePresenceTable);
                 latePresenceTable.appendChild(lateStudentComponent);
@@ -171,7 +170,7 @@ export class Dashboard {
           console.log("%c Dashboard loaded from server, now making it visible", "color: red");
           render("dashboard-section");
 
-          this.loadClasses(); // This methos then loads proms
+          this.loadClasses(); // This method (loadClasses) then loads proms
         } else {
           displayToast("SIMPLON SWS", "Something went wrong.", "error");
         }
