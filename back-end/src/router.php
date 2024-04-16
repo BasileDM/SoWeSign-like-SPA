@@ -43,7 +43,11 @@ switch ($url) {
     break;
 
   case HOME_URL . 'getproms':
-    DashboardController::getPromotions($userRole);
+    DashboardController::getPromotions();
+    break;
+
+  case HOME_URL . 'getstudents':
+    DashboardController::getStudents();
     break;
 
   case HOME_URL . 'generatecode':

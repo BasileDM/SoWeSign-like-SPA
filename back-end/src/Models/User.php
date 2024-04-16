@@ -12,6 +12,7 @@ final class User {
   private bool $Activated;
   private string $Mail;
   private int $IdRole;
+  private int $IdPromotion;
 
   use Hydration;
 
@@ -132,5 +133,40 @@ final class User {
    */
   public function setIdRole(int $IdRole) {
     $this->IdRole = $IdRole;
+  }
+
+  /**
+   * Get the value of IdPromotion
+   */
+  public function getIdPromotion(): int {
+    return $this->IdPromotion;
+  }
+
+  /**
+   * Set the value of IdPromotion
+   *
+   * @param   array  $IdPromotion  
+   * 
+   */
+  public function setIdPromotion(int $IdPromotion) {
+    $this->IdPromotion = $IdPromotion;
+  }
+
+  /**
+   * Serializes the object to a value that can be serialized natively by json_encode().
+   *
+   * @return array Returns an array representation of the object properties.
+   */
+  public function jsonSerialize(): array {
+    return [
+      'Id' => $this->Id,
+      'FirstName' => $this->FirstName,
+      'LastName' => $this->LastName,
+      'Password' => $this->Password,
+      'Activated' => $this->Activated,
+      'Mail' => $this->Mail,
+      'IdRole' => $this->IdRole,
+      'IdPromotion' => $this->IdPromotion
+    ];
   }
 }

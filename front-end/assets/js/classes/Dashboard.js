@@ -66,6 +66,35 @@ export class Dashboard {
       .catch((error) => console.error(error));
   }
 
+  loadStudents() {
+    console.log("Fetching students ......................");
+    fetch(API_URL + "getstudents", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: localStorage.getItem("token"),
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          displayToast("SIMPLON SWS", data.error, "error");
+        } else if (data.success) {
+          console.log(data);
+          const studentTable = document.getElementById("students-table-body");
+          const role = auth.decodeJwt(auth.getToken()).payload.role;
+
+          data.students.forEach((student) => {
+            let studentComponent = componentCreator.createComponent("studentsTableRow", student, role);
+            studentTable.appendChild(studentComponent);
+          });
+        }
+      })
+      .catch((error) => console.error(error));
+  }
+
   async loadDashboard() {
     fetch(API_URL + "dashboard", {
       method: "POST",
@@ -96,6 +125,7 @@ export class Dashboard {
           render("dashboard-section");
           this.loadClasses();
           this.loadProms();
+          this.loadStudents();
         } else {
           displayToast("SIMPLON SWS", "Something went wrong.", "error");
         }

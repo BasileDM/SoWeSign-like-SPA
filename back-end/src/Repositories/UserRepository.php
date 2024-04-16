@@ -71,4 +71,14 @@ class UserRepository {
     }
     return null;
   }
+
+  public function getAll() {
+    $sql = "SELECT ID, FIRST_NAME, LAST_NAME, PASSWORD, ACTIVATED, MAIL, ID_ROLE, ID_PROMOTION FROM " . PREFIXE . "USERS 
+    JOIN " . PREFIXE . "RELATION_USER_PROMOTION ON " . PREFIXE . "USERS.ID = " . PREFIXE . "RELATION_USER_PROMOTION.ID_USER
+    WHERE ID_ROLE = 1";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    $stmt->setFetchMode(PDO::FETCH_CLASS, User::class);
+    return $stmt->fetchAll();
+  }
 }

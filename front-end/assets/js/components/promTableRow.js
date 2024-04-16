@@ -42,7 +42,6 @@ export function promTableRow(content, role) {
   return component;
 
   function displayPromo() {
-    console.log(content);
     const promList = document.getElementById("promolist");
     promList.style.display = "none";
     const promdetails = document.getElementById("promodetails");
