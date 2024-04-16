@@ -3,6 +3,6 @@
     RewriteEngine On
     
     RewriteCond %{REQUEST_URI} !\.(.*)$ [NC]
-    RewriteRule   (.*)  /index.php
+    RewriteRule   (.*)  /index.html
 
 </IfModule>
