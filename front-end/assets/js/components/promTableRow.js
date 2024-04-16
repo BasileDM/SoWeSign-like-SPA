@@ -43,37 +43,21 @@ export function promTableRow(content, role) {
 
   function displayPromo() {
     console.log(content);
-    const promList = document.getElementById("nav-promos");
+    const promList = document.getElementById("promolist");
     promList.style.display = "none";
     const promdetails = document.getElementById("promodetails");
     promdetails.style.display = "block";
 
-
-    const toolbar = document.getElementById("student-list-toolbar");
-    const addStudentButton = document.createElement("div");
-    const goBackButton = document.createElement("div");
-
-    goBackButton.className = "btn btn-primary ms-auto align-self-start";
-    goBackButton.textContent = "Retour";
-    
-    addStudentButton.className = "btn btn-success ms-auto align-self-start";
-    const header = document.createElement("div");
-    const title = document.createElement("h4");
-    const subtitle = document.createElement("p");
-    addStudentButton.textContent = "Ajouter apprenant";
-    header.appendChild(title);
-    header.appendChild(subtitle);
-    toolbar.appendChild(header);
-    toolbar.appendChild(addStudentButton);
-    toolbar.appendChild(goBackButton);
-    toolbar.className = "d-flex justify-content-between";
+    const title = document.getElementById("students-toolbar-title");
+    const subtitle = document.getElementById("students-toolbar-subtitle");
     title.textContent = "Promotion";
     subtitle.textContent = "Promotion " + content.NAME;
+
+    const goBackButton = document.getElementById("students-toolbar-goback-btn");
 
     goBackButton.addEventListener("click", () => {
       promList.style.display = "block";
       promdetails.style.display = "none";
-      promdetails.innerHTML = ""; // FIX THIS
     });
   }
 

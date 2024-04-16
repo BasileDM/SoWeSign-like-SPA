@@ -27,77 +27,105 @@
   </div>
 </nav>
 
+<!-- Nav tabs content -->
 <div class="tab-content m-3" id="nav-tabContent">
+  <!-- Home tab -->
   <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
     <h3>Cours du jour</h3>
   </div>
 
+  <!-- Promotions tab -->
   <div class="tab-pane fade" id="nav-promos" role="tabpanel" aria-labelledby="nav-promos-tab" tabindex="0">
-    <div id="promo-header-ctn" class="d-flex">
-      <div>
-        <h3>Toutes les promotions</h3>
-        <p>Tableau des promotions de Simplon</p>
+    <section id="promolist">
+      <!-- Promotions list header -->
+      <div id="promo-header-ctn" class="d-flex">
+        <div>
+          <h3>Toutes les promotions</h3>
+          <p>Tableau des promotions de Simplon</p>
+        </div>
+        <div class="ms-auto">
+          <a href="./promos" class="btn btn-success align-self-end">Ajouter promotion</a>
+        </div>
       </div>
-      <div class="ms-auto">
-        <a href="./promos" class="btn btn-success align-self-end">Ajouter promotion</a>
-      </div>
-    </div>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col">Promotion</th>
-          <th scope="col">Début</th>
-          <th scope="col">Fin</th>
-          <th scope="col">Places</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody id="prom-table-body"></tbody>
-    </table>
-  </div>
 
-  <section id="promodetails" style="display: none;">
-    <div id="student-list-toolbar"></div>
-    <nav class="m-2">
-      <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <button
-          class="nav-link active"
-          id="nav-home-tab"
-          data-bs-toggle="tab"
-          data-bs-target="#nav-home"
-          type="button"
-          role="tab"
-          aria-controls="nav-home"
-          aria-selected="true"
-        >
-          Tableau des apprenants
-        </button>
-        <button
-          class="nav-link"
-          id="nav-promos-tab"
-          data-bs-toggle="tab"
-          data-bs-target="#nav-promos"
-          type="button"
-          role="tab"
-          aria-controls="nav-promos"
-          aria-selected="false"
-        >
-          Retards
-        </button>
+      <!-- Promotions list -->
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Promotion</th>
+            <th scope="col">Début</th>
+            <th scope="col">Fin</th>
+            <th scope="col">Places</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="prom-table-body"></tbody>
+      </table>
+    </section>
+
+    <!-- Promotions details -->
+    <section id="promodetails" style="display: none">
+      <div id="student-list-toolbar" class="d-flex justify-content-between">
+        <div id="students-toolbar-header">
+          <h4 id="students-toolbar-title"></h4>
+          <p id="students-toolbar-subtitle"></p>
+        </div>
+        <div id="students-toolbar-buttons" class="d-flex gap-3">
+          <div id="students-toolbar-goback-btn" class="btn btn-primary ms-auto align-self-start">Retour</div>
+          <div id="students-toolbar-addstudent-btn" class="btn btn-success ms-auto align-self-start">
+            Ajouter apprenant
+          </div>
+        </div>
       </div>
-    </nav>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col">Nom de famille</th>
-          <th scope="col">Prénom</th>
-          <th scope="col">Mail</th>
-          <th scope="col">Compte activé</th>
-          <th scope="col">Rôle</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody id="prom-table-body"></tbody>
-    </table>
-  </section>
+
+      <!-- Students / Late navabar -->
+      <nav class="m-2">
+        <div class="nav nav-tabs" id="nav-promdetails-tab" role="tablist">
+          <button
+            class="nav-link active"
+            id="nav-students-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#nav-students"
+            type="button"
+            role="tab"
+            aria-controls="nav-students"
+            aria-selected="true"
+          >
+            Tableau des apprenants
+          </button>
+          <button
+            class="nav-link"
+            id="nav-late-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#nav-late"
+            type="button"
+            role="tab"
+            aria-controls="nav-late"
+            aria-selected="false"
+          >
+            Retards
+          </button>
+        </div>
+      </nav>
+
+      <!-- Student / Late nav content -->
+      <div class="tab-content m-3" id="nav-promdetails-tabContent">
+        <div class="tab-pane fade show active" id="nav-students" role="tabpanel" aria-labelledby="nav-students-tab" tabindex="0">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Nom de famille</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Mail</th>
+                <th scope="col">Compte activé</th>
+                <th scope="col">Rôle</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="prom-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
 </div>
