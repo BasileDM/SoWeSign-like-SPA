@@ -165,7 +165,7 @@ export class Dashboard {
         } else if (data.success) {
           this.isLoaded = true;
           window.history.pushState("", "", "dashboard");
-          displayToast("SIMPLON SWS", data.success, "success");
+          // displayToast("SIMPLON SWS", data.success, "success");
           document.querySelector("#dashboard-section").innerHTML = data.dashboard;
           console.log("%c Dashboard loaded from server, now making it visible", "color: red");
           render("dashboard-section");
