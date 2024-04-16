@@ -32,7 +32,7 @@ export class Dashboard {
             let classComponent = componentCreator.createComponent("classes", classe, role);
             homeTab.appendChild(classComponent);
           });
-          
+
           this.loadProms(); // loadProms then loads presences
         }
       })
@@ -69,7 +69,7 @@ export class Dashboard {
             promTable.appendChild(promComponent);
           });
 
-          this.loadLatePresences(); // loadLatePresences then loads students 
+          this.loadLatePresences(); // loadLatePresences then loads students
         }
       })
       .catch((error) => console.error(error));
@@ -93,20 +93,14 @@ export class Dashboard {
         } else if (data.success) {
           console.log(data);
           const role = auth.decodeJwt(auth.getToken()).payload.role;
-
-          data.latePresences.forEach((latePresence) => {
-            let latePresenceTable = document.getElementById("late-table-body-prom" + latePresence.ID_PROMOTION);
-            let latePresenceComponent = componentCreator.createComponent("studentsTableRow", latePresence, role);
-            latePresenceTable.appendChild(latePresenceComponent);
-          });
-        
-          this.loadStudents();
+          let latePresences = data.latePresences;
+          this.loadStudents(latePresences);
         }
       })
       .catch((error) => console.error(error));
   }
 
-  loadStudents() {
+  loadStudents(latePresences) {
     console.log("Fetching students ......................");
     fetch(API_URL + "getstudents", {
       method: "POST",
@@ -130,17 +124,23 @@ export class Dashboard {
             let studentTable = document.getElementById("students-table-body-prom" + student.IdPromotion);
             let studentComponent = componentCreator.createComponent("studentsTableRow", student, role);
             studentTable.appendChild(studentComponent);
+
+            latePresences.forEach((latePresence) => {
+              let latePresenceTable = document.getElementById("late-table-body-prom" + latePresence.ID_PROMOTION);
+              if (latePresence.ID_USER === student.Id) {
+                console.log(`%cLate presence detected for ${student.FirstName} in prom ${latePresence.ID_PROMOTION}`, "color: magenta; font-weight: bold;");
+                console.log(student);
+                let lateStudentComponent = componentCreator.createComponent("studentsTableRow", student, role);
+                console.log(lateStudentComponent);
+                console.log(latePresenceTable);
+                latePresenceTable.appendChild(lateStudentComponent);
+              }
+            });
           });
         }
       })
       .catch((error) => console.error(error));
   }
-
-  
-
-  
-
-  
 
   async loadDashboard() {
     fetch(API_URL + "dashboard", {
@@ -172,7 +172,6 @@ export class Dashboard {
           render("dashboard-section");
 
           this.loadClasses(); // This methos then loads proms
-
         } else {
           displayToast("SIMPLON SWS", "Something went wrong.", "error");
         }

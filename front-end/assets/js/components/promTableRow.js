@@ -43,7 +43,10 @@ export function promTableRow(content, role) {
 
   function displayPromo() {
     const promTableBody = document.getElementById(`students-table-body-prom${content.ID}`);
+    const promLateTableBody = document.getElementById(`late-table-body-prom${content.ID}`);
     promTableBody.classList.remove("d-none");
+    promLateTableBody.classList.remove("d-none");
+
     const promList = document.getElementById("promolist");
     promList.style.display = "none";
     const promdetails = document.getElementById("promodetails");
@@ -60,6 +63,7 @@ export function promTableRow(content, role) {
       promList.style.display = "block";
       promdetails.style.display = "none";
       promTableBody.classList.add("d-none");
+      promLateTableBody.classList.add("d-none");
     });
   }
 
