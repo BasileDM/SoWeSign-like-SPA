@@ -42,12 +42,13 @@ final class ClassRepository {
    *
    * @param string $userId The ID of the user.
    * @param string $classId The ID of the class.
+   * @param int $presenceStatus The presence status of the user, either  1 for presence or 2 for late.
    * @return void
    */
-  public function addPresenceStatus(string $userId, string $classId): void {
-    $sql = 'INSERT INTO ' . PREFIXE . 'RELATION_USER_CLASS(ID_CLASS, ID_USER, STATUS) VALUES (:classId, :userId, 1);';
+  public function addPresenceStatus(string $userId, string $classId, int $presenceStatus): void {
+    $sql = 'INSERT INTO ' . PREFIXE . 'RELATION_USER_CLASS(ID_CLASS, ID_USER, STATUS) VALUES (:classId, :userId, :presenceStatus);';
     $stmt = $this->db->prepare($sql);
-    $stmt->execute(['classId' => $classId, 'userId' => $userId]);
+    $stmt->execute(['classId' => $classId, 'userId' => $userId, 'presenceStatus' => $presenceStatus]);
   }
 
   /**

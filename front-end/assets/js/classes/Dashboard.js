@@ -1,6 +1,6 @@
 import { API_URL } from "../config.js";
 import { displayToast, render } from "../display.js";
-import { componentCreator } from "../app.js";
+import { componentCreator, router } from "../app.js";
 import * as auth from "../auth.js";
 
 export class Dashboard {
@@ -122,7 +122,7 @@ export class Dashboard {
       })
       .then((data) => {
         if (data.error) {
-          this.navigateToRoute(HOME_URL);
+          router.navigateToRoute(HOME_URL);
           displayToast("SIMPLON SWS", data.error, "error");
         } else if (data.success) {
           this.isLoaded = true;
