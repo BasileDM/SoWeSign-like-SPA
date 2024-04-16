@@ -1,5 +1,5 @@
-import { API_URL } from "../config";
-import { displayToast } from "../display";
+import { API_URL } from "../config.js";
+import { displayToast } from "../display.js";
 
 export function todaysClasses(content, role) {
   // Elements creation

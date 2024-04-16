@@ -1,6 +1,7 @@
 <IfModule mod_headers.c>
     # Enable CORS for a specific origin
-    Header set Access-Control-Allow-Origin "http://brief6-sws-front"
+    Header set Access-Control-Allow-Origin "http://127.0.0.1:5500"
+    # "http://brief6-sws-front" for wamp host
 
     # Other CORS headers (optional)
     Header set Access-Control-Allow-Credentials "true"
