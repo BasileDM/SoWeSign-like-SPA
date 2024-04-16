@@ -171,6 +171,13 @@ export class Dashboard {
           render("dashboard-section");
 
           this.loadClasses(); // This method (loadClasses) then loads proms
+          document.getElementById('add-prom-btn').addEventListener('click', () => {
+            console.log("Add prom button clicked");
+            const editSection = document.getElementById("promoEdit");
+            let addPromForm = componentCreator.createComponent("customForm", null, null, ["promotion", "create"]);
+            editSection.appendChild(addPromForm);
+
+          });
         } else {
           displayToast("SIMPLON SWS", "Something went wrong.", "error");
         }

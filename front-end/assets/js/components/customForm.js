@@ -7,11 +7,33 @@ export function customForm(content, role, type) {
 
   switch (type[0]) {
     case "promotion":
-      headerTitle = type === "create" ? "Création d'un promotion" : "Modifier la promotion " + content.NAME;
-      headerSubtitle = type === "create" ? "" : "Les changements appliqués sont définitifs.";
+      headerTitle = type[1] === "create" ? "Création d'un promotion" : "Modifier la promotion " + content.NAME;
+      headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définitifs.";
       inputAmmount = 4;
       inputNames = ["Nom de la promotion", "Date de début", "Date de fin", "Places disponibles"];
       inputTypes = ["text", "date", "date", "number"];
+      break;
+
+    case "student":
+      headerTitle =
+        type[1] === "create"
+          ? "Création d'un apprenant"
+          : "Modifier l'apprenant " + content.FIRST_NAME + " " + content.LAST_NAME;
+      headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définis.";
+      inputAmmount = 3;
+      inputNames = ["Nom de famille", "Prénom", "Mail"];
+      inputTypes = ["text", "text", "email"];
+      break;
+
+    case "retard":
+      headerTitle =
+        type[1] === "create"
+          ? "Création d'un retard"
+          : "Modifier le retard de l'apprenant " + content.FIRST_NAME + " " + content.LAST_NAME;
+      headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définis.";
+      inputAmmount = 2;
+      inputNames = ["Date de retard", "Commentaire"];
+      inputTypes = ["date", "text"];
       break;
 
     default:
@@ -45,7 +67,7 @@ export function customForm(content, role, type) {
     div.appendChild(input);
     component.appendChild(div);
   }
-  
+
   // Bottom buttons
   const buttonBar = document.createElement("div");
   buttonBar.className = "d-flex gap-3";
@@ -60,19 +82,19 @@ export function customForm(content, role, type) {
   leftButtons.appendChild(goBackButton);
 
   const deleteButton = document.createElement("div");
-  deleteButton.className = type === "create" ? "d-none" : "btn btn-danger";
+  deleteButton.className = type[1] === "create" ? "d-none" : "btn btn-danger";
   deleteButton.textContent = "Supprimer";
   rightButtons.appendChild(deleteButton);
-  
+
   const submitButton = document.createElement("div");
   submitButton.className = "btn btn-primary";
   submitButton.textContent = "Enregistrer";
   rightButtons.appendChild(submitButton);
-  
+
   buttonBar.appendChild(leftButtons);
   buttonBar.appendChild(rightButtons);
   component.appendChild(buttonBar);
-  
+
   goBackButton.addEventListener("click", () => {
     const listSection = document.getElementById("promolist");
     const editSection = document.getElementById("promoEdit");
@@ -80,7 +102,7 @@ export function customForm(content, role, type) {
     editSection.style.display = "none";
     editSection.innerHTML = "";
   });
-  
+
   // if (type[0] === "promotion") {
   //   deleteButton.addEventListener("click", () => {
   //     deletePromo();
