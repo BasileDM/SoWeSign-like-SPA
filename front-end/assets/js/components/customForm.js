@@ -1,15 +1,18 @@
 export function customForm(content, role, type) {
+  // type parameter = [switch case, create/edit, section to display on goBack button click]
+  
+  const editSection = document.getElementById("form-creation-section");
+  editSection.style.display = "block";
+
   let headerTitle = "";
   let headerSubtitle = "";
-  let inputAmmount = null;
   let inputNames = [];
   let inputTypes = [];
 
   switch (type[0]) {
     case "promotion":
-      headerTitle = type[1] === "create" ? "Création d'un promotion" : "Modifier la promotion " + content.NAME;
+      headerTitle = type[1] === "create" ? "Création d'une promotion" : "Modifier la promotion " + content.NAME;
       headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définitifs.";
-      inputAmmount = 4;
       inputNames = ["Nom de la promotion", "Date de début", "Date de fin", "Places disponibles"];
       inputTypes = ["text", "date", "date", "number"];
       break;
@@ -20,7 +23,6 @@ export function customForm(content, role, type) {
           ? "Création d'un apprenant"
           : "Modifier l'apprenant " + content.FIRST_NAME + " " + content.LAST_NAME;
       headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définis.";
-      inputAmmount = 3;
       inputNames = ["Nom de famille", "Prénom", "Mail"];
       inputTypes = ["text", "text", "email"];
       break;
@@ -31,7 +33,6 @@ export function customForm(content, role, type) {
           ? "Création d'un retard"
           : "Modifier le retard de l'apprenant " + content.FIRST_NAME + " " + content.LAST_NAME;
       headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définis.";
-      inputAmmount = 2;
       inputNames = ["Date de retard", "Commentaire"];
       inputTypes = ["date", "text"];
       break;
@@ -51,7 +52,8 @@ export function customForm(content, role, type) {
   header.appendChild(subtitle);
   component.appendChild(header);
 
-  for (let i = 0; i < inputAmmount; i++) {
+  // Configuration loop for each input
+  for (let i = 0; i < inputNames.length; i++) {
     const div = document.createElement("div");
     div.className = "mb-3";
     const label = document.createElement("label");
@@ -96,9 +98,9 @@ export function customForm(content, role, type) {
   component.appendChild(buttonBar);
 
   goBackButton.addEventListener("click", () => {
-    const listSection = document.getElementById("promolist");
-    const editSection = document.getElementById("promoEdit");
-    listSection.style.display = "block";
+    const sectionTodisplayBack = type[2];
+    const editSection = document.getElementById("form-creation-section");
+    sectionTodisplayBack.style.display = "block";
     editSection.style.display = "none";
     editSection.innerHTML = "";
   });

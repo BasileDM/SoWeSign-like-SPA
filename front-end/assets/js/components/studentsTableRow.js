@@ -1,3 +1,5 @@
+import { ComponentCreator } from "../classes/ComponentCreator";
+
 export function studentsTableRow(content, role, type) {
   console.log(content);
   const component = document.createElement("tr");
@@ -40,7 +42,11 @@ export function studentsTableRow(content, role, type) {
   return component;
 
   function editStudent() {
-    console.log(content);
+    const detailsSection = document.getElementById("promodetails");
+    detailsSection.style.display = "none";
+    const compCreator = new ComponentCreator();
+    let editStudentForm = compCreator.createComponent("customForm", content, role, ["promotion", "edit", detailsSection]);
+    document.getElementById("form-creation-section").appendChild(editStudentForm);
   }
 
   function deleteStudent() {

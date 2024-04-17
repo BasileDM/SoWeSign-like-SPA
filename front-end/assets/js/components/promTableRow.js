@@ -73,12 +73,10 @@ export function promTableRow(content, role) {
 
   function editPromo(content) {
     const listSection = document.getElementById("promolist");
-    const editSection = document.getElementById("promoEdit");
     listSection.style.display = "none";
-    editSection.style.display = "block";
     const compCreator = new ComponentCreator();
-    let editPromForm = compCreator.createComponent("customForm", content, role, ["promotion", "create"]);
-    editSection.appendChild(editPromForm);
+    let editPromForm = compCreator.createComponent("customForm", content, role, ["promotion", "edit", listSection]);
+    document.getElementById("form-creation-section").appendChild(editPromForm);
   }
 
   function deletePromo() {

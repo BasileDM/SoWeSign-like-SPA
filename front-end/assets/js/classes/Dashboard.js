@@ -172,10 +172,10 @@ export class Dashboard {
 
           this.loadClasses(); // This method (loadClasses) then loads proms
           document.getElementById('add-prom-btn').addEventListener('click', () => {
-            console.log("Add prom button clicked");
-            const editSection = document.getElementById("promoEdit");
-            let addPromForm = componentCreator.createComponent("customForm", null, null, ["promotion", "create"]);
-            editSection.appendChild(addPromForm);
+            const listSection = document.getElementById("promolist");
+            listSection.style.display = "none";
+            let addPromForm = componentCreator.createComponent("customForm", null, null, ["promotion", "create", listSection]);
+            document.getElementById("form-creation-section").appendChild(addPromForm);
 
           });
         } else {
