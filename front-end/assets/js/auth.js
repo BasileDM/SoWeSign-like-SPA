@@ -1,4 +1,7 @@
+import { HOME_URL, API_URL } from "./config.js";
 import { displayToast } from "./display.js";
+import { router } from "./app.js";
+import { dashboard } from "./app.js";
 
 export function decodeJwt(token) {
   // Split token in different parts
@@ -43,9 +46,62 @@ export function isTokenExpired() {
   const timeLeft = 3600000 - (Date.now() - payload.iat * 1000);
   if (timeLeft <= 0) {
     localStorage.removeItem("token");
-    displayToast("SIMPLON SWS", "Your session has expired.", "error");
+    displayToast("SIMPLON SWS", "Your session has expired, please log back in.", "error");
     return true;
   }
-  // console.log(`token time left : ${(Math.floor(timeLeft / 60000))} minutes`);
+  console.log(
+    `%c Token validity time left : ${Math.floor(timeLeft / 60000)} minutes`,
+    "color: green; font-weight: bold;"
+  );
   return false;
+}
+
+export function logout() {
+  localStorage.removeItem("token");
+  document.getElementById("dashboard-section").innerHTML = "";
+  dashboard.isLoaded = false;
+  switchInterface(false);
+}
+
+export function login(mail, pass) {
+  fetch(API_URL + "login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      mail: mail,
+      password: pass,
+    }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      if (data.error) {
+        displayToast("SIMPLON SWS", data.error, "error");
+      } else if (data.success) {
+        displayToast("SIMPLON SWS", data.success, "success");
+        localStorage.setItem("token", data.token);
+        switchInterface(true);
+        router.navigateToRoute(HOME_URL + data.page);
+      } else {
+        displayToast("SIMPLON SWS", "Something went wrong.", "error");
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
+export function switchInterface(isLoggedIn) {
+  const navLogin = document.getElementById("nav-login");
+  const navLogout = document.getElementById("nav-logout");
+  if (isLoggedIn) {
+    navLogin.style.display = "none";
+    navLogout.style.display = "block";
+  } else {
+    navLogin.style.display = "block";
+    navLogout.style.display = "none";
+  }
 }

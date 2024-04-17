@@ -1,15 +1,17 @@
-import { HOME_URL, API_URL } from "../config.js";
-import { displayToast } from "../display.js";
+import { HOME_URL } from "../config.js";
+import { displayToast, render } from "../display.js";
 import { isTokenExpired, getToken } from "../auth.js";
+import { dashboard } from "../app.js";
 
 export class Router {
   constructor() {
-    this.isDashboardLoaded = false;
     this.currentSection = null;
+    this.routeComponents = null;
     this.routes = {
       "/": "login-section",
       "/home": "login-section",
       "/login": "login-section",
+      "/logout": "logout-section",
       "/confirm": "activate-section",
       "/dashboard": "dashboard-section",
     };
@@ -18,21 +20,24 @@ export class Router {
   }
 
   init() {
-    if (!(window.location.pathname in this.routes)) {
+    this.routeComponents = window.location.pathname.split("/");
+    this.routeComponents.shift();
+    console.log(this.routeComponents);
+    if (!("/" + this.routeComponents[0] in this.routes)) {
       window.location.pathname = HOME_URL;
       console.log(`Init : Pathname not found : ${window.location.pathname}`);
       return;
     }
-    this.currentSection = this.routes[window.location.pathname];
+    this.currentSection = this.routes["/" + window.location.pathname.split("/")[1]];
     console.log(`Init : Current section set to Window pathname : ${this.currentSection}`);
 
     this.navigateToRoute(window.location.pathname);
 
     // Add Window object event listeners
-    // window.addEventListener("popstate", (event) => {
-    //   const path = event.state && event.state.path;
-    //   this.navigateToRoute(path || window.location.pathname);
-    // });
+    window.addEventListener("popstate", (event) => {
+      const path = event.state && event.state.path;
+      this.navigateToRoute(path || window.location.pathname);
+    });
 
     window.addEventListener("click", (event) => {
       const element = event.target;
@@ -44,14 +49,15 @@ export class Router {
   }
 
   navigateToRoute(path) {
-    const section = this.routes[path];
+    let splitPath = path.split("/");
+    const section = this.routes["/" + splitPath[1]];
     if (!section) {
       displayToast("SIMPLON SWS", "The page you are trying to access does not exist", "error");
       return;
     }
     console.log(`Valid section, nav section is now : ${section}`);
     document.getElementById(this.currentSection).style.display = "none";
-    console.log(`Navigating to : ${path}, Hiding current section : ${this.currentSection}`);
+    console.log(`Navigating to : ${path}, split: /${splitPath[1]}, Hiding current section : ${this.currentSection}`);
     this.currentSection = section;
     console.log(`New current section set to : ${this.currentSection}`);
 
@@ -60,7 +66,7 @@ export class Router {
       switch (section) {
         case "login-section":
           if (!isTokenExpired()) {
-            console.log(`Rerouting from login to dashboard`);
+            console.log(`%c Rerouting from login to dashboard`, "color: orange");
             this.navigateToRoute(HOME_URL + "dashboard");
             return;
           }
@@ -69,68 +75,48 @@ export class Router {
         case "activate-section":
           if (!isTokenExpired()) {
             this.navigateToRoute(HOME_URL + "dashboard");
-            console.log(`Rerouting from activate to dashboard`);
-            return;
-          };
-          break;
-
-        case "dashboard-section":
-          if (isTokenExpired()) {
-            this.navigateToRoute(HOME_URL);
-            console.log(`Rerouting from dashboard to login`);
+            console.log(`%c Rerouting from activate to dashboard`, "color: orange");
             return;
           }
           break;
+
         default:
-          console.log("Wrong section name, can't reroute");
+          console.log("Token present but no reroute necessary");
           break;
       }
     }
 
-    if (section === "dashboard-section" && !this.isDashboardLoaded) {
-      if (getToken() && !isTokenExpired()) this.loadDashboard().catch((error) => console.error(error));
-      return;
-    }
-
-    this.render(section);
-    console.log(`${section} is now visible`);
-    window.history.pushState("", "", path);
-  }
-
-  async loadDashboard() {
-    fetch(API_URL + "dashboard", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        token: localStorage.getItem("token"),
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Cannot load dashboard: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.error) {
-          this.navigateToRoute(HOME_URL);
-          displayToast("SIMPLON SWS", data.error, "error");
-        } else if (data.success) {
-          this.isDashboardLoaded = true;
-          window.history.pushState("", "", "dashboard");
-          displayToast("SIMPLON SWS", data.success, "success");
-          document.querySelector("#dashboard-section").innerHTML = data.dashboard;
-          console.log("Dashboard loaded from server, now making it visible");
-          this.render("dashboard-section");
+    switch (section) {
+      case "dashboard-section":
+        if (!dashboard.isLoaded) {
+          console.log(`Is dashboard loaded : ${dashboard.isLoaded}`);
+          if (getToken() && !isTokenExpired()) {
+            dashboard.loadDashboard().catch((error) => console.error(error));
+          } else {
+            console.log(`token not found or expired`);
+          }
         } else {
-          displayToast("SIMPLON SWS", "Something went wrong.", "error");
+          render(section);
+          console.log(`${section} is now visible`);
+          window.history.pushState("", "", "/" + splitPath[1]);
         }
-      });
-  }
+        if (isTokenExpired()) {
+          this.navigateToRoute(HOME_URL);
+          console.log(`%c Rerouting from dashboard to login`, "color: orange");
+          return;
+        }
+        break;
 
-  render(section) {
-    document.querySelector(`#${section}`).style.display = "block";
+      case "logout-section":
+        console.log(`%c Rerouting from logout to login`, "color: orange");
+        this.navigateToRoute(HOME_URL);
+        return;
+
+      default:
+        render(section);
+        console.log(`${section} is now visible`);
+        window.history.pushState("", "", "/" + splitPath[1]);
+        break;
+    }
   }
 }

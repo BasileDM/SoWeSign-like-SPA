@@ -1,52 +1,24 @@
-import { HOME_URL, API_URL } from "./config.js";
-import { displayToast } from "./display.js";
+import { HOME_URL } from "./config.js";
 import { Router } from "./classes/Router.js";
-import { getToken, isTokenExpired } from "./auth.js";
+import { Dashboard } from "./classes/dashboard.js";
+import { ComponentCreator } from "./classes/ComponentCreator.js";
+import * as auth from "./auth.js";
 
-const router = new Router();
+export const componentCreator = new ComponentCreator();
+export const dashboard = new Dashboard();
+export const router = new Router();
 
 const emailField = document.getElementById("mail");
 const passwordField = document.getElementById("password");
 const submitButton = document.getElementById("login");
 const navLogin = document.getElementById("nav-login");
-
-function login($mail, $pass) {
-  fetch(API_URL + "login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      mail: $mail,
-      password: $pass,
-    }),
-  })
-    .then((response) => {
-      return response.json();
-    })    
-    .then((data) => {
-      if (data.error) {
-        displayToast("SIMPLON SWS", data.error, "error");
-
-      } else if (data.success) {
-        displayToast("SIMPLON SWS", data.success, "success");
-        localStorage.setItem("token", data.token);
-        router.navigateToRoute(HOME_URL + data.page);
-
-      } else {
-        displayToast("SIMPLON SWS", "Something went wrong.", "error");
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-}
+const navLogout = document.getElementById("nav-logout");
 
 // Event listeners
 submitButton.addEventListener("click", () => {
   let mail = emailField.value;
   let pass = passwordField.value;
-  login(mail, pass);
+  auth.login(mail, pass);
 });
 
 navLogin.addEventListener("click", (event) => {
@@ -54,6 +26,16 @@ navLogin.addEventListener("click", (event) => {
   window.history.pushState("", "", HOME_URL + "login");
 });
 
-// Procedural code
-// displayToast("SIMPLON SWS", "Welcome to the website, the page has reloaded", "success");
+navLogout.addEventListener("click", (event) => {
+  event.preventDefault();
+  auth.logout();
+  
+  window.history.pushState("", "", HOME_URL + "login");
+});
 
+// Procedural code
+if (auth.getToken() && !auth.isTokenExpired()) {
+  auth.switchInterface(true);
+} else {
+  auth.switchInterface(false);
+}
