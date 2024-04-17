@@ -1,4 +1,4 @@
-import { ComponentCreator } from "../classes/ComponentCreator";
+import { ComponentCreator } from "../classes/ComponentCreator.js";
 
 export function studentsTableRow(content, role, type) {
   console.log(`content on element creation :`);
