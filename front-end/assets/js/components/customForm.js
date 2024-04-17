@@ -1,5 +1,7 @@
 export function customForm(content, role, type) {
   // type parameter = [switch case(name), create/edit, section to display on goBack button click]
+  // example usage : 
+  // let editForm = compCreator.createComponent("customForm", content, role, ["student", "edit", hideSection]);
   
   const editSection = document.getElementById("form-creation-section");
   editSection.style.display = "block";
