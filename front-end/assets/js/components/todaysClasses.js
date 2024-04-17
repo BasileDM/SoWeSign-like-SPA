@@ -1,5 +1,5 @@
-import { API_URL } from "../config";
-import { displayToast } from "../display";
+import { API_URL } from "../config.js";
+import { displayToast } from "../display.js";
 
 export function todaysClasses(content, role) {
   // Elements creation
@@ -137,6 +137,16 @@ export function todaysClasses(content, role) {
   }
 
   function submitCode() {
+    let currentHour = new Date().getHours();
+    let currentMinutes = new Date().getMinutes();
+    console.log(currentHour, currentMinutes, classHour, classMinute);
+    let isStudentLate = (currentHour * 60 + currentMinutes) - (parseInt(classHour) * 60 + parseInt(classMinute)) > 15 ? 2 : 1;
+    if (currentHour > parseInt(classEndHour) || (currentHour === parseInt(classEndHour) && currentMinutes >= parseInt(classEndMinute))) {
+      displayToast("SIMPLON SWS", "Erreur : Cours terminé", "error");
+      return;
+    }
+    console.log(isStudentLate);
+
     fetch(API_URL + "sign", {
       method: "POST",
       headers: {
@@ -145,6 +155,7 @@ export function todaysClasses(content, role) {
       body: JSON.stringify({
         classId: content.Id, // ID of the class the code is sent for
         submittedCode: input.value,
+        presenceStatus: isStudentLate, // 1 = present, 2 = late
         token: localStorage.getItem("token"),
       }),
     })
@@ -162,6 +173,5 @@ export function todaysClasses(content, role) {
           displayToast("SIMPLON SWS", "Something went wrong.", "error");
         }
       });
-    console.log(input.value);
   }
 }

@@ -43,7 +43,15 @@ switch ($url) {
     break;
 
   case HOME_URL . 'getproms':
-    DashboardController::getPromotions($userRole);
+    DashboardController::getPromotions();
+    break;
+
+  case HOME_URL . 'getstudents':
+    DashboardController::getStudents();
+    break;
+
+  case HOME_URL . 'getlatepresences':
+    DashboardController::getLatePresences();
     break;
 
   case HOME_URL . 'generatecode':
@@ -56,12 +64,12 @@ switch ($url) {
     break;
 
   case HOME_URL . 'sign':
-    if ($method !== 'POST' || $userRole !== '1' || !isset($request['classId']) || !isset($request['submittedCode'])) {
+    if ($method !== 'POST' || $userRole !== '1' || !isset($request['classId']) || !isset($request['submittedCode']) || !isset($request['presenceStatus'])) {
       header('Content-Type: application/json');
       echo json_encode(['error' => 'Invalid request.']);
       exit();
     }
-    AuthController::recordSignature($request['submittedCode'], $request['classId'], $userId);
+    AuthController::recordSignature($request['submittedCode'], $request['classId'], $userId, $request['presenceStatus']);
     break;
 
   default:

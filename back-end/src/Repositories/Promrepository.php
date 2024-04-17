@@ -37,6 +37,11 @@ class PromRepository {
     return $nbStudents;
   }
 
+  /**
+   * Retrieves all promotions from the database.
+   *
+   * @return array An array containing all promotions.
+   */
   public function getAll(): array {
     $stmt = $this->db->query('SELECT * FROM '.PREFIXE.'PROMOTIONS;');
     $promos = $stmt->fetchAll(PDO::FETCH_ASSOC);

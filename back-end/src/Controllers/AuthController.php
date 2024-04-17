@@ -183,9 +183,10 @@ class AuthController {
    * @param string $submittedCode The code submitted by the user.
    * @param string $classId The ID of the class.
    * @param string $userId The ID of the user.
+   * @param int $presence Status The presence status of the user, either  1 for presence or 2 for late.
    * @return void Sends a JSON response with a success or error message and exits.
    */
-  public static function recordSignature(string $submittedCode, string $classId, string $userId): void {
+  public static function recordSignature(string $submittedCode, string $classId, string $userId, int $presenceStatus): void {
     $classRepo = new ClassRepository();
     $classCode = $classRepo->getClassCode($classId);
     if ($submittedCode !== $classCode) {
@@ -193,7 +194,7 @@ class AuthController {
       echo json_encode(['error' => 'Invalid code.']);
       exit();
     }
-    $classRepo->addPresenceStatus($userId, $classId);
-    echo json_encode(['success' => 'Your presence has been recorded.']);
+    $classRepo->addPresenceStatus($userId, $classId, $presenceStatus);
+    echo json_encode(['success' => $presenceStatus === 1 ? 'Votre présence a été enregistrée.' : 'Vous avez été enregistré(e) en retard !']);
   }
 }
