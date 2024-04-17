@@ -26,7 +26,7 @@ class PromRepository {
   }
 
   /**
-   * Gets the number of students with a unique ID in a promotion.
+   * Gets the number of students with a unique ID in a specified promotion.
    *
    * @param int $promotionId
    * @return int
