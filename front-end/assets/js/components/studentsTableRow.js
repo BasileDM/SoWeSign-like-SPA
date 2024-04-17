@@ -1,6 +1,7 @@
 import { ComponentCreator } from "../classes/ComponentCreator";
 
 export function studentsTableRow(content, role, type) {
+  console.log(`content on element creation :`);
   console.log(content);
   const component = document.createElement("tr");
   const th = document.createElement("th");
@@ -24,8 +25,8 @@ export function studentsTableRow(content, role, type) {
   a2.style.cursor = "pointer";
   a1.textContent = "Éditer";
   a2.textContent = "Supprimer";
-  a1.addEventListener("click", editStudent);
-  a2.addEventListener("click", deleteStudent);
+  a1.addEventListener("click", editAction);
+  a2.addEventListener("click", deleteAction);
   a1.className = "link-info link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover";
   a2.className = "link-danger link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover";
 
@@ -41,15 +42,24 @@ export function studentsTableRow(content, role, type) {
 
   return component;
 
-  function editStudent() {
-    const detailsSection = document.getElementById("promodetails");
-    detailsSection.style.display = "none";
+  function editAction() {
     const compCreator = new ComponentCreator();
-    let editStudentForm = compCreator.createComponent("customForm", content, role, ["promotion", "edit", detailsSection]);
-    document.getElementById("form-creation-section").appendChild(editStudentForm);
+    let hideSection = document.getElementById("promodetails");
+    let editForm = compCreator.createComponent("customForm", content, role, ["student", "edit", hideSection]);
+    switch (type) {
+      case "late":
+        console.log(`Content sent in form through late component edit button :`);
+        console.log(content);
+        editForm = compCreator.createComponent("customForm", content, role, ["retard", "edit", hideSection]);
+        break;
+      default:
+        break;
+      }
+    hideSection.style.display = "none";
+    document.getElementById("form-creation-section").appendChild(editForm);
   }
 
-  function deleteStudent() {
+  function deleteAction() {
     console.log(content);
   }
 }

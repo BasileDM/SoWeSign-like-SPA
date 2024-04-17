@@ -1,5 +1,5 @@
 export function customForm(content, role, type) {
-  // type parameter = [switch case, create/edit, section to display on goBack button click]
+  // type parameter = [switch case(name), create/edit, section to display on goBack button click]
   
   const editSection = document.getElementById("form-creation-section");
   editSection.style.display = "block";
@@ -21,7 +21,7 @@ export function customForm(content, role, type) {
       headerTitle =
         type[1] === "create"
           ? "Création d'un apprenant"
-          : "Modifier l'apprenant " + content.FIRST_NAME + " " + content.LAST_NAME;
+          : "Modifier l'apprenant " + content.FirstName + " " + content.LastName;
       headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définis.";
       inputNames = ["Nom de famille", "Prénom", "Mail"];
       inputTypes = ["text", "text", "email"];
@@ -31,7 +31,7 @@ export function customForm(content, role, type) {
       headerTitle =
         type[1] === "create"
           ? "Création d'un retard"
-          : "Modifier le retard de l'apprenant " + content.FIRST_NAME + " " + content.LAST_NAME;
+          : "Modifier le retard de l'apprenant " + content.FirstName + " " + content.LastName;
       headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définis.";
       inputNames = ["Date de retard", "Commentaire"];
       inputTypes = ["date", "text"];
@@ -97,6 +97,7 @@ export function customForm(content, role, type) {
   buttonBar.appendChild(rightButtons);
   component.appendChild(buttonBar);
 
+  // Go back button
   goBackButton.addEventListener("click", () => {
     const sectionTodisplayBack = type[2];
     const editSection = document.getElementById("form-creation-section");

@@ -21,7 +21,6 @@ export class ComponentCreator {
       console.error(`Template for ${name} not found.`);
       return null;
     }
-
     const templateFunction = this.templates[name];
     return templateFunction(content, role, type);
   }

@@ -121,7 +121,7 @@ export class Dashboard {
           data.students.forEach((student) => {
             // Each table body for each prom are created in the loadProms method
             let studentTable = document.getElementById("students-table-body-prom" + student.IdPromotion);
-            let studentComponent = componentCreator.createComponent("studentsTableRow", student, role);
+            let studentComponent = componentCreator.createComponent("studentsTableRow", student, role, ["student", "edit", "lol"]);
             studentTable.appendChild(studentComponent);
 
             latePresences.forEach((latePresence) => {
@@ -130,8 +130,6 @@ export class Dashboard {
                 console.log(`%cLate presence detected for ${student.FirstName} in prom ${latePresence.ID_PROMOTION}`, "color: magenta; font-weight: bold;");
                 student.lateDate = latePresence.START_TIME;
                 let lateStudentComponent = componentCreator.createComponent("studentsTableRow", student, null, "late");
-                console.log(lateStudentComponent);
-                console.log(latePresenceTable);
                 latePresenceTable.appendChild(lateStudentComponent);
               }
             });
@@ -162,15 +160,17 @@ export class Dashboard {
         if (data.error) {
           router.navigateToRoute(HOME_URL);
           displayToast("SIMPLON SWS", data.error, "error");
+
         } else if (data.success) {
           this.isLoaded = true;
           window.history.pushState("", "", "dashboard");
-          // displayToast("SIMPLON SWS", data.success, "success");
           document.querySelector("#dashboard-section").innerHTML = data.dashboard;
           console.log("%c Dashboard loaded from server, now making it visible", "color: red");
           render("dashboard-section");
 
-          this.loadClasses(); // This method (loadClasses) then loads proms
+          this.loadClasses(); // This method (loadClasses) will then loads proms
+
+          // Create promotion button event listener
           document.getElementById('add-prom-btn').addEventListener('click', () => {
             const listSection = document.getElementById("promolist");
             listSection.style.display = "none";
@@ -178,6 +178,31 @@ export class Dashboard {
             document.getElementById("form-creation-section").appendChild(addPromForm);
 
           });
+          // Create student button event listener
+          document.getElementById('add-student-btn').addEventListener('click', () => {
+            const detailsSection = document.getElementById("promodetails");
+            detailsSection.style.display = "none";
+            let addStudentForm = componentCreator.createComponent("customForm", null, null, ["student", "create", detailsSection]);
+            document.getElementById("form-creation-section").appendChild(addStudentForm);
+          });
+          // Create late presence button event listener
+          document.getElementById('add-late-presence-btn').addEventListener('click', () => {
+            const detailsSection = document.getElementById("promodetails");
+            detailsSection.style.display = "none";
+            let addLateForm = componentCreator.createComponent("customForm", null, null, ["retard", "create", detailsSection]);
+            document.getElementById("form-creation-section").appendChild(addLateForm);
+          });
+
+          // Students / Late tabs buttons event listeners for switching "Add new" buttons
+          document.getElementById('nav-students-tab').addEventListener('click', () => {
+            document.getElementById('add-student-btn').style.display = "block";
+            document.getElementById('add-late-presence-btn').style.display = "none";
+          });
+          document.getElementById('nav-late-tab').addEventListener('click', () => {
+            document.getElementById('add-student-btn').style.display = "none";
+            document.getElementById('add-late-presence-btn').style.display = "block";
+          });
+
         } else {
           displayToast("SIMPLON SWS", "Something went wrong.", "error");
         }
