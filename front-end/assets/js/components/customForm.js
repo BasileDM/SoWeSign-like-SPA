@@ -108,6 +108,10 @@ export function customForm(content, role, type) {
     editSection.innerHTML = "";
   });
 
+  // Submit button
+  submitButton.addEventListener("click", () => {
+  });
+
   // if (type[0] === "promotion") {
   //   deleteButton.addEventListener("click", () => {
   //     deletePromo();

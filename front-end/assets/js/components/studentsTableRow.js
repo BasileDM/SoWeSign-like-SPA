@@ -1,8 +1,6 @@
 import { ComponentCreator } from "../classes/ComponentCreator.js";
 
 export function studentsTableRow(content, role, type) {
-  console.log(`content on element creation :`);
-  console.log(content);
   const component = document.createElement("tr");
   const th = document.createElement("th");
   const tdFirstName = document.createElement("td");

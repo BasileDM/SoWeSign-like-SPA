@@ -167,7 +167,7 @@ class AuthController {
    */
   public static function generateClassCode($classId): string {
     $chars = '0123456789';
-    $length = 6;
+    $length = 5;
     $code = '';
     for ($i = 0; $i < $length; $i++) {
       $code .= $chars[rand(0, strlen($chars) - 1)];
