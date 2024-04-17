@@ -1,3 +1,5 @@
+import { ComponentCreator } from "../classes/ComponentCreator.js";
+
 export function promTableRow(content, role) {
   const component = document.createElement("tr");
   const th = document.createElement("th");
@@ -23,7 +25,9 @@ export function promTableRow(content, role) {
   a2.textContent = "Modifier";
   a3.textContent = "Supprimer";
   a1.addEventListener("click", displayPromo);
-  a2.addEventListener("click", editPromo);
+  a2.addEventListener("click", () => {
+    editPromo(content);
+  });
   a3.addEventListener("click", deletePromo);
   a1.className = "link-info link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover";
   a2.className = "link-info link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover";
@@ -67,8 +71,14 @@ export function promTableRow(content, role) {
     });
   }
 
-  function editPromo() {
-    console.log(content);
+  function editPromo(content) {
+    const listSection = document.getElementById("promolist");
+    const editSection = document.getElementById("promoEdit");
+    listSection.style.display = "none";
+    editSection.style.display = "block";
+    const compCreator = new ComponentCreator();
+    let editPromForm = compCreator.createComponent("customForm", content, role, ["promotion", "create"]);
+    editSection.appendChild(editPromForm);
   }
 
   function deletePromo() {

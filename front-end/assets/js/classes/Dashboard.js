@@ -165,12 +165,19 @@ export class Dashboard {
         } else if (data.success) {
           this.isLoaded = true;
           window.history.pushState("", "", "dashboard");
-          displayToast("SIMPLON SWS", data.success, "success");
+          // displayToast("SIMPLON SWS", data.success, "success");
           document.querySelector("#dashboard-section").innerHTML = data.dashboard;
           console.log("%c Dashboard loaded from server, now making it visible", "color: red");
           render("dashboard-section");
 
           this.loadClasses(); // This method (loadClasses) then loads proms
+          document.getElementById('add-prom-btn').addEventListener('click', () => {
+            console.log("Add prom button clicked");
+            const editSection = document.getElementById("promoEdit");
+            let addPromForm = componentCreator.createComponent("customForm", null, null, ["promotion", "create"]);
+            editSection.appendChild(addPromForm);
+
+          });
         } else {
           displayToast("SIMPLON SWS", "Something went wrong.", "error");
         }

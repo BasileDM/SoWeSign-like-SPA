@@ -1,6 +1,7 @@
 import { todaysClasses } from "../components/todaysClasses.js";
 import { promTableRow } from "../components/promTableRow.js";
 import { studentsTableRow } from "../components/studentsTableRow.js";
+import { customForm } from "../components/customForm.js";
 
 export class ComponentCreator {
   constructor() {
@@ -8,6 +9,7 @@ export class ComponentCreator {
     this.registerTemplate("classes", todaysClasses);
     this.registerTemplate("promTableRow", promTableRow);
     this.registerTemplate("studentsTableRow", studentsTableRow);
+    this.registerTemplate("customForm", customForm);
   }
 
   registerTemplate(name, templateFunction) {

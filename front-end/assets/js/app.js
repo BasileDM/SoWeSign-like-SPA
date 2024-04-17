@@ -1,5 +1,4 @@
 import { HOME_URL } from "./config.js";
-import { displayToast } from "./display.js";
 import { Router } from "./classes/Router.js";
 import { Dashboard } from "./classes/dashboard.js";
 import { ComponentCreator } from "./classes/ComponentCreator.js";
@@ -35,10 +34,8 @@ navLogout.addEventListener("click", (event) => {
 });
 
 // Procedural code
-displayToast("SIMPLON SWS", "Welcome to the website, the page has reloaded", "success");
 if (auth.getToken() && !auth.isTokenExpired()) {
   auth.switchInterface(true);
-
 } else {
   auth.switchInterface(false);
 }
