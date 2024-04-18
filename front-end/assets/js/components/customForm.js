@@ -55,6 +55,11 @@ export function customForm(content, role, type) {
   header.appendChild(subtitle);
   component.appendChild(header);
 
+  const errorContainer = document.createElement("div");
+  errorContainer.className = "text-danger d-none";
+  errorContainer.textContent = "Error";
+  component.appendChild(errorContainer);
+
   // Configuration loop for each input
   for (let i = 0; i < inputNames.length; i++) {
     const div = document.createElement("div");
@@ -72,6 +77,7 @@ export function customForm(content, role, type) {
     div.appendChild(label);
     div.appendChild(input);
     component.appendChild(div);
+    // document.getElementById(input.id).addEventListener("change", () => {}); // Implement this
   }
 
   // Bottom buttons
@@ -109,29 +115,94 @@ export function customForm(content, role, type) {
     editSection.style.display = "none";
     editSection.innerHTML = "";
   });
+  // Event listener checks
+
 
   // Submit button
   submitButton.addEventListener("click", () => {
     let valuesList = [];
     for (let i = 0; i < idList.length; i++) {
       valuesList = [...valuesList, document.getElementById(idList[i]).value];
-      
-      switch (inputTypes[i]) {
-        case "number":
-          valuesList[i] = parseInt(valuesList[i]);
-          break;
-        case "email":
-          checkMail(valuesList[i]);
-          break;
-        case "text":
-          checkName(valuesList[i]);
-          break;
-        default:
-          break;
-      }
+      inputTypes[i] === "date" ? i++ : null;
+      checkFieldType(inputTypes[i], idList[i], valuesList[i], valuesList[i + 1]);
     }
     console.log(valuesList);
   });
+
+  // Input check functions
+  function checkFieldType(type, id, value, value2 = null) {
+    switch (type) {
+      case "number":
+        value = parseInt(value);
+        checkInt(value, id);
+        break;
+      case "email":
+        checkMail(value, id);
+        break;
+      case "text":
+        checkName(value, id);
+        break;
+      case "date":
+        checkDateSpan(value, value2, id);
+        break;
+      default:
+        break;
+    }
+  }
+
+  function displayFormError(id) {
+    errorContainer.classList.remove("d-none");
+    errorContainer.classList.add("d-block");
+    document.getElementById(id).classList.add("is-invalid");
+    document.getElementById(id).classList.remove("is-valid");
+    document.getElementById(id).insertAdjacentElement("afterend", errorContainer);
+  }
+
+  function checkName(string, id) {
+    if (string.length < 2 || string.length > 50) {
+      errorContainer.textContent = "Le nom doit avoir entre 2 et 50 caractères";
+      displayFormError(id);
+      return false;
+    }
+    document.getElementById(id).classList.add("is-valid");
+    return true;
+  }
+  
+  function checkMail(string, id) {
+    const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!regex.test(string)) {
+      errorContainer.textContent = "Veuillez entrer un mail valide";
+      displayFormError(id);
+      return false;
+    }
+    if (string.length < 2 || string.length > 80) {
+      errorContainer.textContent = "Le mail doit avoir entre 2 et 80 caractères";
+      displayFormError(id);
+      return false;
+    }
+    
+    return true;
+  }
+  
+  function checkDateSpan(date1, date2, id) {
+    if (date1 > date2) {
+      errorContainer.textContent = "La date de fin doit être superieur à la date de debut";
+      displayFormError(id);
+      return false;
+    }
+    
+    return true;
+  }
+  
+  function checkInt(int, id) {
+    if (int < 0 || Number.isInteger(int) === false) {
+      errorContainer.textContent = "Veuillez entrer une valeur valide";
+      displayFormError(id);
+      return false;
+    }
+    
+    return true;
+  }
 
   // if (type[0] === "promotion") {
   //   deleteButton.addEventListener("click", () => {
@@ -139,6 +210,7 @@ export function customForm(content, role, type) {
   //   });
   // }
 
+  // Other functions 
   function makePascalCase(string) {
     let word = string
       .split(" ")
@@ -146,44 +218,6 @@ export function customForm(content, role, type) {
       .join("");
     return word;
   }
-
-  function checkName(string) {
-    if (string.length < 2) {
-      alert("Le nom ne peut pas être vide.");
-      return false;
-    }
-  }
-
-  function checkMail(string) {
-    if (string.length < 2) {
-      alert("Le mail ne peut pas être vide.");
-      return false;
-    }
-
-    return true;
-  }
-
-  function checkDateSpan(date1, date2) {
-    if (date1 > date2) {
-      alert("La date de fin doit être superieur à la date de debut.");
-      return false;
-    }
-
-    return true;
-  }
-
-  function checkInt(int) {
-    if (int < 0) {
-      alert("La valeur doit être positive.");
-      return false;
-    }
-    if (Number.isInteger(int) === false) {
-      alert("La valeur doit être un entier.");
-      return false;
-    }
-
-    return true;
-  }
-
+  
   return component;
 }
