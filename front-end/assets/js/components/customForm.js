@@ -10,6 +10,7 @@ export function customForm(content, role, type) {
   let headerSubtitle = "";
   let inputNames = [];
   let inputTypes = [];
+  let idList = [];
 
   switch (type[0]) {
     case "promotion":
@@ -66,6 +67,7 @@ export function customForm(content, role, type) {
     input.className = "form-control";
     input.name = inputNames[i];
     input.id = makePascalCase(inputNames[i]);
+    idList = [...idList, makePascalCase(inputNames[i])];
     input.type = inputTypes[i];
     div.appendChild(label);
     div.appendChild(input);
@@ -110,6 +112,24 @@ export function customForm(content, role, type) {
 
   // Submit button
   submitButton.addEventListener("click", () => {
+    let valuesList = [];
+    for (let i = 0; i < idList.length; i++) {
+      valuesList = [...valuesList, document.getElementById(idList[i]).value];
+      switch (inputTypes[i]) {
+        case "date":
+          valuesList[i] = new Date(valuesList[i]);
+          break;
+        case "number":
+          valuesList[i] = parseInt(valuesList[i]);
+          break;
+        case "email":
+          break;
+        case "text":
+          break;
+        default:
+          break;
+      }
+    }
   });
 
   // if (type[0] === "promotion") {
