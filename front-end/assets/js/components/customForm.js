@@ -126,5 +126,43 @@ export function customForm(content, role, type) {
     return word;
   }
 
+  function checkName(string) {
+    if (string.length < 2) {
+      alert("Le nom ne peut pas être vide.");
+      return false;
+    }
+  }
+
+  function checkMail(string) {
+    if (string.length < 2) {
+      alert("Le mail ne peut pas être vide.");
+      return false;
+    }
+
+    return true;
+  }
+
+  function checkDateSpan(date1, date2) {
+    if (date1 > date2) {
+      alert("La date de fin doit être superieur à la date de debut.");
+      return false;
+    }
+
+    return true;
+  }
+
+  function checkInt(int) {
+    if (int < 0) {
+      alert("La valeur doit être positive.");
+      return false;
+    }
+    if (Number.isInteger(int) === false) {
+      alert("La valeur doit être un entier.");
+      return false;
+    }
+
+    return true;
+  }
+
   return component;
 }
