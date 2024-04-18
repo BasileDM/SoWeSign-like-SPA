@@ -115,21 +115,22 @@ export function customForm(content, role, type) {
     let valuesList = [];
     for (let i = 0; i < idList.length; i++) {
       valuesList = [...valuesList, document.getElementById(idList[i]).value];
+      
       switch (inputTypes[i]) {
-        case "date":
-          valuesList[i] = new Date(valuesList[i]);
-          break;
         case "number":
           valuesList[i] = parseInt(valuesList[i]);
           break;
         case "email":
+          checkMail(valuesList[i]);
           break;
         case "text":
+          checkName(valuesList[i]);
           break;
         default:
           break;
       }
     }
+    console.log(valuesList);
   });
 
   // if (type[0] === "promotion") {
