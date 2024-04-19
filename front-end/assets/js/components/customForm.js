@@ -55,10 +55,7 @@ export function customForm(content, role, type) {
   header.appendChild(subtitle);
   component.appendChild(header);
 
-  const errorContainer = document.createElement("div");
-  errorContainer.className = "text-danger d-none";
-  errorContainer.textContent = "Error";
-  component.appendChild(errorContainer);
+ 
 
   // Configuration loop for each input
   for (let i = 0; i < inputNames.length; i++) {
@@ -77,7 +74,16 @@ export function customForm(content, role, type) {
     div.appendChild(label);
     div.appendChild(input);
     component.appendChild(div);
-    // document.getElementById(input.id).addEventListener("change", () => {}); // Implement this
+
+    const errorContainer = document.createElement("div");
+    errorContainer.className = "text-danger d-none";
+    errorContainer.textContent = "Error container";
+    errorContainer.id = makePascalCase(inputNames[i]) + "-error-ctn";
+    component.appendChild(errorContainer);
+
+    input.addEventListener("change", () => {
+      input.type !== "date" ? checkFieldType(inputTypes[i], input.id, input.value) : null;
+    });
   }
 
   // Bottom buttons
@@ -115,16 +121,25 @@ export function customForm(content, role, type) {
     editSection.style.display = "none";
     editSection.innerHTML = "";
   });
+
   // Event listener checks
-
-
   // Submit button
   submitButton.addEventListener("click", () => {
     let valuesList = [];
     for (let i = 0; i < idList.length; i++) {
+      console.log(`Start of check loop, i = ${i}`);
       valuesList = [...valuesList, document.getElementById(idList[i]).value];
-      inputTypes[i] === "date" ? i++ : null;
+
+      if (inputTypes[i] === "date") {
+        valuesList = [...valuesList, document.getElementById(idList[i+1]).value];
+        checkFieldType(inputTypes[i], idList[i], valuesList[i], valuesList[i+1]);
+        i++;
+        console.log(`Date detected, end of check loop, i = ${i}`);
+        continue;
+      }
+
       checkFieldType(inputTypes[i], idList[i], valuesList[i], valuesList[i + 1]);
+      console.log(`End of check loop, i = ${i}`);
     }
     console.log(valuesList);
   });
@@ -151,6 +166,7 @@ export function customForm(content, role, type) {
   }
 
   function displayFormError(id) {
+    let errorContainer = document.getElementById(id + "-error-ctn");
     errorContainer.classList.remove("d-none");
     errorContainer.classList.add("d-block");
     document.getElementById(id).classList.add("is-invalid");
@@ -158,49 +174,64 @@ export function customForm(content, role, type) {
     document.getElementById(id).insertAdjacentElement("afterend", errorContainer);
   }
 
+  function displayValidForm(id) {
+    let errorContainer = document.getElementById(id + "-error-ctn");
+    document.getElementById(id).classList.add("is-valid");
+    document.getElementById(id).classList.remove("is-invalid");
+    errorContainer.classList.add("d-none");
+    errorContainer.classList.remove("d-block");
+  }
+
   function checkName(string, id) {
+    let errorContainer = document.getElementById(id + "-error-ctn");
     if (string.length < 2 || string.length > 50) {
-      errorContainer.textContent = "Le nom doit avoir entre 2 et 50 caractères";
+      errorContainer.textContent = "Entre 2 et 50 caractères sont requis";
       displayFormError(id);
       return false;
     }
-    document.getElementById(id).classList.add("is-valid");
+    displayValidForm(id);
     return true;
   }
   
   function checkMail(string, id) {
+    let errorContainer = document.getElementById(id + "-error-ctn");
     const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!regex.test(string)) {
       errorContainer.textContent = "Veuillez entrer un mail valide";
       displayFormError(id);
       return false;
     }
-    if (string.length < 2 || string.length > 80) {
-      errorContainer.textContent = "Le mail doit avoir entre 2 et 80 caractères";
+    if (string.length > 80) {
+      errorContainer.textContent = "Le mail ne doit pas avoir plus de 80 caractères";
       displayFormError(id);
       return false;
     }
-    
+    displayValidForm(id);
     return true;
   }
   
   function checkDateSpan(date1, date2, id) {
-    if (date1 > date2) {
+    let errorContainer = document.getElementById(id + "-error-ctn");
+    console.log(`Date 1: ${date1}`);
+    console.log(`Date 2: ${date2}`);
+
+    if (new Date(date1) > new Date(date2)) {
       errorContainer.textContent = "La date de fin doit être superieur à la date de debut";
       displayFormError(id);
       return false;
     }
-    
+    displayValidForm(id);
     return true;
   }
   
   function checkInt(int, id) {
-    if (int < 0 || Number.isInteger(int) === false) {
+    let errorContainer = document.getElementById(id + "-error-ctn");
+    if (int < 0 || !Number.isInteger(int)) {
       errorContainer.textContent = "Veuillez entrer une valeur valide";
       displayFormError(id);
       return false;
     }
-    
+    displayValidForm(id);
     return true;
   }
 
