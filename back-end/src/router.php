@@ -90,6 +90,6 @@ switch ($url) {
 
   default:
     header('Content-Type: application/json');
-    echo json_encode('404');
+    echo json_encode(['error' => '404 Not found.']);
     break;
 }

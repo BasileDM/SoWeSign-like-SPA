@@ -14,6 +14,7 @@ export function customForm(content, role, type) {
   let inputNames = [];
   let inputTypes = [];
   let idList = [];
+  let inputPlaceholders = [];
 
   switch (type[0]) {
     case "promotion":
@@ -21,6 +22,7 @@ export function customForm(content, role, type) {
       headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définitifs.";
       inputNames = ["Nom de la promotion", "Date de début", "Date de fin", "Places disponibles"];
       inputTypes = ["text", "date", "date", "number"];
+      inputPlaceholders = [content.NAME, content.START_DATE, content.END_DATE, content.AVAILABLE_SPOTS];
       break;
 
     case "student":
@@ -31,6 +33,7 @@ export function customForm(content, role, type) {
       headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définis.";
       inputNames = ["Nom de famille", "Prénom", "Mail"];
       inputTypes = ["text", "text", "email"];
+      inputPlaceholders = [content.LastName, content.FirstName, content.Mail];
       break;
 
     case "retard":
@@ -41,6 +44,7 @@ export function customForm(content, role, type) {
       headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définis.";
       inputNames = ["Date de retard", "Commentaire"];
       inputTypes = ["date", "text"];
+      inputPlaceholders = [content.lateDate.split(" ")[0], content.ID_USER];
       break;
 
     default:
@@ -70,6 +74,7 @@ export function customForm(content, role, type) {
     input.className = "form-control";
     input.name = inputNames[i];
     input.id = makePascalCase(inputNames[i]);
+    input.value = type[1] === "create" ? null : inputPlaceholders[i];
     idList = [...idList, makePascalCase(inputNames[i])];
     input.type = inputTypes[i];
     div.appendChild(label);
@@ -272,7 +277,7 @@ export function customForm(content, role, type) {
   }
 
   function sendForm(inputValues, crudType, formCategory) {
-    console.log(inputValues);
+    console.log(inputValues, crudType, formCategory);
     fetch(API_URL + "handleForm", {
       method: "POST",
       headers: {

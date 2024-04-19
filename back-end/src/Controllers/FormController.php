@@ -27,7 +27,7 @@ class FormController {
       die();
 
     } elseif ($crudType === 'edit') {
-      $id = self::sanitizeNumber($formContent[0]);
+      $id = self::sanitizeNumber($formContent[0]); // ADD ID IN FORM CONTENT TO FIX ERROR
       $name = self::sanitizeString($formContent[1]);
       $startDate = self::sanitizeDate($formContent[2]);
       $endDate = self::sanitizeDate($formContent[3]);
@@ -64,7 +64,6 @@ class FormController {
   }
 
   // Check and sanitize data functions
-
   private static function sanitizeString(string $dirtyString): string {
     if (strlen($dirtyString) < 2 || strlen($dirtyString) > 50) {
       header('Content-Type: application/json');
@@ -100,20 +99,20 @@ class FormController {
 
   private static function sanitizeNumber(string $dirtyNumber): string {
     if (!is_numeric($dirtyNumber)) {
-      echo json_encode(['error' => 'Invalid number.']);
+      echo json_encode(['error' => $dirtyNumber]);
       exit();
     };
     if ($dirtyNumber < 0) {
-      echo json_encode(['error' => 'Invalid number.']);
+      echo json_encode(['error' => 'Invalid number 2.']);
       exit();
     };
     if ($dirtyNumber > 100) {
-      echo json_encode(['error' => 'Invalid number.']);
+      echo json_encode(['error' => 'Invalid number 3 .']);
       exit();
     };
     // return another error if the number is not an integer
     if (intval($dirtyNumber) != $dirtyNumber) {
-      echo json_encode(['error' => 'Invalid number.']);
+      echo json_encode(['error' => 'Invalid number 4.']);
       exit();
     }
     return $dirtyNumber;
