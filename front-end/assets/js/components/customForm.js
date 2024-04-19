@@ -55,8 +55,6 @@ export function customForm(content, role, type) {
   header.appendChild(subtitle);
   component.appendChild(header);
 
- 
-
   // Configuration loop for each input
   for (let i = 0; i < inputNames.length; i++) {
     const div = document.createElement("div");
@@ -122,24 +120,19 @@ export function customForm(content, role, type) {
     editSection.innerHTML = "";
   });
 
-  // Event listener checks
+  // // Event listeners checks
   // Submit button
   submitButton.addEventListener("click", () => {
     let valuesList = [];
     for (let i = 0; i < idList.length; i++) {
-      console.log(`Start of check loop, i = ${i}`);
       valuesList = [...valuesList, document.getElementById(idList[i]).value];
-
       if (inputTypes[i] === "date") {
         valuesList = [...valuesList, document.getElementById(idList[i+1]).value];
         checkFieldType(inputTypes[i], idList[i], valuesList[i], valuesList[i+1]);
         i++;
-        console.log(`Date detected, end of check loop, i = ${i}`);
         continue;
       }
-
       checkFieldType(inputTypes[i], idList[i], valuesList[i], valuesList[i + 1]);
-      console.log(`End of check loop, i = ${i}`);
     }
     console.log(valuesList);
   });
@@ -212,9 +205,6 @@ export function customForm(content, role, type) {
   
   function checkDateSpan(date1, date2, id) {
     let errorContainer = document.getElementById(id + "-error-ctn");
-    console.log(`Date 1: ${date1}`);
-    console.log(`Date 2: ${date2}`);
-
     if (new Date(date1) > new Date(date2)) {
       errorContainer.textContent = "La date de fin doit être superieur à la date de debut";
       displayFormError(id);
@@ -226,7 +216,8 @@ export function customForm(content, role, type) {
   
   function checkInt(int, id) {
     let errorContainer = document.getElementById(id + "-error-ctn");
-    if (int < 0 || !Number.isInteger(int)) {
+    console.log(!Number.isInteger(parseFloat(int)));
+    if (int < 0 || !Number.isInteger(parseInt(int))) {
       errorContainer.textContent = "Veuillez entrer une valeur valide";
       displayFormError(id);
       return false;
