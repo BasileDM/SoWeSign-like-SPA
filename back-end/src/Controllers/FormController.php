@@ -3,34 +3,64 @@
 namespace src\Controllers;
 
 use src\Repositories\PromRepository;
+use src\Repositories\UserRepository;
 
 class FormController {
 
-/**
- * Handles the promotion form based on the given CRUD type and form content.
- *
- * @param string $crudType The CRUD type ('create', 'read', 'update', 'delete').
- * @param array $formContent The form content containing the promotion details.
- * @return void echoes a JSON response with the success/error message and dies.
- */
+  /**
+   * Handles the promotion form based on the given CRUD type and form content.
+   *
+   * @param string $crudType The CRUD type ('create', 'read', 'update', 'delete').
+   * @param array $formContent The form content containing the promotion details.
+   * @return void echoes a JSON response with the success/error message and dies.
+   */
   public function handlePromotionForm(string $crudType, array $formContent): void {
-    $promrepo = new PromRepository();
+    $promRepo = new PromRepository();
     if ($crudType === 'create') {
       $name = self::sanitizeString($formContent[0]);
       $startDate = self::sanitizeDate($formContent[1]);
       $endDate = self::sanitizeDate($formContent[2]);
       $availableSpots = self::sanitizeNumber($formContent[3]);
-      $promrepo->create($name, $startDate, $endDate, $availableSpots);
+      $promRepo->create($name, $startDate, $endDate, $availableSpots);
       header('Content-Type: application/json');
       echo json_encode(['success' => 'Promotion created.', 'crudType' => $crudType, 'formContent' => $formContent]);
+      die();
+
+    } elseif ($crudType === 'edit') {
+      $id = self::sanitizeNumber($formContent[0]);
+      $name = self::sanitizeString($formContent[1]);
+      $startDate = self::sanitizeDate($formContent[2]);
+      $endDate = self::sanitizeDate($formContent[3]);
+      $availableSpots = self::sanitizeNumber($formContent[4]);
+      $promRepo->edit($id, $name, $startDate, $endDate, $availableSpots);
+      header('Content-Type: application/json');
+      echo json_encode(['success' => 'Promotion updated.', 'crudType' => $crudType, 'formContent' => $formContent]);
       die();
     }
   }
 
-  public function handleUserForm() {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $promotion = $_POST['promotion'];
+  public function handleUserForm(string $crudType, array $formContent): void {
+    $userRepo = new UserRepository();
+    if ($crudType === 'create') {
+      $lastName = self::sanitizeString($formContent[0]);
+      $firstName = self::sanitizeString($formContent[1]);
+      $email = self::sanitizeEmail($formContent[2]);
+      $userRepo->create($lastName, $firstName, $email);
+      header('Content-Type: application/json');
+      echo json_encode(['success' => 'User created.', 'crudType' => $crudType, 'formContent' => $formContent]);
+      die();
+
+    } elseif ($crudType === 'edit') {
+      $id = self::sanitizeNumber($formContent[0]);
+      $email = self::sanitizeEmail($formContent[1]);
+      $firstName = self::sanitizeString($formContent[2]);
+      $lastName = self::sanitizeString($formContent[3]);
+      $role = self::sanitizeString($formContent[4]);
+      $userRepo->edit($lastName, $firstName, $email, $id);
+      header('Content-Type: application/json');
+      echo json_encode(['success' => 'User updated.', 'crudType' => $crudType, 'formContent' => $formContent]);
+      die();
+    }
   }
 
   // Check and sanitize data functions

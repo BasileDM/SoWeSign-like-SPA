@@ -70,4 +70,27 @@ class PromRepository {
       die();
     }
   }
+
+  /**
+   * Updates a record in the PROMOTIONS table with the given promotion ID, name, start date, end date, and available spots.
+   *
+   * @param int $promotionId The ID of the promotion to update.
+   * @param string $name The new name of the promotion.
+   * @param string $startDate The new start date of the promotion.
+   * @param string $endDate The new end date of the promotion.
+   * @param int $availableSpots The new number of available spots for the promotion.
+   * @throws PDOException If there is an error executing the SQL statement.
+   * @return void
+   */
+  public function edit(int $promotionId, string $name, string $startDate, string $endDate, int $availableSpots): void {
+    try {
+      $stmt = $this->db->prepare('UPDATE ' . PREFIXE . 'PROMOTIONS SET START_DATE = :startDate, END_DATE = :endDate, AVAILABLE_SPOTS = :availableSpots, NAME = :name WHERE ID = :promotionId');
+      $stmt->execute(['startDate' => $startDate, 'endDate' => $endDate, 'availableSpots' => $availableSpots, 'name' => $name, 'promotionId' => $promotionId]);
+    } catch (PDOException $e) {
+      throw new PDOException($e->getMessage());
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Backend error. Please contact your administrator.']);
+      die();
+    }
+  }
 }
