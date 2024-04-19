@@ -134,7 +134,6 @@ export function customForm(content, role, type) {
       }
       checkFieldType(inputTypes[i], idList[i], valuesList[i], valuesList[i + 1]);
     }
-    console.log(valuesList);
   });
 
   // Input check functions
@@ -206,11 +205,8 @@ export function customForm(content, role, type) {
   function checkDateSpan(date1, date2, id = null) {
     let errorContainer = document.getElementById(id + "-error-ctn");
     const index = idList.indexOf(document.getElementById(id).id);
-    console.log(index);
     const date2InputId = idList[index + 1];
-    console.log(date2InputId);
     let errorContainer2 = document.getElementById(date2InputId+ "-error-ctn");
-    console.log(errorContainer2);
     if (date1 === '') {
       errorContainer.textContent = "Veuillez entrer une date.";
       displayFormError(id);
@@ -241,7 +237,6 @@ export function customForm(content, role, type) {
   
   function checkInt(int, id) {
     let errorContainer = document.getElementById(id + "-error-ctn");
-    console.log(!Number.isInteger(parseFloat(int)));
     if (int < 0 || !Number.isInteger(parseInt(int))) {
       errorContainer.textContent = "Veuillez entrer une valeur valide";
       displayFormError(id);
