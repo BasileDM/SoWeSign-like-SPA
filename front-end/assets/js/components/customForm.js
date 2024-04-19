@@ -1,3 +1,5 @@
+import { API_URL } from "../config.js";
+
 export function customForm(content, role, type) {
   // type parameter = [switch case(name), create/edit, section to display on goBack button click]
   // example usage : 
@@ -124,6 +126,7 @@ export function customForm(content, role, type) {
   // Submit button
   submitButton.addEventListener("click", () => {
     let valuesList = [];
+    let areAllinputValid = [];
     for (let i = 0; i < idList.length; i++) {
       valuesList = [...valuesList, document.getElementById(idList[i]).value];
       if (inputTypes[i] === "date") {
@@ -132,7 +135,14 @@ export function customForm(content, role, type) {
         i++;
         continue;
       }
-      checkFieldType(inputTypes[i], idList[i], valuesList[i], valuesList[i + 1]);
+      checkFieldType(inputTypes[i], idList[i], valuesList[i], valuesList[i + 1]) ?
+        areAllinputValid = [...areAllinputValid, true] :
+        areAllinputValid = [...areAllinputValid, false];
+    }
+    if (areAllinputValid.includes(false)) {
+      return;
+    } else {
+      sendForm(valuesList, type[1], type[0]); // sendForm(valuesList, create/edit, prom/student etc.)
     }
   });
 
@@ -141,19 +151,15 @@ export function customForm(content, role, type) {
     switch (type) {
       case "number":
         value = parseInt(value);
-        checkInt(value, id);
-        break;
+        return checkInt(value, id);
       case "email":
-        checkMail(value, id);
-        break;
+        return checkMail(value, id);
       case "text":
-        checkName(value, id);
-        break;
+        return checkName(value, id);
       case "date":
-        checkDateSpan(value, value2, id);
-        break;
+        return checkDateSpan(value, value2, id);
       default:
-        break;
+        return false;
     }
   }
 
@@ -259,6 +265,31 @@ export function customForm(content, role, type) {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join("");
     return word;
+  }
+
+  function sendForm(inputValues, crudType, formCategory) {
+    console.log(inputValues);
+    fetch(API_URL + "handleForm", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: localStorage.getItem("token"),
+        crudType : crudType,
+        formCategory : formCategory,
+        formContent: inputValues,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          displayToast("SIMPLON SWS", data.error, "error");
+        } else if (data.success) {
+          displayToast("SIMPLON SWS", data.success, "success");
+        }
+      })
+      .catch((error) => console.error(error));
   }
   
   return component;
