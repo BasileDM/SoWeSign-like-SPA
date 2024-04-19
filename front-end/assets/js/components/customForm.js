@@ -203,8 +203,24 @@ export function customForm(content, role, type) {
     return true;
   }
   
-  function checkDateSpan(date1, date2, id) {
+  function checkDateSpan(date1, date2, id = null) {
     let errorContainer = document.getElementById(id + "-error-ctn");
+    if (date1 === '') {
+      errorContainer.textContent = "Veuillez entrer une date.";
+      displayFormError(id);
+      return false;
+    }
+    if (date2 === '') {
+      const index = idList.indexOf(document.getElementById(id).id);
+      console.log(index);
+      const date2InputId = idList[index + 1];
+      console.log(date2InputId);
+      let errorContainer2 = document.getElementById(date2InputId+ "-error-ctn");
+      console.log(errorContainer2); // HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEELP
+      errorContainer2.textContent = "Veuillez entrer une date.";
+      displayFormError(id);
+      return false;
+    }
     if (new Date(date1) > new Date(date2)) {
       errorContainer.textContent = "La date de fin doit être superieur à la date de debut";
       displayFormError(id);
