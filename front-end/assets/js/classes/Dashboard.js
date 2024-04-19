@@ -121,7 +121,7 @@ export class Dashboard {
           data.students.forEach((student) => {
             // Each table body for each prom are created in the loadProms method
             let studentTable = document.getElementById("students-table-body-prom" + student.IdPromotion);
-            let studentComponent = componentCreator.createComponent("studentsTableRow", student, role, ["student", "edit", "lol"]);
+            let studentComponent = componentCreator.createComponent("studentsTableRow", student, role, ["student", "edit"]);
             studentTable.appendChild(studentComponent);
 
             latePresences.forEach((latePresence) => {

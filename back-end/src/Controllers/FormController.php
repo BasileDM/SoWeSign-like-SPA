@@ -2,14 +2,28 @@
 
 namespace src\Controllers;
 
+use src\Repositories\PromRepository;
+
 class FormController {
 
+/**
+ * Handles the promotion form based on the given CRUD type and form content.
+ *
+ * @param string $crudType The CRUD type ('create', 'read', 'update', 'delete').
+ * @param array $formContent The form content containing the promotion details.
+ * @return void echoes a JSON response with the success/error message and dies.
+ */
   public function handlePromotionForm(string $crudType, array $formContent): void {
+    $promrepo = new PromRepository();
     if ($crudType === 'create') {
       $name = self::sanitizeString($formContent[0]);
       $startDate = self::sanitizeDate($formContent[1]);
       $endDate = self::sanitizeDate($formContent[2]);
       $availableSpots = self::sanitizeNumber($formContent[3]);
+      $promrepo->create($name, $startDate, $endDate, $availableSpots);
+      header('Content-Type: application/json');
+      echo json_encode(['success' => 'Promotion created.', 'crudType' => $crudType, 'formContent' => $formContent]);
+      die();
     }
   }
 
@@ -23,7 +37,9 @@ class FormController {
 
   private static function sanitizeString(string $dirtyString): string {
     if (strlen($dirtyString) < 2 || strlen($dirtyString) > 50) {
-      
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Le nom doit contenir entre 2 et 50 caractères.']);
+      die();
     }
     return htmlspecialchars($dirtyString, ENT_QUOTES, 'UTF-8');
   }

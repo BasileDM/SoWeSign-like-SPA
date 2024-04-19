@@ -1,10 +1,11 @@
 import { API_URL } from "../config.js";
+import { displayToast } from "../display.js";
 
 export function customForm(content, role, type) {
   // type parameter = [switch case(name), create/edit, section to display on goBack button click]
-  // example usage : 
+  // example usage :
   // let editForm = compCreator.createComponent("customForm", content, role, ["student", "edit", hideSection]);
-  
+
   const editSection = document.getElementById("form-creation-section");
   editSection.style.display = "block";
 
@@ -130,14 +131,16 @@ export function customForm(content, role, type) {
     for (let i = 0; i < idList.length; i++) {
       valuesList = [...valuesList, document.getElementById(idList[i]).value];
       if (inputTypes[i] === "date") {
-        valuesList = [...valuesList, document.getElementById(idList[i+1]).value];
-        checkFieldType(inputTypes[i], idList[i], valuesList[i], valuesList[i+1]);
+        valuesList = [...valuesList, document.getElementById(idList[i + 1]).value];
+        checkFieldType(inputTypes[i], idList[i], valuesList[i], valuesList[i + 1])
+          ? (areAllinputValid = [...areAllinputValid, true])
+          : (areAllinputValid = [...areAllinputValid, false]);
         i++;
         continue;
       }
-      checkFieldType(inputTypes[i], idList[i], valuesList[i], valuesList[i + 1]) ?
-        areAllinputValid = [...areAllinputValid, true] :
-        areAllinputValid = [...areAllinputValid, false];
+      checkFieldType(inputTypes[i], idList[i], valuesList[i], valuesList[i + 1])
+        ? (areAllinputValid = [...areAllinputValid, true])
+        : (areAllinputValid = [...areAllinputValid, false]);
     }
     if (areAllinputValid.includes(false)) {
       return;
@@ -190,10 +193,11 @@ export function customForm(content, role, type) {
     displayValidForm(id);
     return true;
   }
-  
+
   function checkMail(string, id) {
     let errorContainer = document.getElementById(id + "-error-ctn");
-    const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const regex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!regex.test(string)) {
       errorContainer.textContent = "Veuillez entrer un mail valide";
       displayFormError(id);
@@ -207,23 +211,23 @@ export function customForm(content, role, type) {
     displayValidForm(id);
     return true;
   }
-  
+
   function checkDateSpan(date1, date2, id = null) {
     let errorContainer = document.getElementById(id + "-error-ctn");
     const index = idList.indexOf(document.getElementById(id).id);
     const date2InputId = idList[index + 1];
-    let errorContainer2 = document.getElementById(date2InputId+ "-error-ctn");
-    if (date1 === '') {
+    let errorContainer2 = document.getElementById(date2InputId + "-error-ctn");
+    if (date1 === "") {
       errorContainer.textContent = "Veuillez entrer une date.";
       displayFormError(id);
-      if (date2 === '') {
+      if (date2 === "") {
         errorContainer2.textContent = "Veuillez entrer une date.";
         displayFormError(date2InputId);
       }
       return false;
     }
     displayValidForm(id);
-    if (date2 === '') {
+    if (date2 === "") {
       errorContainer2.textContent = "Veuillez entrer une date.";
       displayFormError(date2InputId);
       return false;
@@ -240,7 +244,7 @@ export function customForm(content, role, type) {
     displayValidForm(date2InputId);
     return true;
   }
-  
+
   function checkInt(int, id) {
     let errorContainer = document.getElementById(id + "-error-ctn");
     if (int < 0 || !Number.isInteger(parseInt(int))) {
@@ -258,7 +262,7 @@ export function customForm(content, role, type) {
   //   });
   // }
 
-  // Other functions 
+  // Other functions
   function makePascalCase(string) {
     let word = string
       .split(" ")
@@ -276,8 +280,8 @@ export function customForm(content, role, type) {
       },
       body: JSON.stringify({
         token: localStorage.getItem("token"),
-        crudType : crudType,
-        formCategory : formCategory,
+        crudType: crudType,
+        formCategory: formCategory,
         formContent: inputValues,
       }),
     })
@@ -286,11 +290,12 @@ export function customForm(content, role, type) {
         if (data.error) {
           displayToast("SIMPLON SWS", data.error, "error");
         } else if (data.success) {
+          console.log(data);
           displayToast("SIMPLON SWS", data.success, "success");
         }
       })
       .catch((error) => console.error(error));
   }
-  
+
   return component;
 }
