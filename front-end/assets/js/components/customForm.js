@@ -120,7 +120,7 @@ export function customForm(content, role, type) {
     editSection.innerHTML = "";
   });
 
-  // // Event listeners checks
+  // // Event listeners
   // Submit button
   submitButton.addEventListener("click", () => {
     let valuesList = [];
