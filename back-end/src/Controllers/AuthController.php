@@ -22,6 +22,11 @@ class AuthController {
       echo json_encode(['error' => 'Wrong mail or password.']);
       die();
     }
+    if (!$user->isActivated() || $user->getPassword() === null) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Le compte n\'est pas activé. Veuillez vérifier vos mails.']);
+      die();
+    }
     if (!password_verify($pass, $user->getPassword())) {
       header('Content-Type: application/json');
       echo json_encode(['error' => 'Wrong mail or password.']);

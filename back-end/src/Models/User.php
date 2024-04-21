@@ -8,7 +8,7 @@ final class User {
   private int $Id;
   private string $FirstName;
   private string $LastName;
-  private string $Password;
+  private string|null $Password;
   private bool $Activated;
   private string $Mail;
   private int $IdRole;
@@ -70,7 +70,7 @@ final class User {
   /**
    * Get the value of Password
    */
-  public function getPassword(): string {
+  public function getPassword(): string|null {
     return $this->Password;
   }
 
@@ -80,7 +80,7 @@ final class User {
    * @param   string  $Password  
    * 
    */
-  public function setPassword(string $Password) {
+  public function setPassword(string|null $Password) {
     $this->Password = $Password;
   }
 
