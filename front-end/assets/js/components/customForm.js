@@ -166,7 +166,7 @@ export function customForm(content, role, type) {
     if (areAllinputValid.includes(false)) {
       return;
     } else {
-      if (type[0] == "user" && type[1] == "edit") valuesList = [content.Id, ...valuesList];
+      type[0] == "user" && type[1] == "edit" ? valuesList = [content.Id, ...valuesList] : valuesList = [content, ...valuesList];
       if (type[0] == "promotion" && type[1] == "edit") valuesList = [content.ID, ...valuesList];
       sendForm(valuesList, type[1], type[0]); // sendForm(arg1: valuesList, arg2: create/edit, arg3: prom/user/etc.)
     }

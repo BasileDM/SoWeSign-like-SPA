@@ -42,10 +42,11 @@ class FormController {
   public function handleUserForm(string $crudType, array $formContent): void {
     $userRepo = new UserRepository();
     if ($crudType === 'create') {
-      $lastName = self::sanitizeString($formContent[0]);
-      $firstName = self::sanitizeString($formContent[1]);
-      $email = self::sanitizeEmail($formContent[2]);
-      $userRepo->create($lastName, $firstName, $email);
+      $promId = self::sanitizeNumber($formContent[0]);
+      $lastName = self::sanitizeString($formContent[1]);
+      $firstName = self::sanitizeString($formContent[2]);
+      $email = self::sanitizeEmail($formContent[3]);
+      $userRepo->create($promId, $lastName, $firstName, $email);
       header('Content-Type: application/json');
       echo json_encode(['success' => 'User created.', 'crudType' => $crudType, 'formContent' => $formContent]);
       die();

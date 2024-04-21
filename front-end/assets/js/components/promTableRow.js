@@ -1,6 +1,7 @@
 import { ComponentCreator } from "../classes/ComponentCreator.js";
 import { API_URL } from "../config.js";
 import { displayToast } from "../display.js";
+import { dashboard } from "../app.js";
 
 export function promTableRow(content, role) {
   const component = document.createElement("tr");
@@ -48,6 +49,7 @@ export function promTableRow(content, role) {
   return component;
 
   function displayPromo() {
+    dashboard.currentProm = content.ID;
     const promTableBody = document.getElementById(`students-table-body-prom${content.ID}`);
     const promLateTableBody = document.getElementById(`late-table-body-prom${content.ID}`);
     promTableBody.classList.remove("d-none");

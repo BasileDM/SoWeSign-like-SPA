@@ -6,6 +6,7 @@ import * as auth from "../auth.js";
 export class Dashboard {
   constructor() {
     this.isLoaded = false;
+    this.currentProm = null;
   }
 
   loadClasses() {
@@ -182,7 +183,7 @@ export class Dashboard {
           document.getElementById('add-student-btn').addEventListener('click', () => {
             const detailsSection = document.getElementById("promodetails");
             detailsSection.style.display = "none";
-            let addStudentForm = componentCreator.createComponent("customForm", null, null, ["user", "create", detailsSection]);
+            let addStudentForm = componentCreator.createComponent("customForm", this.currentProm, null, ["user", "create", detailsSection]);
             document.getElementById("form-creation-section").appendChild(addStudentForm);
           });
           // Create late presence button event listener

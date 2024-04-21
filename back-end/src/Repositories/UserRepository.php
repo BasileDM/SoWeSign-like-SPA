@@ -131,17 +131,37 @@ class UserRepository {
   /**
    * Inserts a new user into the database.
    *
+   * @param int $promId The promotion ID of the user.
    * @param string $firstName The first name of the user.
    * @param string $lastName The last name of the user.
    * @param string $mail The email address of the user.
    * @throws PDOException If an error occurs while inserting the user into the database.
    * @return void
    */
-  public function create(string $lastName, string $firstName, string $mail): void {
+  public function create(int $promId, string $lastName, string $firstName, string $mail): void {
     try {
-      $sql = "INSERT INTO " . PREFIXE . "USERS (FIRST_NAME, LAST_NAME, MAIL) VALUES (:firstName, :lastName, :mail)";
+      $newUser = new User();
+      $newUser->setFirstName($firstName);
+      $newUser->setLastName($lastName);
+      $newUser->setActivated(false);
+      $newUser->setMail($mail);
+      $newUser->setIdRole(1);
+      $newUser->setIdPromotion($promId);
+      $sql = "INSERT INTO " . PREFIXE . "USERS (FIRST_NAME, LAST_NAME, ACTIVATED, MAIL, ID_ROLE) 
+      VALUES (:firstName, :lastName, :activated, :mail, :idRole)";
       $stmt = $this->db->prepare($sql);
-      $stmt->execute(['firstName' => $firstName, 'lastName' => $lastName, 'mail' => $mail]);
+      $stmt->execute([
+        'firstName' => $newUser->getFirstName(),
+        'lastName' => $newUser->getLastName(),
+        'activated' => $newUser->isActivated(),
+        'mail' => $newUser->getMail(),
+        'idRole' => $newUser->getIdRole()
+      ]);
+      $lastInsertId = $this->db->lastInsertId();
+      $newUser->setId($lastInsertId);
+      $sql = "INSERT INTO " . PREFIXE . "RELATION_USER_PROMOTION (ID_USER, ID_PROMOTION) VALUES (:id, :promId)";
+      $stmt = $this->db->prepare($sql);
+      $stmt->execute(['id' => $newUser->getId(), 'promId' => $newUser->getIdPromotion()]);
     } catch (PDOException $e) {
       throw new PDOException($e->getMessage());
       header('Content-Type: application/json');
