@@ -4,7 +4,7 @@ import { displayToast } from "../display.js";
 export function customForm(content, role, type) {
   // type parameter = [switch case(name), create/edit, section to display on goBack button click]
   // example usage :
-  // let editForm = compCreator.createComponent("customForm", content, role, ["student", "edit", hideSection]);
+  // let editForm = compCreator.createComponent("customForm", content, role, ["user", "edit", hideSection]);
 
   const editSection = document.getElementById("form-creation-section");
   editSection.style.display = "block";
@@ -22,10 +22,11 @@ export function customForm(content, role, type) {
       headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définitifs.";
       inputNames = ["Nom de la promotion", "Date de début", "Date de fin", "Places disponibles"];
       inputTypes = ["text", "date", "date", "number"];
-      inputPlaceholders = [content.NAME, content.START_DATE, content.END_DATE, content.AVAILABLE_SPOTS];
+      inputPlaceholders =
+        type[1] === "create" ? [] : [content.NAME, content.START_DATE, content.END_DATE, content.AVAILABLE_SPOTS];
       break;
 
-    case "student":
+    case "user":
       headerTitle =
         type[1] === "create"
           ? "Création d'un apprenant"
@@ -33,7 +34,7 @@ export function customForm(content, role, type) {
       headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définis.";
       inputNames = ["Nom de famille", "Prénom", "Mail"];
       inputTypes = ["text", "text", "email"];
-      inputPlaceholders = [content.LastName, content.FirstName, content.Mail];
+      type[1] === "create" ? [] : inputPlaceholders = [content.LastName, content.FirstName, content.Mail];
       break;
 
     case "retard":
@@ -44,7 +45,7 @@ export function customForm(content, role, type) {
       headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définis.";
       inputNames = ["Date de retard", "Commentaire"];
       inputTypes = ["date", "text"];
-      inputPlaceholders = [content.lateDate.split(" ")[0], content.ID_USER];
+      type[1] === "create" ? [] : inputPlaceholders = [content.lateDate.split(" ")[0], content.ID_USER];
       break;
 
     default:
@@ -150,7 +151,9 @@ export function customForm(content, role, type) {
     if (areAllinputValid.includes(false)) {
       return;
     } else {
-      sendForm(valuesList, type[1], type[0]); // sendForm(valuesList, create/edit, prom/student etc.)
+      if (type[0] == "user") valuesList = [content.Id, ...valuesList];
+      if (type[0] == "promotion") valuesList = [content.ID, ...valuesList];
+      sendForm(valuesList, type[1], type[0]); // sendForm(arg1: valuesList, arg2: create/edit, arg3: prom/user/etc.)
     }
   });
 
@@ -240,7 +243,7 @@ export function customForm(content, role, type) {
     displayValidForm(date2InputId);
     if (new Date(date1) > new Date(date2)) {
       errorContainer.textContent = "";
-      errorContainer2.textContent = "La date de fin doit être superieur à la date de début";
+      errorContainer2.textContent = "La date de fin doit être supérieure à la date de début";
       displayFormError(id);
       displayFormError(date2InputId);
       return false;

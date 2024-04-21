@@ -43,7 +43,7 @@ export function studentsTableRow(content, role, type) {
   function editAction() {
     const compCreator = new ComponentCreator();
     let hideSection = document.getElementById("promodetails");
-    let editForm = compCreator.createComponent("customForm", content, role, ["student", "edit", hideSection]);
+    let editForm = compCreator.createComponent("customForm", content, role, ["user", "edit", hideSection]);
     switch (type) {
       case "late":
         console.log(`Content sent in form through late component edit button :`);

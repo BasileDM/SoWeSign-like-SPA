@@ -52,10 +52,9 @@ class FormController {
 
     } elseif ($crudType === 'edit') {
       $id = self::sanitizeNumber($formContent[0]);
-      $email = self::sanitizeEmail($formContent[1]);
+      $lastName = self::sanitizeString($formContent[1]);
       $firstName = self::sanitizeString($formContent[2]);
-      $lastName = self::sanitizeString($formContent[3]);
-      $role = self::sanitizeString($formContent[4]);
+      $email = self::sanitizeEmail($formContent[3]);
       $userRepo->edit($lastName, $firstName, $email, $id);
       header('Content-Type: application/json');
       echo json_encode(['success' => 'User updated.', 'crudType' => $crudType, 'formContent' => $formContent]);
@@ -102,17 +101,12 @@ class FormController {
       echo json_encode(['error' => $dirtyNumber]);
       exit();
     };
-    if ($dirtyNumber < 0) {
-      echo json_encode(['error' => 'Invalid number 2.']);
+    if ($dirtyNumber < 0 || $dirtyNumber > 100) {
+      echo json_encode(['error' => 'Number must be between 0 and 100.']);
       exit();
     };
-    if ($dirtyNumber > 100) {
-      echo json_encode(['error' => 'Invalid number 3 .']);
-      exit();
-    };
-    // return another error if the number is not an integer
     if (intval($dirtyNumber) != $dirtyNumber) {
-      echo json_encode(['error' => 'Invalid number 4.']);
+      echo json_encode(['error' => 'Invalid number.']);
       exit();
     }
     return $dirtyNumber;
