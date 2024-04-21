@@ -128,6 +128,33 @@ class UserRepository {
     }
   }
 
+  public function getUnactivatedMails(): array {
+    try {
+      $sql = "SELECT MAIL FROM " . PREFIXE . "USERS WHERE ACTIVATED = 0";
+      $stmt = $this->db->prepare($sql);
+      $stmt->execute();
+      return $stmt->fetchAll();
+    } catch (PDOException $e) {
+      throw new PDOException($e->getMessage());
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Backend error. Please contact your administrator.']);
+      die();
+    }    
+  }
+
+  public function activate(string $mail, string $password): void {
+    try {
+      $sql = "UPDATE " . PREFIXE . "USERS SET ACTIVATED = 1, PASSWORD = :password WHERE MAIL = :mail";
+      $stmt = $this->db->prepare($sql);
+      $stmt->execute(['mail' => $mail, 'password' => $password]);
+    } catch (PDOException $e) {
+      throw new PDOException($e->getMessage());
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Backend error. Please contact your administrator.']);
+      die();
+    }
+  }
+
   /**
    * Inserts a new user into the database.
    *

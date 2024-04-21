@@ -25,7 +25,6 @@ class FormController {
       header('Content-Type: application/json');
       echo json_encode(['success' => 'Promotion created.', 'crudType' => $crudType, 'formContent' => $formContent]);
       die();
-
     } elseif ($crudType === 'edit') {
       $id = self::sanitizeNumber($formContent[0]); // ADD ID IN FORM CONTENT TO FIX ERROR
       $name = self::sanitizeString($formContent[1]);
@@ -47,10 +46,15 @@ class FormController {
       $firstName = self::sanitizeString($formContent[2]);
       $email = self::sanitizeEmail($formContent[3]);
       $userRepo->create($promId, $lastName, $firstName, $email);
-      header('Content-Type: application/json');
-      echo json_encode(['success' => 'User created.', 'crudType' => $crudType, 'formContent' => $formContent]);
-      die();
-
+      if (self::sendMail($email, $lastName, $firstName)) {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => 'Utilisateur creé ! Le mail a bien été envoyé.']);
+        die();
+      } else {
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'Une erreur est survenue lors de l\'envoi du mail.']);
+        die();
+      }
     } elseif ($crudType === 'edit') {
       $id = self::sanitizeNumber($formContent[0]);
       $lastName = self::sanitizeString($formContent[1]);
@@ -127,5 +131,29 @@ class FormController {
       exit();
     }
     return $dirtyNumber;
+  }
+
+  private static function sendMail(string $email, string $lastName, string $firstName): bool {
+    $hashedEmail = AuthController::hashMail($email);
+    $to = $email;
+    $subject = 'Simplon : Invitation d\'activation';
+    $headers = 'Content-Type: text/html; charset=utf-8' . "\r\n";
+    $headers .= 'From: email@envoi.fr' . "\r\n" .
+      'Reply-To: email@envoi.fr' . "\r\n" .
+      'X-Mailer: PHP/' . phpversion();
+    $message = '<h2>Activation de votre compte Simplon</h2>
+        <p>Bonjour ' . $firstName . ' ' . $lastName . ',</p>
+        <p>Vous avez été invité à rejoindre la plateforme Simplon.</p>
+        <p>Pour activer votre compte, veuillez cliquer sur le lien suivant :</p>
+        <a href="' . HOME_URL . 'activate?code=' . $hashedEmail . '">' . HOME_URL . 'activate?code=' . $hashedEmail . '</a>
+        <p>Cordialement,<br/>L\'équipe Simplon.</p>';
+
+    $test = mail($to, $subject, $message, $headers);
+
+    if ($test) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

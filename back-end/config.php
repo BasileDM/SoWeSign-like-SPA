@@ -1,9 +1,9 @@
 <?php
-    define('DB_INITIALIZED', FALSE);
-    define('JWT_SECRET', 'your-secret-key');
+    define('DB_INITIALIZED', TRUE);
+    define('JWT_SECRET', 'simplon-jwt-5494845');
     define('DB_HOST', 'localhost');
-    define('DB_NAME', 'your-db-name');
-    define('DB_USER', 'your-db-user');
-    define('DB_PASS', 'your-db-password');
-    define('PREFIXE', 'SWS_'); // Do not edit
+    define('DB_NAME', 'sws');
+    define('DB_USER', 'sws');
+    define('DB_PASS', 'sws');
+    define('PREFIXE', 'SWS_');
     define('HOME_URL', '/');

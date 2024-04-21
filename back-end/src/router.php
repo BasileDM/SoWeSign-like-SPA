@@ -9,7 +9,7 @@ $url = parse_url($url, PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 $request = json_decode(file_get_contents('php://input'), true);
 
-if ($url !== HOME_URL . 'login' && $url !== HOME_URL) {
+if ($url !== HOME_URL . 'login' && $url !== HOME_URL && $url !== HOME_URL . 'activate') {
   AuthController::securityCheck($request['token']);
   $tokenPayload = AuthController::getTokenPayload($request['token']);
   $userId = $tokenPayload['ID'];
@@ -106,6 +106,31 @@ switch ($url) {
     }
     $formController = new FormController();
     $formController->deletePromotion($request['deletePromId']);
+    break;
+
+  case HOME_URL . 'activate':
+    if ($method !== 'POST' || !isset($request['code']) || !isset($request['password']) || !isset($request['passwordConfirm'])) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Invalid request.']);
+      exit();
+    }
+    if ($request['password'] !== $request['passwordConfirm']) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Les mots de passe ne sont pas identiques.']);
+      exit();
+    }
+    if (strlen($request['password']) < 8) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Le mot de passe doit contenir au moins 8 caractères.']);
+      exit();
+    }
+    if (AuthController::activate($request['code'], $request['password'],)) {
+      header('Content-Type: application/json');
+      echo json_encode(['success' => 'Le compte a été activé, vous pouvez vous connecter.']);
+    } else {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Erreur lors de l\'activation.']);
+    }
     break;
 
   default:
