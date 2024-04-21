@@ -180,7 +180,7 @@ class UserRepository {
       $stmt->execute([
         'firstName' => $newUser->getFirstName(),
         'lastName' => $newUser->getLastName(),
-        'activated' => $newUser->isActivated(),
+        'activated' => 0,
         'mail' => $newUser->getMail(),
         'idRole' => $newUser->getIdRole()
       ]);
