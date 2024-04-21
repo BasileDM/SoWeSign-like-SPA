@@ -91,7 +91,7 @@ final class Database {
     define('DB_PASS', '" . DB_PASS . "');
     define('PREFIXE', '" . PREFIXE . "');
     define('HOME_URL', '" . HOME_URL . "');
-    define('FRONT-URL', '" . FRONT_URL . "');";
+    define('FRONT_URL', '" . FRONT_URL . "');";
 
     if (fwrite($configFile, $content)) {
       fclose($configFile);
