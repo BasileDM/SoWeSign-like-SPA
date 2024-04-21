@@ -146,7 +146,6 @@ class FormController {
         <p>Vous avez été invité à rejoindre la plateforme Simplon.</p>
         <p>Pour activer votre compte, veuillez cliquer sur le lien suivant :</p>
         <a href="' . HOME_URL . 'activate?code=' . $hashedEmail . '">' . HOME_URL . 'activate?code=' . $hashedEmail . '</a>
-        <p>Ce lien est valable 24 heures.</p>
         <p>Cordialement,<br/>L\'équipe Simplon.</p>';
 
     $test = mail($to, $subject, $message, $headers);
