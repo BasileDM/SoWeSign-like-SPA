@@ -2,6 +2,7 @@
 
 use src\Controllers\AuthController;
 use src\Controllers\DashboardController;
+use src\Controllers\FormController;
 
 $url = $_SERVER['REQUEST_URI'];
 $url = parse_url($url, PHP_URL_PATH);
@@ -72,8 +73,43 @@ switch ($url) {
     AuthController::recordSignature($request['submittedCode'], $request['classId'], $userId, $request['presenceStatus']);
     break;
 
+  case HOME_URL . 'handleForm':
+    if ($method !== 'POST' || $userRole === '1' || !isset($request['crudType']) || !isset($request['formCategory'])) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Invalid request.']);
+      exit();
+    }
+    $formController = new FormController();
+    if ($request['formCategory'] === 'promotion') {
+      $formController->handlePromotionForm($request['crudType'], $request['formContent']);
+    }
+    if ($request['formCategory'] === 'user') {
+      $formController->handleUserForm($request['crudType'], $request['formContent']);
+    }
+    break;
+
+  case HOME_URL . 'deleteuser':
+    if ($method !== 'POST' || $userRole === '1' || !isset($request['deleteUserId'])) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Invalid request.']);
+      exit();
+    }
+    $formController = new FormController();
+    $formController->deleteUser($request['deleteUserId']);
+    break;
+
+  case HOME_URL . 'deleteprom':
+    if ($method !== 'POST' || $userRole === '1' || !isset($request['deletePromId'])) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Invalid request.']);
+      exit();
+    }
+    $formController = new FormController();
+    $formController->deletePromotion($request['deletePromId']);
+    break;
+
   default:
     header('Content-Type: application/json');
-    echo json_encode('404');
+    echo json_encode(['error' => '404 Not found.']);
     break;
 }

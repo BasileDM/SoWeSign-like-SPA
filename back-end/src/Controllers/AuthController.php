@@ -22,6 +22,11 @@ class AuthController {
       echo json_encode(['error' => 'Wrong mail or password.']);
       die();
     }
+    if (!$user->isActivated() || $user->getPassword() === null) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Le compte n\'est pas activé. Veuillez vérifier vos mails.']);
+      die();
+    }
     if (!password_verify($pass, $user->getPassword())) {
       header('Content-Type: application/json');
       echo json_encode(['error' => 'Wrong mail or password.']);
@@ -167,7 +172,7 @@ class AuthController {
    */
   public static function generateClassCode($classId): string {
     $chars = '0123456789';
-    $length = 6;
+    $length = 5;
     $code = '';
     for ($i = 0; $i < $length; $i++) {
       $code .= $chars[rand(0, strlen($chars) - 1)];

@@ -1,8 +1,8 @@
 import { ComponentCreator } from "../classes/ComponentCreator.js";
+import { API_URL } from "../config.js";
+import { displayToast } from "../display.js";
 
 export function studentsTableRow(content, role, type) {
-  console.log(`content on element creation :`);
-  console.log(content);
   const component = document.createElement("tr");
   const th = document.createElement("th");
   const tdFirstName = document.createElement("td");
@@ -45,7 +45,7 @@ export function studentsTableRow(content, role, type) {
   function editAction() {
     const compCreator = new ComponentCreator();
     let hideSection = document.getElementById("promodetails");
-    let editForm = compCreator.createComponent("customForm", content, role, ["student", "edit", hideSection]);
+    let editForm = compCreator.createComponent("customForm", content, role, ["user", "edit", hideSection]);
     switch (type) {
       case "late":
         console.log(`Content sent in form through late component edit button :`);
@@ -54,12 +54,30 @@ export function studentsTableRow(content, role, type) {
         break;
       default:
         break;
-      }
+    }
     hideSection.style.display = "none";
     document.getElementById("form-creation-section").appendChild(editForm);
   }
 
   function deleteAction() {
-    console.log(content);
+    fetch(API_URL + "deleteuser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: localStorage.getItem("token"),
+        deleteUserId: content.Id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          displayToast("SIMPLON SWS", data.error, "error");
+        } else if (data.success) {
+          displayToast("SIMPLON SWS", data.success, "success");
+        }
+      })
+      .catch((error) => console.error(error));
   }
 }
