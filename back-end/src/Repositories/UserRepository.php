@@ -128,6 +128,20 @@ class UserRepository {
     }
   }
 
+  public function getUnactivatedMails(): array {
+    try {
+      $sql = "SELECT MAIL FROM " . PREFIXE . "USERS WHERE ACTIVATED = 0";
+      $stmt = $this->db->prepare($sql);
+      $stmt->execute();
+      return $stmt->fetchAll();
+    } catch (PDOException $e) {
+      throw new PDOException($e->getMessage());
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Backend error. Please contact your administrator.']);
+      die();
+    }    
+  }
+
   /**
    * Inserts a new user into the database.
    *

@@ -174,10 +174,7 @@ export function customForm(content, role, type) {
       }
       if (type[0] === "promotion" && type[1] === "edit") {
         valuesList = [content.ID, ...valuesList];
-      } else if (type[0] === "promotion" && type[1] === "create") {
-        valuesList.splice(0, 1);
-      }
-
+      } 
       sendForm(valuesList, type[1], type[0]); // sendForm(arg1: valuesList, arg2: create/edit, arg3: prom/user/etc.)
     }
   });

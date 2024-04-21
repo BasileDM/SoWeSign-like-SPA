@@ -108,6 +108,15 @@ switch ($url) {
     $formController->deletePromotion($request['deletePromId']);
     break;
 
+  case HOME_URL . 'activate':
+    if ($method !== 'GET' || !isset($_GET['code'])) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Invalid request.']);
+      exit();
+    }
+    AuthController::activate($_GET['code']);
+    break;
+
   default:
     header('Content-Type: application/json');
     echo json_encode(['error' => '404 Not found.']);
