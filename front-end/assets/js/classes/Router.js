@@ -1,6 +1,6 @@
 import { HOME_URL } from "../config.js";
 import { displayToast, render } from "../display.js";
-import { isTokenExpired, getToken } from "../auth.js";
+import { isTokenExpired, getToken, activate } from "../auth.js";
 import { dashboard } from "../app.js";
 
 export class Router {
@@ -15,6 +15,7 @@ export class Router {
       "/logout": "logout-section",
       "/confirm": "activate-section",
       "/dashboard": "dashboard-section",
+      "/activate": "activate-section",
     };
     this.init();
     console.log("Router initialized");
@@ -134,6 +135,42 @@ export class Router {
         console.log(`%c Nav: Rerouting from logout to login`, "color: orange");
         this.navigateToRoute(HOME_URL);
         return;
+
+      case "activate-section":
+        render(section);
+        document.getElementById("activate-account-btn").addEventListener("click", (event) => {
+          const errorCtn = document.getElementById("password-activation-error");
+          const pass1Input = document.getElementById("password-activation");
+          const pass2Input = document.getElementById("password2-activation");
+          let password = pass1Input.value;
+          let passwordConfirm = pass2Input.value;
+          if (password === "") {
+            errorCtn.textContent = "Veuillez entrer un mot de passe.";
+            pass1Input.classList.add("is-invalid");
+            pass2Input.classList.add("is-invalid");
+            return;
+          }
+          if (password !== passwordConfirm) {
+            errorCtn.textContent = "Les mots de passe ne sont pas identiques.";
+            pass1Input.classList.add("is-invalid");
+            pass2Input.classList.add("is-invalid");
+            return;
+          }
+          if (password.length < 8) {
+            errorCtn.textContent = "Le mot de passe doit contenir au moins 8 caractères.";
+            pass1Input.classList.add("is-invalid");
+            pass2Input.classList.add("is-invalid");
+            return;
+          }
+          pass1Input.classList.remove("is-invalid");
+          pass2Input.classList.remove("is-invalid");
+          pass1Input.classList.add("is-valid");
+          pass2Input.classList.add("is-valid");
+          let code = window.location.search.split("=")[1];
+          console.log(`Code: ${window.location.search.split("=")[1]}`);
+          activate(code, password, passwordConfirm);
+        });
+        break;
 
       default:
         console.log(`Nav: calling render(${section}) method.`);

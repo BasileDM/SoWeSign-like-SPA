@@ -216,22 +216,23 @@ class AuthController {
 
   public static function compareHashedMails(string $code, array $unactivatedMails): string|null {
     foreach ($unactivatedMails as $unactivatedMail) {
-      if (hash_equals(self::hashMail($unactivatedMail), $code)) {
-        return $unactivatedMail;
+      if (hash_equals(self::hashMail($unactivatedMail['MAIL']), $code)) {
+        return $unactivatedMail['MAIL'];
       } else {
         return null;
       }
     }
   }
 
-  public static function activate(string $code): void {
+  public static function activate(string $code, string $pass): bool {
+    $hashedPass = password_hash($pass, PASSWORD_DEFAULT);
     $userRepo = new UserRepository();
     $unactivatedMails = $userRepo->getUnactivatedMails();
     if ($mailToActivate = self::compareHashedMails($code, $unactivatedMails)) {
-      $userRepo->setActivated($mailToActivate);
-      echo json_encode(['success' => 'Le compte a été activé.']);
+      $userRepo->activate($mailToActivate, $hashedPass);
+      return true;
     } else {
-      echo json_encode(['error' => 'Erreur d\'activation.']);
+      return false;
     }
   }
 }

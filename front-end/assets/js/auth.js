@@ -94,6 +94,31 @@ export function login(mail, pass) {
     });
 }
 
+export function activate(code, password, passwordConfirm) {
+  fetch(API_URL + "activate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      code: code,
+      password: password,
+      passwordConfirm: passwordConfirm,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        console.log(data.success);
+        displayToast("SIMPLON SWS", data.success, "success");
+        router.navigateToRoute(HOME_URL + "login");
+      } else if (data.error) {
+        console.log(data.error);
+        displayToast("SIMPLON SWS", data.error, "error");
+      }
+    })
+}
+
 export function switchInterface(isLoggedIn) {
   const navLogin = document.getElementById("nav-login");
   const navLogout = document.getElementById("nav-logout");
