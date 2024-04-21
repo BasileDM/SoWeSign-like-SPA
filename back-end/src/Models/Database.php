@@ -90,7 +90,8 @@ final class Database {
     define('DB_USER', '" . DB_USER . "');
     define('DB_PASS', '" . DB_PASS . "');
     define('PREFIXE', '" . PREFIXE . "');
-    define('HOME_URL', '" . HOME_URL . "');";
+    define('HOME_URL', '" . HOME_URL . "');
+    define('FRONT-URL', '" . FRONT_URL . "');";
 
     if (fwrite($configFile, $content)) {
       fclose($configFile);
