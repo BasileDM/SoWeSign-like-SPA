@@ -6,6 +6,7 @@ import * as auth from "../auth.js";
 export class Dashboard {
   constructor() {
     this.isLoaded = false;
+    this.currentProm = null;
   }
 
   loadClasses() {
@@ -32,7 +33,11 @@ export class Dashboard {
             let classComponent = componentCreator.createComponent("classes", classe, role);
             homeTab.appendChild(classComponent);
           });
-
+          const decodedToken =auth.decodeJwt(auth.getToken());
+          if (decodedToken.payload.role == 1) {
+            document.getElementById('nav-promos-tab').remove();
+            return;
+          }
           this.loadProms(); // loadProms then loads presences
         }
       })
@@ -121,7 +126,7 @@ export class Dashboard {
           data.students.forEach((student) => {
             // Each table body for each prom are created in the loadProms method
             let studentTable = document.getElementById("students-table-body-prom" + student.IdPromotion);
-            let studentComponent = componentCreator.createComponent("studentsTableRow", student, role, ["student", "edit", "lol"]);
+            let studentComponent = componentCreator.createComponent("studentsTableRow", student, role, ["student", "edit"]);
             studentTable.appendChild(studentComponent);
 
             latePresences.forEach((latePresence) => {
@@ -182,7 +187,7 @@ export class Dashboard {
           document.getElementById('add-student-btn').addEventListener('click', () => {
             const detailsSection = document.getElementById("promodetails");
             detailsSection.style.display = "none";
-            let addStudentForm = componentCreator.createComponent("customForm", null, null, ["student", "create", detailsSection]);
+            let addStudentForm = componentCreator.createComponent("customForm", this.currentProm, null, ["user", "create", detailsSection]);
             document.getElementById("form-creation-section").appendChild(addStudentForm);
           });
           // Create late presence button event listener

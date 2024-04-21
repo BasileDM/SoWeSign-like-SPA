@@ -22,6 +22,11 @@ class AuthController {
       echo json_encode(['error' => 'Wrong mail or password.']);
       die();
     }
+    if (!$user->isActivated() || $user->getPassword() === null) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Le compte n\'est pas activé. Veuillez vérifier vos mails.']);
+      die();
+    }
     if (!password_verify($pass, $user->getPassword())) {
       header('Content-Type: application/json');
       echo json_encode(['error' => 'Wrong mail or password.']);
@@ -166,8 +171,8 @@ class AuthController {
    * @return string
    */
   public static function generateClassCode($classId): string {
-    $chars = '0123456789';
-    $length = 6;
+    $chars = '123456789';
+    $length = 5;
     $code = '';
     for ($i = 0; $i < $length; $i++) {
       $code .= $chars[rand(0, strlen($chars) - 1)];
@@ -196,5 +201,38 @@ class AuthController {
     }
     $classRepo->addPresenceStatus($userId, $classId, $presenceStatus);
     echo json_encode(['success' => $presenceStatus === 1 ? 'Votre présence a été enregistrée.' : 'Vous avez été enregistré(e) en retard !']);
+  }
+
+  /**
+   * Hashes the given email with the JWT secret using SHA-256 algorithm.
+   *
+   * @param string $mail The email to be hashed.
+   * @return string The hashed email.
+   */
+  public static function hashMail(string $mail): string {
+    $mailAndKey = JWT_SECRET . $mail;
+    return hash('sha256', $mailAndKey);
+  }
+
+  public static function compareHashedMails(string $code, array $unactivatedMails): string|null {
+    foreach ($unactivatedMails as $unactivatedMail) {
+      if (hash_equals(self::hashMail($unactivatedMail['MAIL']), $code)) {
+        return $unactivatedMail['MAIL'];
+      } else {
+        return null;
+      }
+    }
+  }
+
+  public static function activate(string $code, string $pass): bool {
+    $hashedPass = password_hash($pass, PASSWORD_DEFAULT);
+    $userRepo = new UserRepository();
+    $unactivatedMails = $userRepo->getUnactivatedMails();
+    if ($mailToActivate = self::compareHashedMails($code, $unactivatedMails)) {
+      $userRepo->activate($mailToActivate, $hashedPass);
+      return true;
+    } else {
+      return false;
+    }
   }
 }

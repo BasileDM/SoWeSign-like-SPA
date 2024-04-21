@@ -17,6 +17,6 @@ function loadClasses(string $class): void {
   if (file_exists(__DIR__ . $class)) {
     require_once __DIR__ . $class;
   } else {
-    throw new Exception('Class : ' . $class . '.php not found.');
+    throw new Exception('Class : ' . $class . ' not found.');
   }
 }
