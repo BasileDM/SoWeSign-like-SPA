@@ -19,16 +19,16 @@ class UserRepository {
    * Retrieves a user from the database by their email address.
    *
    * @param string $mail The email address of the user to retrieve.
-   * @return User|null The User object if found, or null if not found.
+   * @return User|false The User object if found, or false if not found.
    * @throws PDOException If an error occurs while fetching the user from the database.
    */
-  public function getByMail(string $mail): User|null {
+  public function getByMail(string $mail): User|false {
     try {
       $sql = "SELECT * FROM " . PREFIXE . "USERS WHERE mail = :mail";
       $stmt = $this->db->prepare($sql);
       $stmt->execute(['mail' => $mail]);
       $stmt->setFetchMode(PDO::FETCH_CLASS, User::class);
-      return $stmt->fetch() ? $stmt->fetch() : null;
+      return $stmt->fetch();
     } catch (PDOException $e) {
       throw new PDOException($e->getMessage());
       header('Content-Type: application/json');
