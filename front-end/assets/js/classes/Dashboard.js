@@ -33,7 +33,11 @@ export class Dashboard {
             let classComponent = componentCreator.createComponent("classes", classe, role);
             homeTab.appendChild(classComponent);
           });
-
+          const decodedToken =auth.decodeJwt(auth.getToken());
+          if (decodedToken.payload.role == 1) {
+            document.getElementById('nav-promos-tab').remove();
+            return;
+          }
           this.loadProms(); // loadProms then loads presences
         }
       })

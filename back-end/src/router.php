@@ -44,18 +44,42 @@ switch ($url) {
     break;
 
   case HOME_URL . 'getproms':
+    $payload = AuthController::getTokenPayload($request['token']);
+    if ($payload['role'] == '1') {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Permission denied.']);
+      exit();
+    }
     DashboardController::getPromotions();
     break;
 
   case HOME_URL . 'getstudents':
+    $payload = AuthController::getTokenPayload($request['token']);
+    if ($payload['role'] == '1') {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Permission denied.']);
+      exit();
+    }
     DashboardController::getStudents();
     break;
 
   case HOME_URL . 'getlatepresences':
+    $payload = AuthController::getTokenPayload($request['token']);
+    if ($payload['role'] == '1') {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Permission denied.']);
+      exit();
+    }
     DashboardController::getLatePresences();
     break;
 
   case HOME_URL . 'generatecode':
+    $payload = AuthController::getTokenPayload($request['token']);
+    if ($payload['role'] == '1') {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Permission denied.']);
+      exit();
+    }
     if ($method !== 'POST' || $userRole !== '2') {
       header('Content-Type: application/json');
       echo json_encode(['error' => 'Invalid request.']);
@@ -89,6 +113,12 @@ switch ($url) {
     break;
 
   case HOME_URL . 'deleteuser':
+    $payload = AuthController::getTokenPayload($request['token']);
+    if ($payload['role'] == '1') {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Permission denied.']);
+      exit();
+    }
     if ($method !== 'POST' || $userRole === '1' || !isset($request['deleteUserId'])) {
       header('Content-Type: application/json');
       echo json_encode(['error' => 'Invalid request.']);
@@ -99,6 +129,12 @@ switch ($url) {
     break;
 
   case HOME_URL . 'deleteprom':
+    $payload = AuthController::getTokenPayload($request['token']);
+    if ($payload['role'] == '1') {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Permission denied.']);
+      exit();
+    }
     if ($method !== 'POST' || $userRole === '1' || !isset($request['deletePromId'])) {
       header('Content-Type: application/json');
       echo json_encode(['error' => 'Invalid request.']);

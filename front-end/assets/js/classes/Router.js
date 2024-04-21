@@ -31,7 +31,6 @@ export class Router {
     console.log(`Init: Searching for /${this.routeComponents[0]} in routes`);
     if (!("/" + this.routeComponents[0] in this.routes)) {
       console.log(`Init: Pathname not found: ${HOME_URL} ${window.location.pathname}`);
-      // window.location.pathname = HOME_URL + "index.html";
       return;
     }
     console.log(`Init: Pathname found`);
