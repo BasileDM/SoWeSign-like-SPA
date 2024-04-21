@@ -34,7 +34,7 @@ export function customForm(content, role, type) {
       headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définis.";
       inputNames = ["Nom de famille", "Prénom", "Mail"];
       inputTypes = ["text", "text", "email"];
-      type[1] === "create" ? [] : inputPlaceholders = [content.LastName, content.FirstName, content.Mail];
+      type[1] === "create" ? [] : (inputPlaceholders = [content.LastName, content.FirstName, content.Mail]);
       break;
 
     case "retard":
@@ -45,7 +45,7 @@ export function customForm(content, role, type) {
       headerSubtitle = type[1] === "create" ? "" : "Les changements appliqués sont définis.";
       inputNames = ["Date de retard", "Commentaire"];
       inputTypes = ["date", "text"];
-      type[1] === "create" ? [] : inputPlaceholders = [content.lateDate.split(" ")[0], content.ID_USER];
+      type[1] === "create" ? [] : (inputPlaceholders = [content.lateDate.split(" ")[0], content.ID_USER]);
       break;
 
     default:
@@ -120,6 +120,21 @@ export function customForm(content, role, type) {
   buttonBar.appendChild(rightButtons);
   component.appendChild(buttonBar);
 
+  // Delete button
+  deleteButton.addEventListener("click", () => {
+    switch (type[0]) {
+      case "promotion":
+        deletePromotion(content.ID);
+        break;
+      case "user":
+        deleteUser(content.Id);
+        break;
+      default:
+        console.error("Invalid type");
+        break;
+    }
+  });
+
   // Go back button
   goBackButton.addEventListener("click", () => {
     const sectionTodisplayBack = type[2];
@@ -151,8 +166,8 @@ export function customForm(content, role, type) {
     if (areAllinputValid.includes(false)) {
       return;
     } else {
-      if (type[0] == "user") valuesList = [content.Id, ...valuesList];
-      if (type[0] == "promotion") valuesList = [content.ID, ...valuesList];
+      if (type[0] == "user" && type[1] == "edit") valuesList = [content.Id, ...valuesList];
+      if (type[0] == "promotion" && type[1] == "edit") valuesList = [content.ID, ...valuesList];
       sendForm(valuesList, type[1], type[0]); // sendForm(arg1: valuesList, arg2: create/edit, arg3: prom/user/etc.)
     }
   });
@@ -264,12 +279,6 @@ export function customForm(content, role, type) {
     return true;
   }
 
-  // if (type[0] === "promotion") {
-  //   deleteButton.addEventListener("click", () => {
-  //     deletePromo();
-  //   });
-  // }
-
   // Other functions
   function makePascalCase(string) {
     let word = string
@@ -277,6 +286,50 @@ export function customForm(content, role, type) {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join("");
     return word;
+  }
+
+  function deleteUser(userId) {
+    fetch(API_URL + "deleteuser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: localStorage.getItem("token"),
+        deleteUserId: userId,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          displayToast("SIMPLON SWS", data.error, "error");
+        } else if (data.success) {
+          displayToast("SIMPLON SWS", data.success, "success");
+        }
+      })
+      .catch((error) => console.error(error));
+  }
+
+  function deletePromotion(promId) {
+    fetch(API_URL + "deleteprom", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: localStorage.getItem("token"),
+        deletePromId: promId,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          displayToast("SIMPLON SWS", data.error, "error");
+        } else if (data.success) {
+          displayToast("SIMPLON SWS", data.success, "success");
+        }
+      })
+      .catch((error) => console.error(error));
   }
 
   function sendForm(inputValues, crudType, formCategory) {

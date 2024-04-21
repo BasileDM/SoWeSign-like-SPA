@@ -88,6 +88,26 @@ switch ($url) {
     }
     break;
 
+  case HOME_URL . 'deleteuser':
+    if ($method !== 'POST' || $userRole === '1' || !isset($request['deleteUserId'])) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Invalid request.']);
+      exit();
+    }
+    $formController = new FormController();
+    $formController->deleteUser($request['deleteUserId']);
+    break;
+
+  case HOME_URL . 'deleteprom':
+    if ($method !== 'POST' || $userRole === '1' || !isset($request['deletePromId'])) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Invalid request.']);
+      exit();
+    }
+    $formController = new FormController();
+    $formController->deletePromotion($request['deletePromId']);
+    break;
+
   default:
     header('Content-Type: application/json');
     echo json_encode(['error' => '404 Not found.']);

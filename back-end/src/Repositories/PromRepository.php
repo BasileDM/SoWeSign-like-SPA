@@ -93,4 +93,18 @@ class PromRepository {
       die();
     }
   }
+
+  public function delete(int $promotionId): void {
+    try {
+      $stmt = $this->db->prepare('DELETE FROM ' . PREFIXE . 'CLASSES WHERE ID_PROMOTION = :promotionId;
+        DELETE FROM ' . PREFIXE . 'RELATION_USER_PROMOTION WHERE ID_PROMOTION = :promotionId;
+        DELETE FROM ' . PREFIXE . 'PROMOTIONS WHERE ID = :promotionId;');
+      $stmt->execute(['promotionId' => $promotionId]);
+    } catch (PDOException $e) {
+      throw new PDOException($e->getMessage());
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Backend error. Please contact your administrator.']);
+      die();
+    }
+  }
 }

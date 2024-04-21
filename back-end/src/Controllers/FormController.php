@@ -10,7 +10,7 @@ class FormController {
   /**
    * Handles the promotion form based on the given CRUD type and form content.
    *
-   * @param string $crudType The CRUD type ('create', 'read', 'update', 'delete').
+   * @param string $crudType The CRUD type ('create', 'edit').
    * @param array $formContent The form content containing the promotion details.
    * @return void echoes a JSON response with the success/error message and dies.
    */
@@ -60,6 +60,22 @@ class FormController {
       echo json_encode(['success' => 'User updated.', 'crudType' => $crudType, 'formContent' => $formContent]);
       die();
     }
+  }
+
+  public function deletePromotion(int $id): void {
+    $promRepo = new PromRepository();
+    $promRepo->delete($id);
+    header('Content-Type: application/json');
+    echo json_encode(['success' => 'Promotion deleted.']);
+    die();
+  }
+
+  public function deleteUser(int $id): void {
+    $userRepo = new UserRepository();
+    $userRepo->delete($id);
+    header('Content-Type: application/json');
+    echo json_encode(['success' => 'User deleted.']);
+    die();
   }
 
   // Check and sanitize data functions

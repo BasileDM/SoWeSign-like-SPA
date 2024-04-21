@@ -1,4 +1,6 @@
 import { ComponentCreator } from "../classes/ComponentCreator.js";
+import { API_URL } from "../config.js";
+import { displayToast } from "../display.js";
 
 export function studentsTableRow(content, role, type) {
   const component = document.createElement("tr");
@@ -52,12 +54,30 @@ export function studentsTableRow(content, role, type) {
         break;
       default:
         break;
-      }
+    }
     hideSection.style.display = "none";
     document.getElementById("form-creation-section").appendChild(editForm);
   }
 
   function deleteAction() {
-    console.log(content);
+    fetch(API_URL + "deleteuser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: localStorage.getItem("token"),
+        deleteUserId: content.Id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          displayToast("SIMPLON SWS", data.error, "error");
+        } else if (data.success) {
+          displayToast("SIMPLON SWS", data.success, "success");
+        }
+      })
+      .catch((error) => console.error(error));
   }
 }

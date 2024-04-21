@@ -182,7 +182,7 @@ export class Dashboard {
           document.getElementById('add-student-btn').addEventListener('click', () => {
             const detailsSection = document.getElementById("promodetails");
             detailsSection.style.display = "none";
-            let addStudentForm = componentCreator.createComponent("customForm", null, null, ["student", "create", detailsSection]);
+            let addStudentForm = componentCreator.createComponent("customForm", null, null, ["user", "create", detailsSection]);
             document.getElementById("form-creation-section").appendChild(addStudentForm);
           });
           // Create late presence button event listener
