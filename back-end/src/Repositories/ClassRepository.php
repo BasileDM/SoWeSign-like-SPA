@@ -23,6 +23,13 @@ final class ClassRepository {
   public function getTodaysClasses(int $promotionId): array {
     $stmt = $this->db->query('SELECT * FROM ' . PREFIXE . 'CLASSES WHERE DAY(START_TIME) = DAY(CURDATE()) AND ID_PROMOTION = ' . $promotionId . ';');
     $classes = $stmt->fetchAll(PDO::FETCH_CLASS, ClassModel::class);
+    if (empty($classes)) {
+      $stmt = $this->db->prepare("INSERT INTO " . PREFIXE . "CLASSES(START_TIME, END_TIME, CODE, ID_PROMOTION) VALUES (CONCAT(CURDATE(), ' 09:00:00'), CONCAT(CURDATE(), ' 12:00:00'), NULL, :promotionId);
+      INSERT INTO SWS_CLASSES(START_TIME, END_TIME, CODE, ID_PROMOTION) VALUES (CONCAT(CURDATE(), ' 13:00:00'), CONCAT(CURDATE(), ' 17:00:00'), NULL, :promotionId);
+      SELECT * FROM ' . PREFIXE . 'CLASSES WHERE DAY(START_TIME) = DAY(CURDATE()) AND ID_PROMOTION = ' . $promotionId . ';");
+      $stmt->execute(['promotionId' => $promotionId]);
+      $classes = $stmt->fetchAll(PDO::FETCH_CLASS, ClassModel::class); 
+    }
     return $classes;
   }
 
