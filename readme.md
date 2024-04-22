@@ -2,10 +2,10 @@
 
 ### Objectif et consignes du projet
 
-L'objectif est de développer une application permettant aux formateurs de gérer les promotions, élèves et cours. Les apprenants peuvent signer pour marquer leur présence à un cours, et les formateur peuvent générer un code lorsqu'ils valident leur présence.
+L'objectif est de développer une application permettant aux formateurs de gérer les promotions, élèves et cours. Les apprenants peuvent signer pour marquer leur présence à un cours, et les formateurs peuvent générer un code lorsqu'ils valident leur présence.
 
 Le projet doit respecter les consignes suivantes :
-1. Respecter le design pattern MVC.
+1. Respecter le pattern MVC.
 2. Conserver les informations en base de données.
 3. Ajouter un apprenant doit envoyer un mail qui lui permet de valider son compte.
 4. Le MCD doit être cohérent et permettre des évolutions.
