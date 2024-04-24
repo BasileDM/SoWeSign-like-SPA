@@ -11,7 +11,8 @@ Le projet doit respecter les consignes suivantes :
 4. Le MCD doit être cohérent et permettre des évolutions.
 5. Les champs sont nettoyés et protégés contre les injections SQL.
 
-### Config.php
+### Mise en place du projet
+#### Config.php
 
 Pour que le projet fonctionne, il faut renommer le fichier config-example.php en config.php qui se trouve dans le dossier "back-end" et remplacer les informations placeholder par les votres.
 
@@ -28,20 +29,21 @@ Pour que le projet fonctionne, il faut renommer le fichier config-example.php en
     define('FRONT_URL', 'http://your-frontend-url/'); // Remplacer par votre URL en front end
 ```
 
-### Config.js
+#### Config.js
 
-Pour que le projet fonctionne, il faut renommer le fichier config-example.js en config.js qui se trouve dans le dossier "front-end/assets/js" et remplacer les informations placeholder par les votres.
+Il faut également renommer le fichier config-example.js en config.js qui se trouve dans le dossier "front-end/assets/js" et remplacer les informations placeholder par les votres.
 
 ```javascript
 export const HOME_URL = ''; // Remplacer par votre URL front-end
 export const API_URL = 'http://your-backend-url/'; // Remplacer par votre URL back-end
 ```
 
-### Migration
+#### Migration
 
 À la première initialisation du projet, le fichier SWSDatabase.sql est chargé.
-Ce fichier se trouve dans le dossier back-end/src/Migration. 
-Pour modifier la structure ou le contenu de la base de données, il faut éditer ce fichier. 
+Ce fichier se trouve dans le dossier back-end/src/Migration.
+Pour modifier la structure ou le contenu de la base de données, il faut éditer ce fichier.
+Pour migrer la base, rendez-vous une fois sur l'adresse du back end pour lancer la création des tables.
 
 ### Utilisateurs par défault
 
